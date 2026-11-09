@@ -1,12 +1,34 @@
 # C Notes — offline C tutorial
 
+[![Open the live site](https://img.shields.io/badge/%E2%96%B6%20Open%20the%20live%20site-amitdev--ai.github.io%2FC--full--notes-1f6feb?style=for-the-badge)](https://amitdev-ai.github.io/C-full-notes/)
+
 A free, W3Schools-style C programming tutorial built from plain HTML, CSS, JavaScript and
 WebAssembly. It works entirely offline: no CDNs, no web fonts, no analytics, no account, and
 nothing is sent to a server.
 
 ## Open the site
 
-Double-click **`index.html`**. That is all you need — no installation.
+### 🌐 Open online — one click
+
+**https://amitdev-ai.github.io/C-full-notes/**
+
+No download, install or account is needed. The site is hosted on GitHub Pages and runs
+entirely in the browser, including the real C editor.
+
+### 📲 Install it as an app (works offline)
+
+Open the live link in Chrome, Edge, Brave or another Chromium browser, then use the install
+button in the address bar (or **⋮ → Install app** / **Apps → Install this site as an app**).
+The site is cached by a service worker after the first visit, so the app keeps working with
+no internet connection.
+
+On Android, use **Chrome → ⋮ → Add to Home screen**. On iPhone/iPad, use **Safari →
+Share → Add to Home Screen** (offline caching support varies by iOS version).
+
+### 💾 Open the local copy
+
+Double-click **`index.html`**. That is all you need — no installation. Everything except
+service-worker installation works directly from the filesystem.
 
 Optionally, serve the folder over HTTP. This is recommended if you want the service worker
 (offline app install) to register, because browsers only allow service workers on
