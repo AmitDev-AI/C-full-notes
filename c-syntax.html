@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="C syntax: statements, semicolons, braces, identifiers and the structure of a C program.">
+<title>C Syntax — C Notes</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#04aa6d">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="c-syntax.html">
+<a class="skip-link" href="#main">Skip to content</a>
+<header id="topbar"></header>
+
+<div class="layout">
+  <aside id="sidebar"></aside>
+
+  <main class="content" id="main">
+    <div class="breadcrumb"><a href="index.html">C Tutorial</a><span>›</span>Syntax</div>
+    <h1>C Syntax</h1>
+    <p class="lead">C syntax is the set of rules that defines how a C program is written. It is small and consistent: statements end with semicolons, blocks are wrapped in braces, and case matters.</p>
+
+    <h2>The smallest C program</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    printf("Hello, World!");
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>Hello, World!</pre></div>
+
+    <h2>Statements and semicolons</h2>
+    <p>A <b>statement</b> is one instruction. In C, most statements end with a semicolon:</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>int age = 25;
+printf("Age: %d\n", age);
+return 0;</code></pre>
+    </div>
+    <p>Forgetting the semicolon is the most common compile error. The compiler often reports it on the <i>next</i> line, because that is where it notices the statement never finished.</p>
+
+    <h2>Blocks and braces</h2>
+    <p>Braces <code class="inline">{ }</code> group statements into a <b>block</b>. Function bodies, loops, conditions and structures all use blocks.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>int main(void) {
+    int x = 10;
+
+    if (x &gt; 5) {
+        printf("x is large\n");
+        printf("still inside the if block\n");
+    }
+
+    return 0;
+}</code></pre>
+    </div>
+
+    <h2>Case sensitivity</h2>
+    <p>C is case-sensitive. <code class="inline">age</code>, <code class="inline">Age</code> and <code class="inline">AGE</code> are three different names. Keywords are always lowercase: <code class="inline">int</code>, not <code class="inline">Int</code>.</p>
+
+    <h2>Identifiers</h2>
+    <p>Identifiers are names you give to variables, functions, structures and so on. The rules:</p>
+    <ul>
+      <li>May contain letters, digits and underscores.</li>
+      <li>Must begin with a letter or an underscore (not a digit).</li>
+      <li>Cannot be a keyword such as <code class="inline">int</code> or <code class="inline">return</code>.</li>
+      <li>Are case-sensitive.</li>
+    </ul>
+    <div class="codebox" data-file="main.c">
+<pre><code>int score = 100;        // valid
+int _count = 3;         // valid
+int player2 = 7;        // valid
+// int 2player = 7;     // invalid: starts with a digit
+// int float = 1;       // invalid: float is a keyword</code></pre>
+    </div>
+
+    <h3>Naming conventions</h3>
+    <ul>
+      <li><b>snake_case</b> for variables and functions: <code class="inline">total_score</code>, <code class="inline">read_file</code>.</li>
+      <li><b>UPPER_CASE</b> for macros and constants: <code class="inline">MAX_SIZE</code>, <code class="inline">PI</code>.</li>
+      <li>Descriptive names beat short names: <code class="inline">student_count</code> is clearer than <code class="inline">n</code>.</li>
+    </ul>
+
+    <h2>Whitespace and indentation</h2>
+    <p>Spaces, tabs and newlines are ignored by the compiler (except inside strings and to separate tokens). Indentation is for humans, but consistent indentation makes bugs visible. Four spaces per level is a common C style.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>int main(void){int x=1;if(x){printf("%d",x);}return 0;}
+
+/* The same program, formatted: */
+
+int main(void) {
+    int x = 1;
+    if (x) {
+        printf("%d", x);
+    }
+    return 0;
+}</code></pre>
+    </div>
+
+    <h2>Comments in brief</h2>
+    <p>Comments start with <code class="inline">//</code> (to end of line) or wrap with <code class="inline">/* ... */</code>. They are ignored by the compiler.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>// A single-line comment
+printf("Hello");  // also a comment after code
+
+/*
+   A multi-line comment.
+   Useful for longer explanations.
+*/</code></pre>
+    </div>
+    <p>Read the full <a href="c-comments.html">Comments chapter</a> for details.</p>
+
+    <h2>The main function</h2>
+    <p>Every C program must have exactly one <code class="inline">main</code>. Execution starts there. The standard forms are:</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>int main(void) { ... }                     // no arguments
+
+int main(int argc, char *argv[]) { ... }   // command-line arguments</code></pre>
+    </div>
+    <p>The <code class="inline">return 0;</code> value is passed to the operating system. Zero means success.</p>
+
+    <h2>Preprocessor directives</h2>
+    <p>Lines starting with <code class="inline">#</code> are handled before compilation. They do <b>not</b> end with a semicolon.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#define MAX 100
+
+int main(void) {
+    printf("%d\n", MAX);
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>100</pre></div>
+
+    <h2>Common syntax mistakes</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Mistake</th><th>Example</th><th>Correction</th></tr></thead>
+        <tbody>
+          <tr><td>Missing semicolon</td><td><code>int x = 5</code></td><td><code>int x = 5;</code></td></tr>
+          <tr><td>Assignment in a condition</td><td><code>if (x = 5)</code></td><td><code>if (x == 5)</code></td></tr>
+          <tr><td>Using a name before declaring it</td><td><code>printf("%d", y);</code></td><td>Declare <code>y</code> first.</td></tr>
+          <tr><td>Mismatched braces</td><td><code>if (x) { ...</code></td><td>Close every <code>{</code> with <code>}</code>.</td></tr>
+          <tr><td>Wrong quotes</td><td><code>printf(“Hi”);</code></td><td>Use straight quotes: <code>"Hi"</code>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="tip">
+      <p><b>Tip:</b> let your editor auto-indent and auto-close braces. Compile often — small programs are much easier to debug.</p>
+    </div>
+  </main>
+
+  <aside class="toc" id="toc"></aside>
+</div>
+
+<footer id="footer"></footer>
+<script src="assets/app.js"></script>
+</body>
+</html>

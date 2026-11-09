@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="What is C? A short introduction to the C programming language, its history and uses.">
+<title>C Introduction — C Notes</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#04aa6d">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="c-intro.html">
+<a class="skip-link" href="#main">Skip to content</a>
+<header id="topbar"></header>
+
+<div class="layout">
+  <aside id="sidebar"></aside>
+
+  <main class="content" id="main">
+    <div class="breadcrumb"><a href="index.html">C Tutorial</a><span>›</span>Introduction</div>
+    <h1>C Introduction</h1>
+    <p class="lead">C is a general-purpose, compiled programming language created by Dennis Ritchie at Bell Labs between 1969 and 1973. It was designed for writing the Unix operating system — and it is still one of the most influential languages ever made.</p>
+
+    <h2>What is C?</h2>
+    <p>C is a <b>procedural</b> language: a program is a collection of functions, and execution starts at <code class="inline">main()</code>. It is <b>statically typed</b> (every variable has a type known at compile time), <b>compiled</b> (source code is translated to machine code before it runs) and <b>low-level enough</b> to work directly with memory through pointers.</p>
+    <p>Despite being small, C is powerful. The same language can write a tiny microcontroller program and a large operating system kernel.</p>
+
+    <div class="codebox" data-file="hello.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    printf("Hello, World!\n");
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>Hello, World!</pre></div>
+
+    <h2>Why is C called a "middle-level" language?</h2>
+    <p>It combines features of high-level languages (functions, loops, structured code) with low-level access (raw memory, bit operations, pointers). That combination is why C is used for both application code and system code.</p>
+
+    <h2>A very short history</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Year</th><th>Event</th></tr></thead>
+        <tbody>
+          <tr><td>1972</td><td>Dennis Ritchie develops C at Bell Labs to rewrite Unix.</td></tr>
+          <tr><td>1978</td><td><i>The C Programming Language</i> by Kernighan and Ritchie ("K&amp;R C") is published.</td></tr>
+          <tr><td>1989/1990</td><td>ANSI/ISO standardises C — often called <b>C89</b> or <b>C90</b>.</td></tr>
+          <tr><td>1999</td><td><b>C99</b> adds <code class="inline">//</code> comments, <code class="inline">long long</code>, variable-length arrays and more.</td></tr>
+          <tr><td>2011</td><td><b>C11</b> adds threads, atomics and anonymous structs/unions.</td></tr>
+          <tr><td>2018</td><td><b>C17</b> — mostly bug fixes and clarifications.</td></tr>
+          <tr><td>2024</td><td><b>C23</b> is published with new attributes, <code class="inline">typeof</code>, <code class="inline">constexpr</code> and more.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Where C is used</h2>
+    <ul>
+      <li><b>Operating systems</b> — Linux, Windows, macOS and Android kernels.</li>
+      <li><b>Embedded systems</b> — cars, routers, washing machines, medical devices.</li>
+      <li><b>Databases</b> — SQLite, PostgreSQL and MySQL are largely C/C++.</li>
+      <li><b>Language runtimes</b> — CPython, Ruby MRI and the JVM are written in C/C++.</li>
+      <li><b>Tools</b> — Git, curl, the core of most command-line utilities.</li>
+      <li><b>Libraries</b> — OpenSSL, zlib, libpng, FFmpeg and thousands more.</li>
+    </ul>
+
+    <h2>What makes C different?</h2>
+    <ul>
+      <li><b>Manual memory management.</b> You allocate memory with <code class="inline">malloc</code> and release it with <code class="inline">free</code>. Nothing happens automatically, which is both freedom and responsibility.</li>
+      <li><b>Pointers.</b> Variables that store addresses. They enable efficient data structures and are the source of many bugs when used carelessly.</li>
+      <li><b>No classes, exceptions or garbage collector.</b> C keeps the language small. Libraries provide the rest.</li>
+      <li><b>Undefined behaviour.</b> Some mistakes (reading past an array, using freed memory) are not required to produce an error — the behaviour is simply undefined. Learning what not to do matters.</li>
+    </ul>
+
+    <h2>Your first program explained</h2>
+    <div class="codebox" data-file="hello.c">
+<pre><code>#include &lt;stdio.h&gt;   // gives access to printf
+
+int main(void) {     // execution starts here
+    printf("Hello, World!\n");  // print text + newline
+    return 0;        // 0 means success
+}</code></pre>
+    </div>
+    <ul>
+      <li><code class="inline">#include &lt;stdio.h&gt;</code> — a preprocessor directive that includes the standard input/output header.</li>
+      <li><code class="inline">int main(void)</code> — the entry point. <code class="inline">int</code> is the value returned to the operating system.</li>
+      <li><code class="inline">printf(...)</code> — prints formatted text to standard output.</li>
+      <li><code class="inline">\n</code> — an escape sequence meaning "new line".</li>
+      <li><code class="inline">return 0;</code> — tells the shell the program succeeded.</li>
+      <li><code class="inline">;</code> — ends a statement. Almost every C statement needs one.</li>
+    </ul>
+
+    <h2>C vs. other languages</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Feature</th><th>C</th><th>Python</th><th>Java</th></tr></thead>
+        <tbody>
+          <tr><td>Execution</td><td>Compiled to machine code</td><td>Interpreted</td><td>Compiled to bytecode (JVM)</td></tr>
+          <tr><td>Typing</td><td>Static, explicit</td><td>Dynamic</td><td>Static, explicit</td></tr>
+          <tr><td>Memory</td><td>Manual</td><td>Garbage collected</td><td>Garbage collected</td></tr>
+          <tr><td>Speed</td><td>Very fast</td><td>Slower</td><td>Fast after warm-up</td></tr>
+          <tr><td>Typical use</td><td>Systems, embedded</td><td>Scripts, data science</td><td>Business applications</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      <p><b>Note:</b> this tutorial targets standard C as described by C99 and later. Code will compile with GCC, Clang, MSVC (with minor warnings) and TCC. Features added in C11/C23 are marked when discussed.</p>
+    </div>
+
+    <h2>Ready to start?</h2>
+    <p>Next, install a compiler and build your first program.</p>
+  </main>
+
+  <aside class="toc" id="toc"></aside>
+</div>
+
+<footer id="footer"></footer>
+<script src="assets/app.js"></script>
+</body>
+</html>

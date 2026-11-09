@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="A plain-English glossary of C programming terms, from address to volatile.">
+<title>C Glossary — C Notes</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="c-glossary.html">
+<a class="skip-link" href="#main">Skip to content</a>
+<header id="topbar"></header>
+
+<div class="layout no-toc">
+  <aside id="sidebar"></aside>
+
+  <main class="content" id="main">
+    <div class="breadcrumb"><a href="index.html">C Tutorial</a><span>›</span>Reference<span>›</span>Glossary</div>
+    <h1>C Glossary</h1>
+    <p class="lead">Short, practical definitions of the words you meet while learning C. Use the filter to find a term instantly.</p>
+
+    <div class="glossary-filter">
+      <input type="search" id="glossarySearch" placeholder="Filter terms… (for example: pointer, heap, undefined)" aria-label="Filter glossary terms" autocomplete="off">
+    </div>
+    <p class="small" id="glossaryCount"></p>
+
+    <nav class="letter-nav" aria-label="Jump to letter">
+      <a href="#letter-a">A</a><a href="#letter-b">B</a><a href="#letter-c">C</a><a href="#letter-d">D</a><a href="#letter-e">E</a><a href="#letter-f">F</a><a href="#letter-g">G</a><a href="#letter-h">H</a><a href="#letter-i">I</a><a href="#letter-k">K</a><a href="#letter-l">L</a><a href="#letter-m">M</a><a href="#letter-n">N</a><a href="#letter-o">O</a><a href="#letter-p">P</a><a href="#letter-r">R</a><a href="#letter-s">S</a><a href="#letter-t">T</a><a href="#letter-u">U</a><a href="#letter-v">V</a><a href="#letter-w">W</a>
+    </nav>
+
+    <div class="glossary" id="glossary">
+      <h2 id="letter-a">A</h2>
+      <div class="term"><h3 id="term-address">Address</h3><p>A number that identifies a byte in memory. The <code class="inline">&amp;</code> operator obtains the address of a variable; a pointer stores one.</p></div>
+      <div class="term"><h3 id="term-argument">Argument</h3><p>A value passed to a function at the call site. The matching variable inside the function is the <i>parameter</i>. The words are often used interchangeably.</p></div>
+      <div class="term"><h3 id="term-array">Array</h3><p>A fixed-size block of consecutive elements of one type. Indexes start at 0. An array name decays to a pointer to its first element when passed to a function.</p></div>
+      <div class="term"><h3 id="term-ascii">ASCII</h3><p>A character encoding that maps 0–127 to letters, digits, punctuation and control codes. For example <code class="inline">'A'</code> is 65 and <code class="inline">'0'</code> is 48.</p></div>
+      <div class="term"><h3 id="term-assembly">Assembly</h3><p>Low-level human-readable machine instructions. C compilers translate source code to assembly or directly to object code.</p></div>
+      <div class="term"><h3 id="term-auto">auto</h3><p>The default storage class for local variables. In modern C, <code class="inline">auto</code> is almost never written explicitly.</p></div>
+    </div>
+
+    <div class="glossary">
+      <h2 id="letter-b">B</h2>
+      <div class="term"><h3 id="term-binary">Binary</h3><p>Base-2 notation using only 0 and 1. One binary digit is a bit; eight bits make a byte.</p></div>
+      <div class="term"><h3 id="term-bit">Bit</h3><p>The smallest unit of data: 0 or 1. Bitwise operators work directly on individual bits.</p></div>
+      <div class="term"><h3 id="term-bitwise">Bitwise operator</h3><p><code class="inline">&amp;</code> AND, <code class="inline">|</code> OR, <code class="inline">^</code> XOR, <code class="inline">~</code> NOT, and shifts <code class="inline">&lt;&lt;</code> / <code class="inline">&gt;&gt;</code>. They operate on the binary representation of integers.</p></div>
+      <div class="term"><h3 id="term-block">Block</h3><p>A group of statements inside braces <code class="inline">{ }</code>. A block introduces a new scope.</p></div>
+      <div class="term"><h3 id="term-buffer">Buffer</h3><p>A region of memory used to hold data temporarily, commonly an array receiving input or file contents.</p></div>
+      <div class="term"><h3 id="term-buffer-overflow">Buffer overflow</h3><p>Writing past the end of an array or buffer. It corrupts neighbouring memory and is a classic security bug. Use bounded functions and check lengths.</p></div>
+      <div class="term"><h3 id="term-byte">Byte</h3><p>Eight bits. <code class="inline">sizeof(char)</code> is always 1 byte in C.</p></div>
+    </div>
+
+    <div class="glossary">
+      <h2 id="letter-c">C</h2>
+      <div class="term"><h3 id="term-call-stack">Call stack</h3><p>The runtime structure that holds one <i>stack frame</i> per active function call, including parameters, locals and the return address.</p></div>
+      <div class="term"><h3 id="term-cast">Cast</h3><p>Explicit conversion between types, written <code class="inline">(double)n</code> or <code class="inline">(int)3.9</code>. Casting does not change the original variable.</p></div>
+      <div class="term"><h3 id="term-char">char</h3><p>The smallest integer type, usually one byte. It stores a character code or a small integer. A string is an array of <code class="inline">char</code> ending in <code class="inline">'\0'</code>.</p></div>
+      <div class="term"><h3 id="term-compiler">Compiler</h3><p>A program that translates C source code into object code, then links it into an executable. GCC, Clang and MSVC are common C compilers.</p></div>
+      <div class="term"><h3 id="term-const">const</h3><p>A qualifier promising that a value will not be modified through that name. <code class="inline">const int *p</code> means the pointed-to value is read-only; <code class="inline">int *const p</code> means the pointer itself is fixed.</p></div>
+      <div class="term"><h3 id="term-constant">Constant</h3><p>A value that cannot change, such as <code class="inline">42</code>, <code class="inline">'A'</code>, <code class="inline">3.14</code>, or a name defined with <code class="inline">#define</code> / <code class="inline">const</code>.</p></div>
+    </div>
+
+    <div class="glossary">
+      <h2 id="letter-d">D</h2>
+      <div class="term"><h3 id="term-dangling-pointer">Dangling pointer</h3><p>A pointer that still holds the address of memory that has been freed or gone out of scope. Using it is undefined behaviour — set pointers to <code class="inline">NULL</code> after <code class="inline">free</code>.</p></div>
+      <div class="term"><h3 id="term-data-type">Data type</h3><p>A category that determines the size, representation and allowed operations of a value: <code class="inline">int</code>, <code class="inline">double</code>, <code class="inline">char</code>, pointers, structs and so on.</p></div>
+      <div class="term"><h3 id="term-declaration">Declaration</h3><p>Tells the compiler that a name exists and what type it has, without necessarily allocating storage. A <i>definition</i> creates it.</p></div>
+      <div class="term"><h3 id="term-dereference">Dereference</h3><p>Accessing the value a pointer points to with <code class="inline">*p</code>. Dereferencing NULL or an invalid pointer crashes the program.</p></div>
+      <div class="term"><h3 id="term-directive">Directive</h3><p>A line beginning with <code class="inline">#</code> handled by the preprocessor, such as <code class="inline">#include</code>, <code class="inline">#define</code> and <code class="inline">#if</code>.</p></div>
+      <div class="term"><h3 id="term-double">double</h3><p>A double-precision floating-point type, usually 8 bytes and about 15 significant decimal digits.</p></div>
+    </div>
+
+    <div class="glossary">
+      <h2 id="letter-e">E</h2>
+      <div class="term"><h3 id="term-enum">enum</h3><p>A type whose values are named integer constants: <code class="inline">enum Color { RED, GREEN, BLUE };</code>. The names are easier to read than raw numbers.</p></div>
+      <div class="term"><h3 id="term-escape-sequence">Escape sequence</h3><p>A backslash combination representing a special character: <code class="inline">\n</code> newline, <code class="inline">\t</code> tab, <code class="inline">\\</code> backslash, <code class="inline">\0</code> null.</p></div>
+      <div class="term"><h3 id="term-expression">Expression</h3><p>A combination of values, variables, operators and function calls that produces a value, such as <code class="inline">a + b * 2</code>.</p></div>
+    </div>
+
+    <div class="glossary">
+      <h2 id="letter-f">F</h2>
+      <div class="term"><h3 id="term-file-pointer">File pointer</h3><p>A <code class="inline">FILE *</code> returned by <code class="inline">fopen</code> and used with <code class="inline">fread</code>, <code class="inline">fprintf</code>, <code class="inline">fclose</code> and related functions.</p></div>
+      <div class="term"><h3 id="term-float">float</h3><p>A single-precision floating-point type, usually 4 bytes and about 6 significant digits. Use <code class="inline">double</code> unless memory is tight.</p></div>
+      <div class="term"><h3 id="term-function">Function</h3><p>A named, reusable block of code with a return type and optional parameters. Every C program starts at <code class="inline">main</code>.</p></div>
+      <div class="term"><h3 id="term-function-pointer">Function pointer</h3><p>A pointer that stores the address of a function, allowing callbacks and dispatch tables: <code class="inline">int (*op)(int, int) = add;</code>.</p></div>
+    </div>
+
+    <div class="glossary">
+      <h2 id="letter-g">G</h2>
+      <div class="term"><h3 id="term-garbage-value">Garbage value</h3><p>An unpredictable value in an uninitialised variable. Local variables are not automatically zeroed — initialise them.</p></div>
+      <div class="term"><h3 id="term-global-variable">Global variable</h3><p>A variable declared outside all functions. It is visible from its declaration to the end of the file and lives for the whole program.</p></div>
+    </div>
+
+    <div class="glossary">
+      <h2 id="letter-h">H</h2>
+      <div class="term"><h3 id="term-header">Header</h3><p>A <code class="inline">.h</code> file containing declarations, macros and type definitions, included with <code class="inline">#include</code>.</p></div>
+      <div class="term"><h3 id="term-heap">Heap</h3><p>The region used for dynamic allocation with <code class="inline">malloc</code>, <code class="inline">calloc</code> and <code class="inline">realloc</code>. You manage its lifetime with <code class="inline">free</code>.</p></div>
+      <div class="term"><h3 id="term-hexadecimal">Hexadecimal</h3><p>Base-16 notation using 0–9 and A–F, written with a <code class="inline">0x</code> prefix: <code class="inline">0xFF</code> is 255. Common for memory addresses and bit masks.</p></div>
+    </div>
+
+    <div class="glossary">
+      <h2 id="letter-i">I</h2>
+      <div class="term"><h3 id="term-identifier">Identifier</h3><p>A name for a variable, function, type or label. It must begin with a letter or underscore and contain only letters, digits and underscores.</p></div>
+      <div class="term"><h3 id="term-include-guard">Include guard</h3><p><code class="inline">#ifndef NAME_H</code> / <code class="inline">#define NAME_H</code> / <code class="inline">#endif</code> around a header, preventing it from being included twice.</p></div>
+      <div class="term"><h3 id="term-initialisation">Initialisation</h3><p>Giving a variable its first value at the point of definition: <code class="inline">int n = 0;</code>. Distinct from later assignment.</p></div>
+      <div class="term"><h3 id="term-integer">Integer</h3><p>A whole number with no fractional part, such as <code class="inline">int</code>, <code class="inline">long</code> or <code class="inline">unsigned short</code>.</p></div>
+      <div class="term"><h3 id="term-interpreter">Interpreter</h3><p>A program that executes source code directly instead of producing a native executable. The Try It Editor uses a small C interpreter (PicoC) compiled to WebAssembly.</p></div>
+    </div>
+
+    <div class="glossary">
+      <h2 id="letter-k">K</h2>
+      <div class="term"><h3 id="term-keyword">Keyword</h3><p>A word reserved by the language, such as <code class="inline">int</code>, <code class="inline">return</code>, <code class="inline">while</code> or <code class="inline">struct</code>. You cannot use it as an identifier.</p></div>
+    </div>
+
+    <div class="glossary">
+      <h2 id="letter-l">L</h2>
+      <div class="term"><h3 id="term-library">Library</h3><p>A collection of compiled functions and declarations that can be linked into your program, such as the C standard library or a maths library.</p></div>
+      <div class="term"><h3 id="term-linker">Linker</h3><p>The tool that combines object files and libraries into an executable, resolving references between them.</p></div>
+      <div class="term"><h3 id="term-literal">Literal</h3><p>A value written directly in source code: <code class="inline">42</code>, <code class="inline">3.14</code>, <code class="inline">'x'</code>, <code class="inline">"hello"</code>.</p></div>
+      <div class="term"><h3 id="term-local-variable">Local variable</h3><p>A variable declared inside a block or function. It exists only while that block executes.</p></div>
+      <div class="term"><h3 id="term-loop">Loop</h3><p>A construct that repeats statements: <code class="inline">for</code>, <code class="inline">while</code> or <code class="inline">do...while</code>.</p></div>
+      <div class="term"><h3 id="term-lvalue">Lvalue</h3><p>An expression that refers to a storage location and can appear on the left of an assignment, such as a variable or <code class="inline">*p</code>.</p></div>
+    </div>
+
+    <div class="glossary">
+      <h2 id="letter-m">M</h2>
+      <div class="term"><h3 id="term-macro">Macro</h3><p>A preprocessor name replaced textually before compilation, defined with <code class="inline">#define</code>. Parenthesise macro parameters carefully.</p></div>
+      <div class="term"><h3 id="term-main">main</h3><p>The entry point of a C program. It returns an <code class="inline">int</code> status to the operating system; 0 means success.</p></div>
+      <div class="term"><h3 id="term-memory-leak">Memory leak</h3><p>Memory that was allocated but never freed, so the program keeps consuming memory until it exits.</p></div>
+    </div>
+
+    <div class="glossary">
+      <h2 id="letter-n">N</h2>
+      <div class="term"><h3 id="term-null-pointer">Null pointer</h3><p>A pointer with the value <code class="inline">NULL</code>, meaning it points to nothing. Check before dereferencing.</p></div>
+      <div class="term"><h3 id="term-null-terminator">Null terminator</h3><p>The <code class="inline">'\0'</code> character that marks the end of a C string. Functions such as <code class="inline">printf("%s")</code> and <code class="inline">strlen</code> rely on it.</p></div>
+    </div>
+
+    <div class="glossary">
+      <h2 id="letter-o">O</h2>
+      <div class="term"><h3 id="term-operand">Operand</h3><p>A value or expression that an operator acts on. In <code class="inline">a + b</code>, both <code class="inline">a</code> and <code class="inline">b</code> are operands.</p></div>
+      <div class="term"><h3 id="term-operator">Operator</h3><p>A symbol that performs an operation: arithmetic, comparison, logic, assignment, bitwise or member access.</p></div>
+      <div class="term"><h3 id="term-overflow">Overflow</h3><p>When a value is too large for its type. Signed integer overflow is undefined behaviour; unsigned arithmetic wraps modulo 2<sup>n</sup>.</p></div>
+    </div>
+
+    <div class="glossary">
+      <h2 id="letter-p">P</h2>
+      <div class="term"><h3 id="term-parameter">Parameter</h3><p>A variable declared in a function definition that receives an argument from the caller.</p></div>
+      <div class="term"><h3 id="term-pointer">Pointer</h3><p>A variable that holds a memory address. Its type says what kind of value lives at that address. Declared with <code class="inline">int *p</code>.</p></div>
+      <div class="term"><h3 id="term-preprocessor">Preprocessor</h3><p>The first translation phase. It handles <code class="inline">#include</code>, <code class="inline">#define</code> and conditional compilation before the compiler sees the code.</p></div>
+      <div class="term"><h3 id="term-prototype">Prototype</h3><p>A function declaration that gives the name, return type and parameter types, allowing calls before the definition appears.</p></div>
+    </div>
+
+    <div class="glossary">
+      <h2 id="letter-r">R</h2>
+      <div class="term"><h3 id="term-recursion">Recursion</h3><p>A function calling itself. Every recursive function needs a base case that stops the recursion, or the stack will overflow.</p></div>
+      <div class="term"><h3 id="term-return-value">Return value</h3><p>The value a function sends back to its caller with <code class="inline">return</code>. A function returning <code class="inline">void</code> returns no value.</p></div>
+    </div>
+
+    <div class="glossary">
+      <h2 id="letter-s">S</h2>
+      <div class="term"><h3 id="term-scope">Scope</h3><p>The part of a program where a name is visible. Block scope ends at <code class="inline">}</code>; file scope lasts to the end of the translation unit.</p></div>
+      <div class="term"><h3 id="term-segmentation-fault">Segmentation fault</h3><p>A crash caused by accessing memory the process is not allowed to touch — often a NULL or wild pointer, or an out-of-bounds access.</p></div>
+      <div class="term"><h3 id="term-signed">Signed</h3><p>An integer type that can hold negative and positive values. The default for <code class="inline">int</code> is signed.</p></div>
+      <div class="term"><h3 id="term-stack">Stack</h3><p>The region that stores function call frames and local variables. It grows and shrinks automatically; large local arrays can overflow it.</p></div>
+      <div class="term"><h3 id="term-statement">Statement</h3><p>A complete instruction, usually ending in a semicolon: a declaration, assignment, call, loop or jump.</p></div>
+      <div class="term"><h3 id="term-static">static</h3><p>At file scope, gives a name internal linkage (private to the file). Inside a function, gives a local variable a lifetime for the whole program.</p></div>
+      <div class="term"><h3 id="term-string">String</h3><p>A sequence of characters ending in <code class="inline">'\0'</code>, stored in a <code class="inline">char</code> array. There is no separate string type in C.</p></div>
+      <div class="term"><h3 id="term-struct">struct</h3><p>A composite type grouping named members, possibly of different types, into one object.</p></div>
+      <div class="term"><h3 id="term-syntax">Syntax</h3><p>The grammar rules of the language. A syntax error means the compiler cannot parse the code.</p></div>
+    </div>
+
+    <div class="glossary">
+      <h2 id="letter-t">T</h2>
+      <div class="term"><h3 id="term-token">Token</h3><p>The smallest lexical unit: a keyword, identifier, literal, operator or punctuation mark.</p></div>
+      <div class="term"><h3 id="term-typedef">typedef</h3><p>Creates an alias for a type: <code class="inline">typedef unsigned long ulong;</code>. It does not create a new type.</p></div>
+    </div>
+
+    <div class="glossary">
+      <h2 id="letter-u">U</h2>
+      <div class="term"><h3 id="term-undefined-behaviour">Undefined behaviour</h3><p>Code the C standard does not define — for example signed overflow, out-of-bounds access or double free. The compiler may do anything; the program is not reliable.</p></div>
+      <div class="term"><h3 id="term-union">union</h3><p>A type whose members share the same memory. Only one member holds a meaningful value at a time. Useful for tagged variants and low-level representations.</p></div>
+      <div class="term"><h3 id="term-unsigned">unsigned</h3><p>An integer type that cannot be negative. Unsigned arithmetic wraps around instead of overflowing.</p></div>
+    </div>
+
+    <div class="glossary">
+      <h2 id="letter-v">V</h2>
+      <div class="term"><h3 id="term-variable">Variable</h3><p>A named storage location with a type. Its value can change during execution.</p></div>
+      <div class="term"><h3 id="term-void">void</h3><p>“No type”: a function returning <code class="inline">void</code> returns nothing; <code class="inline">void *</code> is a generic object pointer that converts to any object pointer type.</p></div>
+      <div class="term"><h3 id="term-volatile">volatile</h3><p>A qualifier telling the compiler that a value may change at any time, so it must not cache or optimise away accesses. Used for hardware registers and signal flags, not for thread synchronisation.</p></div>
+    </div>
+
+    <div class="glossary">
+      <h2 id="letter-w">W</h2>
+      <div class="term"><h3 id="term-warning">Warning</h3><p>A diagnostic that is probably a mistake but still valid C. Compile with <code class="inline">-Wall -Wextra</code> and fix warnings before they become bugs.</p></div>
+    </div>
+
+    <div class="search-empty" id="glossaryEmpty" hidden>No term matches that filter.</div>
+  </main>
+</div>
+
+<footer id="footer"></footer>
+<script src="assets/app.js"></script>
+<script src="assets/glossary.js"></script>
+</body>
+</html>

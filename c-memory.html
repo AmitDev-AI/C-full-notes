@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="C memory management: stack vs heap, malloc, calloc, realloc, free and common memory bugs.">
+<title>C Memory — C Notes</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#04aa6d">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="c-memory.html">
+<a class="skip-link" href="#main">Skip to content</a>
+<header id="topbar"></header>
+
+<div class="layout">
+  <aside id="sidebar"></aside>
+
+  <main class="content" id="main">
+    <div class="breadcrumb"><a href="index.html">C Tutorial</a><span>›</span>Memory</div>
+    <h1>C Memory Management</h1>
+    <p class="lead">C does not manage memory for you. You decide when to allocate it and when to release it. Understanding the stack and the heap is essential for writing correct C programs.</p>
+
+    <h2>Stack vs heap</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th></th><th>Stack</th><th>Heap</th></tr></thead>
+        <tbody>
+          <tr><td>Allocation</td><td>Automatic (local variables)</td><td>Manual (<code>malloc</code> family)</td></tr>
+          <tr><td>Lifetime</td><td>Until the function returns</td><td>Until you call <code>free</code></td></tr>
+          <tr><td>Size</td><td>Small (often 1–8 MB total)</td><td>Limited by available RAM</td></tr>
+          <tr><td>Speed</td><td>Very fast</td><td>Slower, involves the allocator</td></tr>
+          <tr><td>Flexibility</td><td>Size known at compile time (or VLA)</td><td>Size can be decided at run time</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>malloc</h2>
+    <p><code class="inline">malloc(size)</code> reserves <code class="inline">size</code> bytes and returns a <code class="inline">void *</code> to the block, or <code class="inline">NULL</code> if it fails. The memory is <b>not initialised</b>.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main(void) {
+    int n = 5;
+    int *values = malloc(n * sizeof *values);
+
+    if (values == NULL) {
+        fprintf(stderr, "Out of memory\n");
+        return 1;
+    }
+
+    for (int i = 0; i &lt; n; i++) {
+        values[i] = (i + 1) * 10;
+    }
+
+    for (int i = 0; i &lt; n; i++) {
+        printf("%d ", values[i]);
+    }
+    printf("\n");
+
+    free(values);
+    values = NULL;
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>10 20 30 40 50</pre></div>
+    <p><code class="inline">sizeof *values</code> is better than <code class="inline">sizeof(int)</code>: it stays correct if the type of <code class="inline">values</code> changes.</p>
+
+    <h2>calloc</h2>
+    <p><code class="inline">calloc(count, size)</code> allocates space for an array and <b>zeroes it</b>.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>int *a = calloc(10, sizeof *a);
+if (a == NULL) return 1;
+
+// all ten elements are 0
+for (int i = 0; i &lt; 10; i++) {
+    printf("%d ", a[i]);
+}
+free(a);</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>0 0 0 0 0 0 0 0 0 0</pre></div>
+
+    <h2>realloc</h2>
+    <p><code class="inline">realloc(ptr, new_size)</code> resizes an existing block. It may move it, so always assign the result to the same pointer and check for <code class="inline">NULL</code>.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main(void) {
+    int *values = malloc(3 * sizeof *values);
+    if (values == NULL) return 1;
+
+    for (int i = 0; i &lt; 3; i++) values[i] = i + 1;
+
+    int *bigger = realloc(values, 6 * sizeof *values);
+    if (bigger == NULL) {
+        free(values);          // old block still valid
+        return 1;
+    }
+    values = bigger;
+
+    for (int i = 3; i &lt; 6; i++) values[i] = i + 1;
+
+    for (int i = 0; i &lt; 6; i++) printf("%d ", values[i]);
+    printf("\n");
+
+    free(values);
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>1 2 3 4 5 6</pre></div>
+    <div class="warn">
+      <p><b>Warning:</b> do not write <code class="inline">values = realloc(values, ...)</code> directly. If <code class="inline">realloc</code> fails, you lose the original pointer and leak the memory.</p>
+    </div>
+
+    <h2>free</h2>
+    <p><code class="inline">free(ptr)</code> releases memory obtained from <code class="inline">malloc</code>, <code class="inline">calloc</code> or <code class="inline">realloc</code>. After freeing, set the pointer to <code class="inline">NULL</code> to avoid accidental reuse.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>int *p = malloc(sizeof *p);
+if (p != NULL) {
+    *p = 42;
+    printf("%d\n", *p);
+    free(p);
+    p = NULL;
+}
+
+// free(NULL) is safe and does nothing.
+free(NULL);</code></pre>
+    </div>
+
+    <h2>Common memory bugs</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Bug</th><th>What happens</th><th>Avoid by</th></tr></thead>
+        <tbody>
+          <tr><td>Memory leak</td><td>Allocated block is never freed; memory grows</td><td>Free every successful allocation</td></tr>
+          <tr><td>Use after free</td><td>Reading/writing freed memory</td><td>Set pointer to <code>NULL</code>; restructure ownership</td></tr>
+          <tr><td>Double free</td><td>Freeing the same pointer twice</td><td>Free once; null the pointer</td></tr>
+          <tr><td>Buffer overflow</td><td>Writing past the allocation</td><td>Check indices and lengths</td></tr>
+          <tr><td>Off-by-one</td><td>Allocating <code>n</code> but using <code>n+1</code></td><td>Use <code>count * sizeof</code> consistently</td></tr>
+          <tr><td>Unchecked NULL</td><td>Dereferencing a failed allocation</td><td>Check every allocation</td></tr>
+          <tr><td>Freeing stack memory</td><td>Passing a non-heap pointer to <code>free</code></td><td>Only free what you allocated</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Ownership</h2>
+    <p>For every allocation, decide <b>who owns it</b> and <b>when it is freed</b>. A simple convention: the function that allocates returns ownership to the caller, and the caller frees it. Document this in the function's comment.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>/*
+ * Creates a copy of src on the heap.
+ * The caller owns the result and must free() it.
+ * Returns NULL on allocation failure.
+ */
+char *string_dup(const char *src) {
+    size_t len = strlen(src) + 1;
+    char *copy = malloc(len);
+    if (copy != NULL) {
+        memcpy(copy, src, len);
+    }
+    return copy;
+}</code></pre>
+    </div>
+
+    <h2>Detecting memory errors</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>// GCC / Clang AddressSanitizer
+// gcc -fsanitize=address -g main.c -o main
+
+// Valgrind (Linux)
+// valgrind --leak-check=full ./main
+
+// Visual Studio: use the debug heap and _CrtDumpMemoryLeaks()</code></pre>
+    </div>
+
+    <h2>When not to use malloc</h2>
+    <ul>
+      <li>For small, fixed-size data — use a local array or a struct.</li>
+      <li>When the lifetime is exactly one function call — use the stack.</li>
+      <li>In tight loops — allocator calls are relatively expensive.</li>
+      <li>When a static buffer is enough and the program is single-threaded.</li>
+    </ul>
+
+    <div class="tip">
+      <p><b>Tip:</b> pair every <code class="inline">malloc</code>/<code class="inline">calloc</code>/<code class="inline">realloc</code> with exactly one <code class="inline">free</code> on every path, including error paths. A short checklist prevents most leaks.</p>
+    </div>
+
+    <h2>Exercises</h2>
+    <ol>
+      <li>Allocate an array of 10 ints, fill it with squares, print it, then free it.</li>
+      <li>Write a function that duplicates a string on the heap.</li>
+      <li>Grow a dynamic array from 2 to 8 elements with <code class="inline">realloc</code>.</li>
+      <li>Create a linked list of three nodes with <code class="inline">malloc</code> and free every node.</li>
+      <li>Run a deliberately leaky program under Valgrind or AddressSanitizer and read the report.</li>
+    </ol>
+  </main>
+
+  <aside class="toc" id="toc"></aside>
+</div>
+
+<footer id="footer"></footer>
+<script src="assets/app.js"></script>
+</body>
+</html>

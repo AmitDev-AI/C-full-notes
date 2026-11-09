@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="C pointers: addresses, dereferencing, pointer arithmetic, NULL, pointers and arrays, and common mistakes.">
+<title>C Pointers — C Notes</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#04aa6d">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="c-pointers.html">
+<a class="skip-link" href="#main">Skip to content</a>
+<header id="topbar"></header>
+
+<div class="layout">
+  <aside id="sidebar"></aside>
+
+  <main class="content" id="main">
+    <div class="breadcrumb"><a href="index.html">C Tutorial</a><span>›</span>Pointers</div>
+    <h1>C Pointers</h1>
+    <p class="lead">A pointer is a variable that stores the <b>memory address</b> of another value. Pointers are what make C powerful — and what make it dangerous.</p>
+
+    <h2>Addresses and the &amp; operator</h2>
+    <p>Every variable lives at some address. The unary <code class="inline">&amp;</code> operator ("address of") gives you that address.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int age = 25;
+
+    printf("age = %d\n", age);
+    printf("address of age = %p\n", (void *)&amp;age);
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>age = 25
+address of age = 0x7ffee3b6a8ac</pre></div>
+    <p>The exact address changes on every run. Addresses are printed with <code class="inline">%p</code>.</p>
+
+    <h2>Declaring a pointer</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>int *p;        // pointer to int
+double *d;     // pointer to double
+char *s;       // pointer to char (often a string)
+void *v;       // generic pointer; can hold any address
+
+int x = 10;
+int *ptr = &amp;x; // ptr now holds the address of x</code></pre>
+    </div>
+    <p>The <code class="inline">*</code> in a declaration means "pointer to". The type matters: it tells the compiler how many bytes to read when dereferencing and how far to step in pointer arithmetic.</p>
+
+    <h2>Dereferencing with *</h2>
+    <p>The unary <code class="inline">*</code> operator ("dereference") accesses the value at the address.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int value = 42;
+    int *p = &amp;value;
+
+    printf("value      = %d\n", value);
+    printf("*p         = %d\n", *p);      // read through pointer
+    printf("&amp;value     = %p\n", (void *)&amp;value);
+    printf("p          = %p\n", (void *)p);
+
+    *p = 100;                            // write through pointer
+    printf("value now  = %d\n", value);
+
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>value      = 42
+*p         = 42
+&amp;value     = 0x7ffc1d2a3b4c
+p          = 0x7ffc1d2a3b4c
+value now  = 100</pre></div>
+    <p>Changing <code class="inline">*p</code> changes <code class="inline">value</code> because both refer to the same memory.</p>
+
+    <h2>NULL pointers</h2>
+    <p>A pointer that does not point anywhere should be set to <code class="inline">NULL</code> (defined in <code class="inline">&lt;stddef.h&gt;</code>). Check before dereferencing.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stddef.h&gt;
+
+int main(void) {
+    int *p = NULL;
+
+    if (p != NULL) {
+        printf("%d\n", *p);
+    } else {
+        printf("p does not point anywhere\n");
+    }
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>p does not point anywhere</pre></div>
+    <div class="warn">
+      <p><b>Never dereference NULL.</b> <code class="inline">*p</code> when <code class="inline">p == NULL</code> usually crashes the program. It is also good practice to set a pointer to <code class="inline">NULL</code> after freeing its memory.</p>
+    </div>
+
+    <h2>Pointers and functions</h2>
+    <p>Pass an address to let a function modify the caller's variable. This is how <code class="inline">scanf</code> works.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+void swap(int *a, int *b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+void increment(int *n) {
+    (*n)++;
+}
+
+int main(void) {
+    int x = 5, y = 10;
+
+    swap(&amp;x, &amp;y);
+    printf("x = %d, y = %d\n", x, y);   // x = 10, y = 5
+
+    increment(&amp;x);                     // x = 11
+    printf("x = %d\n", x);
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>x = 10, y = 5
+x = 11</pre></div>
+    <p>Note <code class="inline">(*n)++</code>: the parentheses are required. <code class="inline">*n++</code> means "increment the pointer, then dereference".</p>
+
+    <h2>Pointers and arrays</h2>
+    <p>An array name decays to a pointer to its first element. <code class="inline">a[i]</code> is defined as <code class="inline">*(a + i)</code>.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int a[5] = {10, 20, 30, 40, 50};
+    int *p = a;              // same as &amp;a[0]
+
+    printf("%d\n", a[0]);    // 10
+    printf("%d\n", *p);      // 10
+    printf("%d\n", p[2]);    // 30
+    printf("%d\n", *(a + 3));// 40
+
+    for (int i = 0; i &lt; 5; i++) {
+        printf("%d ", *(p + i));
+    }
+    printf("\n");
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>10
+10
+30
+40
+10 20 30 40 50</pre></div>
+
+    <h2>Pointer arithmetic</h2>
+    <p>Adding 1 to a pointer moves it to the next element — <b>not</b> the next byte. The step size is the size of the pointed-to type.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>int a[4] = {10, 20, 30, 40};
+int *p = a;
+
+printf("%d\n", *p);       // 10
+p++;
+printf("%d\n", *p);       // 20
+p += 2;
+printf("%d\n", *p);       // 40
+
+int distance = (int)(&amp;a[3] - &amp;a[0]);   // 3 elements
+printf("%d\n", distance);</code></pre>
+    </div>
+    <p>Subtracting two pointers into the same array gives the number of elements between them. Adding two pointers is meaningless and not allowed.</p>
+
+    <h2>Pointers to structures</h2>
+    <p>Use <code class="inline">-&gt;</code> to access a member through a pointer. It is shorthand for <code class="inline">(*ptr).member</code>.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+struct Point {
+    int x;
+    int y;
+};
+
+int main(void) {
+    struct Point p = {10, 20};
+    struct Point *ptr = &amp;p;
+
+    printf("x = %d\n", ptr-&gt;x);
+    printf("y = %d\n", ptr-&gt;y);
+
+    ptr-&gt;x = 99;
+    printf("p.x = %d\n", p.x);
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>x = 10
+y = 20
+p.x = 99</pre></div>
+
+    <h2>Pointers to pointers</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>int value = 7;
+int *p = &amp;value;      // pointer to int
+int **pp = &amp;p;        // pointer to pointer to int
+
+printf("%d\n", **pp);   // 7
+**pp = 8;
+printf("%d\n", value);  // 8</code></pre>
+    </div>
+
+    <h2>Function pointers</h2>
+    <p>Functions also have addresses. A function pointer can choose behaviour at run time.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int add(int a, int b) { return a + b; }
+int sub(int a, int b) { return a - b; }
+
+int main(void) {
+    int (*operation)(int, int) = add;
+
+    printf("%d\n", operation(10, 3));   // 13
+    operation = sub;
+    printf("%d\n", operation(10, 3));   // 7
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>13
+7</pre></div>
+
+    <h2>const and pointers</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>int value = 10;
+
+const int *p1 = &amp;value;         // cannot change *p1
+int * const p2 = &amp;value;        // cannot change p2
+const int * const p3 = &amp;value;  // cannot change either
+
+*p1 = 20;      // error
+p1 = NULL;     // allowed
+p2 = NULL;     // error
+*p2 = 20;      // allowed</code></pre>
+    </div>
+
+    <h2>Common pointer bugs</h2>
+    <ul>
+      <li><b>Uninitialised pointer</b> — points at a random address. Always initialise to <code class="inline">NULL</code> or a real address.</li>
+      <li><b>Dangling pointer</b> — points at memory that has been freed or gone out of scope.</li>
+      <li><b>Double free</b> — calling <code class="inline">free</code> twice on the same allocation.</li>
+      <li><b>Wild write</b> — <code class="inline">*p = 5</code> when <code class="inline">p</code> was never valid. Silent memory corruption.</li>
+      <li><b>Pointer type mismatch</b> — reading a <code class="inline">double</code> through an <code class="inline">int *</code> gives nonsense.</li>
+      <li><b>Forgetting <code class="inline">&amp;</code></b> — passing an <code class="inline">int</code> where an <code class="inline">int *</code> is expected.</li>
+    </ul>
+
+    <div class="tip">
+      <p><b>Tip:</b> compile with <code class="inline">-Wall -Wextra</code> and run memory-sensitive code under <b>Valgrind</b> (Linux) or <b>AddressSanitizer</b> (<code class="inline">gcc -fsanitize=address</code>). They catch the bugs that "seem to work".</p>
+    </div>
+
+    <h2>A mental model</h2>
+    <p>Think of memory as a street of numbered houses. A variable is a house containing a value. A pointer is a piece of paper with a house number written on it. Dereferencing means walking to that house and reading or writing what is inside.</p>
+
+    <h2>Exercises</h2>
+    <ol>
+      <li>Declare an int, print its address, and store the address in a pointer.</li>
+      <li>Write a function that swaps two integers using pointers.</li>
+      <li>Use a pointer to find the largest element of an array.</li>
+      <li>Write a function that returns the length of a string using pointer arithmetic.</li>
+      <li>Explain the difference between <code class="inline">*p++</code> and <code class="inline">(*p)++</code>.</li>
+    </ol>
+  </main>
+
+  <aside class="toc" id="toc"></aside>
+</div>
+
+<footer id="footer"></footer>
+<script src="assets/app.js"></script>
+</body>
+</html>

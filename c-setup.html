@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Install a C compiler and write, compile and run your first C program.">
+<title>C Get Started — C Notes</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#04aa6d">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="c-setup.html">
+<a class="skip-link" href="#main">Skip to content</a>
+<header id="topbar"></header>
+
+<div class="layout">
+  <aside id="sidebar"></aside>
+
+  <main class="content" id="main">
+    <div class="breadcrumb"><a href="index.html">C Tutorial</a><span>›</span>Get Started</div>
+    <h1>C Get Started</h1>
+    <p class="lead">To write and run C you need two things: a <b>compiler</b> that turns source code into a program, and a <b>text editor</b> to write it in. This chapter shows the fastest setup on Windows, macOS and Linux.</p>
+
+    <h2>Step 1 — Install a compiler</h2>
+
+    <h3>Windows: GCC with MSYS2 (recommended)</h3>
+    <ol>
+      <li>Download and install <b>MSYS2</b> from <code class="inline">msys2.org</code>.</li>
+      <li>Open the <b>MSYS2 UCRT64</b> terminal and run: <code class="inline">pacman -S mingw-w64-ucrt-x86_64-gcc</code></li>
+      <li>Add <code class="inline">C:\msys64\ucrt64\bin</code> to your PATH.</li>
+      <li>Open a new Command Prompt and check: <code class="inline">gcc --version</code></li>
+    </ol>
+
+    <h3>Windows: Visual Studio</h3>
+    <p>Install <b>Visual Studio Community</b> with the <i>Desktop development with C++</i> workload. Use the <b>Developer Command Prompt</b> and compile with <code class="inline">cl hello.c</code>.</p>
+
+    <h3>macOS</h3>
+    <p>Open Terminal and run <code class="inline">xcode-select --install</code>. This installs Clang, the compiler Apple ships. Verify with <code class="inline">clang --version</code>.</p>
+
+    <h3>Linux (Debian / Ubuntu)</h3>
+    <pre><code>sudo apt update
+sudo apt install build-essential</code></pre>
+    <p>On Fedora use <code class="inline">sudo dnf install gcc</code>; on Arch use <code class="inline">sudo pacman -S gcc</code>.</p>
+
+    <h3>No installation? Use an online compiler</h3>
+    <p>If you cannot install anything, sites such as <b>onlinegdb.com</b> or <b>godbolt.org</b> can compile C in the browser. They require internet access, so they are only a fallback for this offline course.</p>
+
+    <h2>Step 2 — Choose an editor</h2>
+    <ul>
+      <li><b>VS Code</b> + the C/C++ extension — cross-platform and popular.</li>
+      <li><b>Code::Blocks</b> or <b>Dev-C++</b> — simple IDE bundles for beginners.</li>
+      <li><b>CLion</b> — a full commercial IDE.</li>
+      <li><b>Vim, Neovim, Emacs</b> — fast terminal editors if you prefer the keyboard.</li>
+      <li>Any plain text editor works. Do <b>not</b> use a word processor such as Word.</li>
+    </ul>
+
+    <h2>Step 3 — Write your first program</h2>
+    <p>Create a folder called <code class="inline">c-projects</code> and inside it a file named <code class="inline">hello.c</code>:</p>
+    <div class="codebox" data-file="hello.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    printf("Hello, World!\n");
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>Hello, World!</pre></div>
+
+    <h2>Step 4 — Compile and run</h2>
+    <p>Open a terminal in the folder that contains <code class="inline">hello.c</code>.</p>
+
+    <h3>GCC / Clang</h3>
+    <pre><code>gcc hello.c -o hello
+./hello        # macOS / Linux
+hello.exe      # Windows</code></pre>
+    <p>The <code class="inline">-o hello</code> option names the output file. Without it, GCC writes <code class="inline">a.out</code> (or <code class="inline">a.exe</code> on Windows).</p>
+
+    <h3>MSVC</h3>
+    <pre><code>cl hello.c
+hello.exe</code></pre>
+
+    <h3>Useful compiler flags</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Flag</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td><code>-Wall</code></td><td>Enable common warnings.</td></tr>
+          <tr><td><code>-Wextra</code></td><td>Enable extra warnings.</td></tr>
+          <tr><td><code>-Werror</code></td><td>Treat warnings as errors.</td></tr>
+          <tr><td><code>-std=c11</code> / <code>-std=c17</code></td><td>Choose the language standard.</td></tr>
+          <tr><td><code>-g</code></td><td>Include debug information (for GDB).</td></tr>
+          <tr><td><code>-O2</code></td><td>Optimise for speed.</td></tr>
+          <tr><td><code>-lm</code></td><td>Link the maths library (needed for <code>sqrt</code> etc. on Linux).</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>The compile → link → run pipeline</h2>
+    <ol>
+      <li><b>Preprocessing</b> — <code class="inline">#include</code> and <code class="inline">#define</code> are expanded.</li>
+      <li><b>Compilation</b> — C source becomes assembly, then object code (<code class="inline">.o</code> / <code class="inline">.obj</code>).</li>
+      <li><b>Linking</b> — your object files are joined with libraries to make an executable.</li>
+      <li><b>Execution</b> — the operating system loads the program and calls <code class="inline">main</code>.</li>
+    </ol>
+
+    <h2>Common first-run problems</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Message</th><th>Fix</th></tr></thead>
+        <tbody>
+          <tr><td><code>'gcc' is not recognized</code></td><td>GCC is not installed or its <code>bin</code> folder is not on PATH. Reopen the terminal after editing PATH.</td></tr>
+          <tr><td><code>stdio.h: No such file or directory</code></td><td>The compiler's standard library is missing — reinstall the toolchain.</td></tr>
+          <tr><td><code>undefined reference to 'main'</code></td><td>You compiled the wrong file, or <code>main</code> is misspelled.</td></tr>
+          <tr><td><code>expected ';' before ...</code></td><td>A semicolon is missing on the previous line.</td></tr>
+          <tr><td><code>Permission denied</code> when running</td><td>Run <code>./hello</code>, not <code>hello</code>, on Linux/macOS, and mark it executable with <code>chmod +x hello</code>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="tip">
+      <p><b>Tip:</b> compile with <code class="inline">gcc -Wall -Wextra -std=c17 hello.c -o hello</code> from day one. The warnings catch real bugs.</p>
+    </div>
+
+    <h2>Try it in this site</h2>
+    <p>Open the built-in <a href="tryit.html">Try It editor</a> to write, run, and download C files. It uses a small C interpreter compiled to WebAssembly, so most tutorial programs run directly in the browser — no compiler installation required.</p>
+  </main>
+
+  <aside class="toc" id="toc"></aside>
+</div>
+
+<footer id="footer"></footer>
+<script src="assets/app.js"></script>
+</body>
+</html>

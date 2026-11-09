@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Practice C with graded exercises and full solutions. Track your progress offline.">
+<title>C Exercises — C Notes</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="c-exercises.html">
+<a class="skip-link" href="#main">Skip to content</a>
+<header id="topbar"></header>
+
+<div class="layout">
+  <aside id="sidebar"></aside>
+
+  <main class="content" id="main">
+    <div class="breadcrumb"><a href="index.html">C Tutorial</a><span>›</span>Practice<span>›</span>Exercises</div>
+    <h1>C Exercises</h1>
+    <p class="lead">Reading C is not the same as writing C. These exercises go from printing a line to pointers, structures and dynamic memory. Try each one before opening the solution — then press <b>Try it</b> on a solution to run it in the offline editor.</p>
+
+    <div class="ex-progress">
+      <div class="progress-track"><div class="progress-fill" id="exProgressFill"></div></div>
+      <strong id="exProgress">0 of 18 solved</strong>
+    </div>
+
+    <div class="note">
+      <p><b>How to use this page.</b> Write your attempt in the <a href="tryit.html">Try It Editor</a>, or click <b>Try it</b> on any solution. Tick the checkbox when you have solved an exercise — ticks are saved in this browser. The editor uses PicoC, a C interpreter, so a few advanced programs are best tested with GCC or Clang.</p>
+    </div>
+
+    <h2>Beginner</h2>
+
+    <article class="exercise">
+      <div class="ex-head">
+        <input type="checkbox" class="ex-check" data-exercise-id="ex-01" aria-label="Mark exercise 1 solved">
+        <div>
+          <h3>1. Print a greeting <span class="diff easy">Easy</span></h3>
+          <p class="task">Ask for a first name with <code class="inline">scanf</code>, then print <code class="inline">Hello, &lt;name&gt;!</code> on one line.</p>
+          <p class="chapter-link">Related: <a href="c-output.html">C Output</a> · <a href="c-input.html">C User Input</a></p>
+          <details><summary>Show solution</summary>
+            <div class="codebox" data-file="greeting.c"><pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    char name[64];
+
+    printf("Enter your name: ");
+    scanf("%63s", name);
+    printf("Hello, %s!\n", name);
+
+    return 0;
+}</code></pre></div>
+            <div class="output"><strong>Output</strong><pre>Enter your name: Ada
+Hello, Ada!</pre></div>
+          </details>
+        </div>
+      </div>
+    </article>
+
+    <article class="exercise">
+      <div class="ex-head">
+        <input type="checkbox" class="ex-check" data-exercise-id="ex-02" aria-label="Mark exercise 2 solved">
+        <div>
+          <h3>2. Add two numbers <span class="diff easy">Easy</span></h3>
+          <p class="task">Read two integers and print their sum, difference, product and integer quotient on separate lines.</p>
+          <p class="chapter-link">Related: <a href="c-variables.html">C Variables</a> · <a href="c-operators.html">C Operators</a></p>
+          <details><summary>Show solution</summary>
+            <div class="codebox" data-file="calculator.c"><pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int a, b;
+
+    printf("Two integers: ");
+    scanf("%d %d", &amp;a, &amp;b);
+
+    printf("sum        = %d\n", a + b);
+    printf("difference = %d\n", a - b);
+    printf("product    = %d\n", a * b);
+    if (b != 0)
+        printf("quotient   = %d\n", a / b);
+    else
+        printf("quotient   = undefined (division by zero)\n");
+
+    return 0;
+}</code></pre></div>
+          </details>
+        </div>
+      </div>
+    </article>
+
+    <article class="exercise">
+      <div class="ex-head">
+        <input type="checkbox" class="ex-check" data-exercise-id="ex-03" aria-label="Mark exercise 3 solved">
+        <div>
+          <h3>3. Even or odd <span class="diff easy">Easy</span></h3>
+          <p class="task">Read an integer and report whether it is even or odd. Use the remainder operator.</p>
+          <p class="chapter-link">Related: <a href="c-conditions.html">C If...Else</a></p>
+          <details><summary>Show solution</summary>
+            <div class="codebox" data-file="evenodd.c"><pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int n;
+
+    printf("Enter an integer: ");
+    scanf("%d", &amp;n);
+
+    if (n % 2 == 0)
+        printf("%d is even.\n", n);
+    else
+        printf("%d is odd.\n", n);
+
+    return 0;
+}</code></pre></div>
+          </details>
+        </div>
+      </div>
+    </article>
+
+    <article class="exercise">
+      <div class="ex-head">
+        <input type="checkbox" class="ex-check" data-exercise-id="ex-04" aria-label="Mark exercise 4 solved">
+        <div>
+          <h3>4. Grade calculator <span class="diff easy">Easy</span></h3>
+          <p class="task">Convert a score from 0–100 to a letter grade: A ≥ 90, B ≥ 80, C ≥ 70, D ≥ 60, otherwise F. Reject scores outside 0–100.</p>
+          <p class="chapter-link">Related: <a href="c-conditions.html">C If...Else</a></p>
+          <details><summary>Show solution</summary>
+            <div class="codebox" data-file="grade.c"><pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int score;
+
+    printf("Score (0-100): ");
+    scanf("%d", &amp;score);
+
+    if (score &lt; 0 || score &gt; 100) {
+        printf("Invalid score.\n");
+    } else if (score &gt;= 90) {
+        printf("Grade A\n");
+    } else if (score &gt;= 80) {
+        printf("Grade B\n");
+    } else if (score &gt;= 70) {
+        printf("Grade C\n");
+    } else if (score &gt;= 60) {
+        printf("Grade D\n");
+    } else {
+        printf("Grade F\n");
+    }
+
+    return 0;
+}</code></pre></div>
+          </details>
+        </div>
+      </div>
+    </article>
+
+    <article class="exercise">
+      <div class="ex-head">
+        <input type="checkbox" class="ex-check" data-exercise-id="ex-05" aria-label="Mark exercise 5 solved">
+        <div>
+          <h3>5. Multiplication table <span class="diff easy">Easy</span></h3>
+          <p class="task">Print the multiplication table for a number from 1 to 10 using a <code class="inline">for</code> loop, formatted as <code class="inline">7 x 3 = 21</code>.</p>
+          <p class="chapter-link">Related: <a href="c-loops.html">C Loops</a></p>
+          <details><summary>Show solution</summary>
+            <div class="codebox" data-file="table.c"><pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int n, i;
+
+    printf("Table for: ");
+    scanf("%d", &amp;n);
+
+    for (i = 1; i &lt;= 10; i++) {
+        printf("%d x %d = %d\n", n, i, n * i);
+    }
+
+    return 0;
+}</code></pre></div>
+          </details>
+        </div>
+      </div>
+    </article>
+
+    <article class="exercise">
+      <div class="ex-head">
+        <input type="checkbox" class="ex-check" data-exercise-id="ex-06" aria-label="Mark exercise 6 solved">
+        <div>
+          <h3>6. Countdown <span class="diff easy">Easy</span></h3>
+          <p class="task">Read a positive number and count down to zero with a <code class="inline">while</code> loop, then print <code class="inline">Liftoff!</code>.</p>
+          <p class="chapter-link">Related: <a href="c-loops.html">C Loops</a></p>
+          <details><summary>Show solution</summary>
+            <div class="codebox" data-file="countdown.c"><pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int n;
+
+    printf("Start at: ");
+    scanf("%d", &amp;n);
+
+    while (n &gt; 0) {
+        printf("%d...\n", n);
+        n--;
+    }
+    printf("Liftoff!\n");
+
+    return 0;
+}</code></pre></div>
+          </details>
+        </div>
+      </div>
+    </article>
+
+    <article class="exercise">
+      <div class="ex-head">
+        <input type="checkbox" class="ex-check" data-exercise-id="ex-07" aria-label="Mark exercise 7 solved">
+        <div>
+          <h3>7. Largest of three <span class="diff easy">Easy</span></h3>
+          <p class="task">Read three integers and print the largest. Do it once with <code class="inline">if</code> statements and once with the conditional operator <code class="inline">?:</code>.</p>
+          <p class="chapter-link">Related: <a href="c-operators.html">C Operators</a> · <a href="c-conditions.html">C If...Else</a></p>
+          <details><summary>Show solution</summary>
+            <div class="codebox" data-file="largest.c"><pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int a, b, c, max;
+
+    printf("Three integers: ");
+    scanf("%d %d %d", &amp;a, &amp;b, &amp;c);
+
+    max = a;
+    if (b &gt; max) max = b;
+    if (c &gt; max) max = c;
+    printf("if version: %d\n", max);
+
+    max = (a &gt; b) ? a : b;
+    max = (c &gt; max) ? c : max;
+    printf("ternary version: %d\n", max);
+
+    return 0;
+}</code></pre></div>
+          </details>
+        </div>
+      </div>
+    </article>
+
+    <article class="exercise">
+      <div class="ex-head">
+        <input type="checkbox" class="ex-check" data-exercise-id="ex-08" aria-label="Mark exercise 8 solved">
+        <div>
+          <h3>8. Simple calculator <span class="diff easy">Easy</span></h3>
+          <p class="task">Read two numbers and an operator (<code class="inline">+ - * /</code>) and print the result using a <code class="inline">switch</code>. Handle division by zero.</p>
+          <p class="chapter-link">Related: <a href="c-switch.html">C Switch</a></p>
+          <details><summary>Show solution</summary>
+            <div class="codebox" data-file="switchcalc.c"><pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    double a, b;
+    char op;
+
+    printf("Expression (for example 12.5 * 4): ");
+    scanf("%lf %c %lf", &amp;a, &amp;op, &amp;b);
+
+    switch (op) {
+        case '+': printf("%.2f\n", a + b); break;
+        case '-': printf("%.2f\n", a - b); break;
+        case '*': printf("%.2f\n", a * b); break;
+        case '/':
+            if (b == 0) printf("Cannot divide by zero.\n");
+            else printf("%.2f\n", a / b);
+            break;
+        default: printf("Unknown operator.\n");
+    }
+
+    return 0;
+}</code></pre></div>
+          </details>
+        </div>
+      </div>
+    </article>
+
+    <h2>Intermediate</h2>
+
+    <article class="exercise">
+      <div class="ex-head">
+        <input type="checkbox" class="ex-check" data-exercise-id="ex-09" aria-label="Mark exercise 9 solved">
+        <div>
+          <h3>9. Array statistics <span class="diff medium">Medium</span></h3>
+          <p class="task">Read 10 integers into an array and print the sum, average (as a <code class="inline">double</code>), minimum and maximum.</p>
+          <p class="chapter-link">Related: <a href="c-arrays.html">C Arrays</a></p>
+          <details><summary>Show solution</summary>
+            <div class="codebox" data-file="stats.c"><pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int values[10];
+    int i, sum = 0, min, max;
+
+    printf("Enter 10 integers:\n");
+    for (i = 0; i &lt; 10; i++) {
+        scanf("%d", &amp;values[i]);
+    }
+
+    min = max = values[0];
+    for (i = 0; i &lt; 10; i++) {
+        sum += values[i];
+        if (values[i] &lt; min) min = values[i];
+        if (values[i] &gt; max) max = values[i];
+    }
+
+    printf("sum     = %d\n", sum);
+    printf("average = %.2f\n", sum / 10.0);
+    printf("min     = %d\n", min);
+    printf("max     = %d\n", max);
+
+    return 0;
+}</code></pre></div>
+          </details>
+        </div>
+      </div>
+    </article>
+
+    <article class="exercise">
+      <div class="ex-head">
+        <input type="checkbox" class="ex-check" data-exercise-id="ex-10" aria-label="Mark exercise 10 solved">
+        <div>
+          <h3>10. Reverse a string <span class="diff medium">Medium</span></h3>
+          <p class="task">Read a word and print it backwards. Write your own loop first; then compare with a version using <code class="inline">strlen</code>.</p>
+          <p class="chapter-link">Related: <a href="c-strings.html">C Strings</a></p>
+          <details><summary>Show solution</summary>
+            <div class="codebox" data-file="reverse.c"><pre><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int main(void) {
+    char word[100];
+    int i, len;
+
+    printf("Word: ");
+    scanf("%99s", word);
+
+    len = (int)strlen(word);
+    printf("Reversed: ");
+    for (i = len - 1; i &gt;= 0; i--) {
+        putchar(word[i]);
+    }
+    putchar('\n');
+
+    return 0;
+}</code></pre></div>
+          </details>
+        </div>
+      </div>
+    </article>
+
+    <article class="exercise">
+      <div class="ex-head">
+        <input type="checkbox" class="ex-check" data-exercise-id="ex-11" aria-label="Mark exercise 11 solved">
+        <div>
+          <h3>11. Count vowels <span class="diff medium">Medium</span></h3>
+          <p class="task">Count the vowels (a, e, i, o, u) in a sentence read with <code class="inline">fgets</code>. Treat uppercase letters as vowels too.</p>
+          <p class="chapter-link">Related: <a href="c-strings.html">C Strings</a> · <a href="c-input.html">C User Input</a></p>
+          <details><summary>Show solution</summary>
+            <div class="codebox" data-file="vowels.c"><pre><code>#include &lt;stdio.h&gt;
+#include &lt;ctype.h&gt;
+
+int main(void) {
+    char text[200];
+    int i, count = 0;
+
+    printf("Sentence: ");
+    fgets(text, sizeof(text), stdin);
+
+    for (i = 0; text[i] != '\0'; i++) {
+        char c = (char)tolower((unsigned char)text[i]);
+        if (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u')
+            count++;
+    }
+
+    printf("Vowels: %d\n", count);
+    return 0;
+}</code></pre></div>
+          </details>
+        </div>
+      </div>
+    </article>
+
+    <article class="exercise">
+      <div class="ex-head">
+        <input type="checkbox" class="ex-check" data-exercise-id="ex-12" aria-label="Mark exercise 12 solved">
+        <div>
+          <h3>12. Palindrome check <span class="diff medium">Medium</span></h3>
+          <p class="task">Read a word and decide whether it reads the same forwards and backwards. Ignore case.</p>
+          <p class="chapter-link">Related: <a href="c-strings.html">C Strings</a></p>
+          <details><summary>Show solution</summary>
+            <div class="codebox" data-file="palindrome.c"><pre><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#include &lt;ctype.h&gt;
+
+int main(void) {
+    char word[100];
+    int left, right, ok = 1;
+
+    printf("Word: ");
+    scanf("%99s", word);
+
+    left = 0;
+    right = (int)strlen(word) - 1;
+    while (left &lt; right) {
+        if (tolower((unsigned char)word[left]) !=
+            tolower((unsigned char)word[right])) {
+            ok = 0;
+            break;
+        }
+        left++;
+        right--;
+    }
+
+    printf("%s is %sa palindrome.\n", word, ok ? "" : "not ");
+    return 0;
+}</code></pre></div>
+          </details>
+        </div>
+      </div>
+    </article>
+
+    <article class="exercise">
+      <div class="ex-head">
+        <input type="checkbox" class="ex-check" data-exercise-id="ex-13" aria-label="Mark exercise 13 solved">
+        <div>
+          <h3>13. Factorial and Fibonacci <span class="diff medium">Medium</span></h3>
+          <p class="task">Write two functions: one returns <code class="inline">n!</code> with a loop, the other returns the nth Fibonacci number with recursion. Print the first 10 values of each.</p>
+          <p class="chapter-link">Related: <a href="c-functions.html">C Functions</a></p>
+          <details><summary>Show solution</summary>
+            <div class="codebox" data-file="series.c"><pre><code>#include &lt;stdio.h&gt;
+
+long factorial(int n) {
+    long result = 1;
+    int i;
+    for (i = 2; i &lt;= n; i++) result *= i;
+    return result;
+}
+
+long fibonacci(int n) {
+    if (n &lt; 2) return n;
+    return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+int main(void) {
+    int i;
+    for (i = 0; i &lt; 10; i++) {
+        printf("%d! = %ld   fib(%d) = %ld\n",
+               i, factorial(i), i, fibonacci(i));
+    }
+    return 0;
+}</code></pre></div>
+          </details>
+        </div>
+      </div>
+    </article>
+
+    <article class="exercise">
+      <div class="ex-head">
+        <input type="checkbox" class="ex-check" data-exercise-id="ex-14" aria-label="Mark exercise 14 solved">
+        <div>
+          <h3>14. Swap with pointers <span class="diff medium">Medium</span></h3>
+          <p class="task">Write <code class="inline">void swap(int *a, int *b)</code> and prove that the caller's variables change.</p>
+          <p class="chapter-link">Related: <a href="c-pointers.html">C Pointers</a></p>
+          <details><summary>Show solution</summary>
+            <div class="codebox" data-file="swap.c"><pre><code>#include &lt;stdio.h&gt;
+
+void swap(int *a, int *b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+int main(void) {
+    int x = 10, y = 99;
+    printf("before: x=%d y=%d\n", x, y);
+    swap(&amp;x, &amp;y);
+    printf("after:  x=%d y=%d\n", x, y);
+    return 0;
+}</code></pre></div>
+          </details>
+        </div>
+      </div>
+    </article>
+
+    <article class="exercise">
+      <div class="ex-head">
+        <input type="checkbox" class="ex-check" data-exercise-id="ex-15" aria-label="Mark exercise 15 solved">
+        <div>
+          <h3>15. Bubble sort <span class="diff medium">Medium</span></h3>
+          <p class="task">Sort an array of 8 integers in ascending order using bubble sort, then print the result.</p>
+          <p class="chapter-link">Related: <a href="c-arrays.html">C Arrays</a> · <a href="c-loops.html">C Loops</a></p>
+          <details><summary>Show solution</summary>
+            <div class="codebox" data-file="bubble.c"><pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int a[8] = {5, 2, 9, 1, 7, 3, 8, 4};
+    int i, j, temp;
+
+    for (i = 0; i &lt; 7; i++) {
+        for (j = 0; j &lt; 7 - i; j++) {
+            if (a[j] &gt; a[j + 1]) {
+                temp = a[j];
+                a[j] = a[j + 1];
+                a[j + 1] = temp;
+            }
+        }
+    }
+
+    for (i = 0; i &lt; 8; i++) printf("%d ", a[i]);
+    printf("\n");
+    return 0;
+}</code></pre></div>
+          </details>
+        </div>
+      </div>
+    </article>
+
+    <article class="exercise">
+      <div class="ex-head">
+        <input type="checkbox" class="ex-check" data-exercise-id="ex-16" aria-label="Mark exercise 16 solved">
+        <div>
+          <h3>16. Student record <span class="diff medium">Medium</span></h3>
+          <p class="task">Define a <code class="inline">struct Student</code> with name, age and grade. Fill one record from input and print it. Pass the struct to a print function by value.</p>
+          <p class="chapter-link">Related: <a href="c-structures.html">C Structures</a></p>
+          <details><summary>Show solution</summary>
+            <div class="codebox" data-file="student.c"><pre><code>#include &lt;stdio.h&gt;
+
+struct Student {
+    char name[40];
+    int age;
+    double grade;
+};
+
+void print_student(struct Student s) {
+    printf("%s, age %d, grade %.1f\n", s.name, s.age, s.grade);
+}
+
+int main(void) {
+    struct Student s;
+
+    printf("Name age grade: ");
+    scanf("%39s %d %lf", s.name, &amp;s.age, &amp;s.grade);
+    print_student(s);
+
+    return 0;
+}</code></pre></div>
+          </details>
+        </div>
+      </div>
+    </article>
+
+    <h2>Advanced</h2>
+
+    <article class="exercise">
+      <div class="ex-head">
+        <input type="checkbox" class="ex-check" data-exercise-id="ex-17" aria-label="Mark exercise 17 solved">
+        <div>
+          <h3>17. Dynamic array <span class="diff hard">Hard</span></h3>
+          <p class="task">Ask for a count, allocate an <code class="inline">int</code> array with <code class="inline">malloc</code>, fill it, print it, then free it. Check that allocation succeeded.</p>
+          <p class="chapter-link">Related: <a href="c-memory.html">C Memory</a></p>
+          <details><summary>Show solution</summary>
+            <div class="codebox" data-file="dynamic.c"><pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main(void) {
+    int n, i;
+    int *values;
+
+    printf("How many numbers? ");
+    scanf("%d", &amp;n);
+    if (n &lt;= 0) {
+        printf("Nothing to do.\n");
+        return 1;
+    }
+
+    values = malloc((size_t)n * sizeof(int));
+    if (values == NULL) {
+        printf("Out of memory.\n");
+        return 1;
+    }
+
+    for (i = 0; i &lt; n; i++) {
+        printf("value %d: ", i + 1);
+        scanf("%d", &amp;values[i]);
+    }
+
+    printf("You entered: ");
+    for (i = 0; i &lt; n; i++) printf("%d ", values[i]);
+    printf("\n");
+
+    free(values);
+    return 0;
+}</code></pre></div>
+          </details>
+        </div>
+      </div>
+    </article>
+
+    <article class="exercise">
+      <div class="ex-head">
+        <input type="checkbox" class="ex-check" data-exercise-id="ex-18" aria-label="Mark exercise 18 solved">
+        <div>
+          <h3>18. Prime sieve <span class="diff hard">Hard</span></h3>
+          <p class="task">Print every prime below 100 using the Sieve of Eratosthenes. Use an array of flags and a loop that starts at <code class="inline">i * i</code>.</p>
+          <p class="chapter-link">Related: <a href="c-arrays.html">C Arrays</a> · <a href="c-loops.html">C Loops</a></p>
+          <details><summary>Show solution</summary>
+            <div class="codebox" data-file="sieve.c"><pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int is_prime[100];
+    int i, j;
+
+    for (i = 0; i &lt; 100; i++) is_prime[i] = 1;
+    is_prime[0] = is_prime[1] = 0;
+
+    for (i = 2; i * i &lt; 100; i++) {
+        if (is_prime[i]) {
+            for (j = i * i; j &lt; 100; j += i) {
+                is_prime[j] = 0;
+            }
+        }
+    }
+
+    for (i = 2; i &lt; 100; i++) {
+        if (is_prime[i]) printf("%d ", i);
+    }
+    printf("\n");
+    return 0;
+}</code></pre></div>
+          </details>
+        </div>
+      </div>
+    </article>
+
+    <div class="tip">
+      <p><b>Finished all 18?</b> Take the <a href="c-quiz.html">15-question quiz</a>, then generate your <a href="c-certificate.html">course certificate</a>. If you want more practice, rebuild each program from memory the next day.</p>
+    </div>
+  </main>
+
+  <aside class="toc" id="toc"></aside>
+</div>
+
+<footer id="footer"></footer>
+<script src="assets/app.js"></script>
+</body>
+</html>

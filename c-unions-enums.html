@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="C unions and enums: shared memory, tagged unions, named constants and enum flags.">
+<title>C Unions &amp; Enums — C Notes</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#04aa6d">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="c-unions-enums.html">
+<a class="skip-link" href="#main">Skip to content</a>
+<header id="topbar"></header>
+
+<div class="layout">
+  <aside id="sidebar"></aside>
+
+  <main class="content" id="main">
+    <div class="breadcrumb"><a href="index.html">C Tutorial</a><span>›</span>Unions &amp; Enums</div>
+    <h1>C Unions &amp; Enums</h1>
+    <p class="lead">Unions and enumerations are two small but useful tools: a union lets several members share one block of memory, and an enum gives names to a fixed set of integers.</p>
+
+    <h2>Unions</h2>
+    <p>A union looks like a structure, but <b>all members share the same storage</b>. Its size is the size of its largest member. Writing one member overwrites the others.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+union Value {
+    int i;
+    float f;
+    char c;
+};
+
+int main(void) {
+    union Value v;
+
+    printf("size = %zu\n", sizeof(v));   // 4 on most systems
+
+    v.i = 65;
+    printf("as int:   %d\n", v.i);
+    printf("as char:  %c\n", v.c);        // 'A' (lowest byte)
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>size = 4
+as int:   65
+as char:  A</pre></div>
+
+    <h2>Union vs struct</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th></th><th><code>struct</code></th><th><code>union</code></th></tr></thead>
+        <tbody>
+          <tr><td>Memory</td><td>Each member has its own space</td><td>All members overlap</td></tr>
+          <tr><td>Size</td><td>Sum of members + padding</td><td>Size of largest member</td></tr>
+          <tr><td>Simultaneous values</td><td>Yes</td><td>No — only the last written member is valid</td></tr>
+          <tr><td>Typical use</td><td>Objects with several fields</td><td>One value that can have different types</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Tagged unions</h2>
+    <p>Because a union does not remember which member is active, pair it with an enum tag inside a structure.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+typedef enum { TYPE_INT, TYPE_FLOAT, TYPE_TEXT } ValueKind;
+
+typedef struct {
+    ValueKind kind;
+    union {
+        int i;
+        float f;
+        const char *s;
+    } data;
+} Value;
+
+void print_value(const Value *v) {
+    switch (v-&gt;kind) {
+        case TYPE_INT:   printf("int: %d\n", v-&gt;data.i);   break;
+        case TYPE_FLOAT: printf("float: %.2f\n", v-&gt;data.f); break;
+        case TYPE_TEXT:  printf("text: %s\n", v-&gt;data.s);   break;
+    }
+}
+
+int main(void) {
+    Value a = { .kind = TYPE_INT,   .data.i = 42 };
+    Value b = { .kind = TYPE_TEXT,  .data.s = "hello" };
+
+    print_value(&amp;a);
+    print_value(&amp;b);
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>int: 42
+text: hello</pre></div>
+
+    <h2>Enumerations</h2>
+    <p>An <code class="inline">enum</code> declares a set of named integer constants. It makes code readable and restricts values to a known list.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+enum Day {
+    MON,     // 0
+    TUE,     // 1
+    WED,     // 2
+    THU,     // 3
+    FRI,     // 4
+    SAT,     // 5
+    SUN      // 6
+};
+
+int main(void) {
+    enum Day today = WED;
+    printf("%d\n", today);     // 2
+
+    if (today == WED) {
+        printf("Halfway through the week\n");
+    }
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>2
+Halfway through the week</pre></div>
+
+    <h2>Custom enum values</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>enum Status {
+    OK = 200,
+    NOT_FOUND = 404,
+    SERVER_ERROR = 500
+};
+
+enum Flags {
+    READ    = 1 &lt;&lt; 0,   // 1
+    WRITE   = 1 &lt;&lt; 1,   // 2
+    EXECUTE = 1 &lt;&lt; 2    // 4
+};
+
+int perms = READ | WRITE;   // 3</code></pre>
+    </div>
+    <p>When you assign one value, the following names continue counting from it:</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>enum Example {
+    A,        // 0
+    B,        // 1
+    C = 10,
+    D,        // 11
+    E         // 12
+};</code></pre>
+    </div>
+
+    <h2>typedef enum</h2>
+    <p>The tag is optional, but when you use one you normally also create a typedef for convenience.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>typedef enum {
+    LOW,
+    MEDIUM,
+    HIGH
+} Priority;
+
+Priority p = HIGH;
+
+switch (p) {
+    case LOW:    puts("low");    break;
+    case MEDIUM: puts("medium"); break;
+    case HIGH:   puts("high");   break;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>high</pre></div>
+
+    <h2>Enum with a switch</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+typedef enum { RED, YELLOW, GREEN } Light;
+
+const char *action(Light light) {
+    switch (light) {
+        case RED:    return "Stop";
+        case YELLOW: return "Prepare to stop";
+        case GREEN:  return "Go";
+        default:     return "Unknown";
+    }
+}
+
+int main(void) {
+    printf("%s\n", action(GREEN));
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>Go</pre></div>
+
+    <h2>Enum vs #define</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th></th><th><code>enum</code></th><th><code>#define</code></th></tr></thead>
+        <tbody>
+          <tr><td>Type-safe</td><td>Yes (an enum type)</td><td>No</td></tr>
+          <tr><td>Debugger visible</td><td>Often yes</td><td>No</td></tr>
+          <tr><td>Scope</td><td>Block scope</td><td>Preprocessor, file scope</td></tr>
+          <tr><td>Values</td><td>Integer constants only</td><td>Any token sequence</td></tr>
+          <tr><td>Best for</td><td>Related named options</td><td>Configuration, include guards, macros</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Practical notes</h2>
+    <ul>
+      <li>An enum's underlying type is an implementation-defined integer type large enough to hold all values.</li>
+      <li>Enumerators are visible in the surrounding scope (unlike struct members).</li>
+      <li>C does not prevent assigning an integer to an enum variable — the type is a helpful convention, not a strict guarantee.</li>
+      <li>Use enums for states, options, error codes and command types.</li>
+      <li>Do not take the address of a union member you did not last write — reading an inactive member is implementation-defined and often meaningless.</li>
+    </ul>
+
+    <div class="warn">
+      <p><b>Warning:</b> type-punning through unions (writing one member and reading another) is a common but non-portable trick. Unless your compiler documents it, avoid relying on it. Use <code class="inline">memcpy</code> for safe reinterpretation.</p>
+    </div>
+
+    <h2>Exercises</h2>
+    <ol>
+      <li>Define an enum for the four seasons and print one.</li>
+      <li>Create a tagged union that stores either an int or a string, plus a tag.</li>
+      <li>Use enum flags to represent read/write/execute permissions and test whether a set of permissions includes write access.</li>
+      <li>Write a function that returns a season name from an enum value.</li>
+    </ol>
+  </main>
+
+  <aside class="toc" id="toc"></aside>
+</div>
+
+<footer id="footer"></footer>
+<script src="assets/app.js"></script>
+</body>
+</html>

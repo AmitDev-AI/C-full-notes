@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="C variables: declaring, initialising and changing variables, plus naming rules and format specifiers.">
+<title>C Variables — C Notes</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#04aa6d">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="c-variables.html">
+<a class="skip-link" href="#main">Skip to content</a>
+<header id="topbar"></header>
+
+<div class="layout">
+  <aside id="sidebar"></aside>
+
+  <main class="content" id="main">
+    <div class="breadcrumb"><a href="index.html">C Tutorial</a><span>›</span>Variables</div>
+    <h1>C Variables</h1>
+    <p class="lead">A variable is a named container for a value. Every variable in C has a <b>type</b> that decides what kind of value it can hold and how much memory it uses.</p>
+
+    <h2>Declaring a variable</h2>
+    <p>Declaration tells the compiler the variable's name and type:</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>int age;        // declares an int named age
+float price;    // declares a float named price
+char grade;     // declares a char named grade</code></pre>
+    </div>
+    <p>At this point the value is <b>indeterminate</b> — it contains whatever happened to be in that memory. Never read a variable before assigning it.</p>
+
+    <h2>Assigning a value</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>int age;
+age = 25;
+
+printf("Age: %d\n", age);</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>Age: 25</pre></div>
+
+    <h2>Initialising at declaration</h2>
+    <p>You can combine declaration and assignment. This is the safest habit.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int age = 25;
+    float height = 5.9f;
+    char grade = 'A';
+    double balance = 1250.75;
+
+    printf("Age: %d\n", age);
+    printf("Height: %.1f\n", height);
+    printf("Grade: %c\n", grade);
+    printf("Balance: %.2f\n", balance);
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>Age: 25
+Height: 5.9
+Grade: A
+Balance: 1250.75</pre></div>
+
+    <h2>Changing a variable</h2>
+    <p>Assignment replaces the old value. The variable keeps its type.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int score = 10;
+    printf("Start: %d\n", score);
+
+    score = 25;
+    printf("After: %d\n", score);
+
+    score = score + 5;
+    printf("Final: %d\n", score);
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>Start: 10
+After: 25
+Final: 30</pre></div>
+
+    <h2>Declaring several variables at once</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>int x = 1, y = 2, z = 3;
+
+// Same type, no initial value:
+int a, b, c;
+
+// Mixed types must be separate declarations:
+int count = 0;
+double total = 0.0;</code></pre>
+    </div>
+
+    <h2>Naming rules</h2>
+    <ul>
+      <li>Letters, digits and underscores only.</li>
+      <li>Must start with a letter or underscore.</li>
+      <li>Case-sensitive: <code class="inline">total</code> and <code class="inline">Total</code> differ.</li>
+      <li>Cannot be a C keyword.</li>
+      <li>Should describe the value: <code class="inline">item_count</code>, not <code class="inline">ic</code>.</li>
+    </ul>
+    <div class="codebox" data-file="main.c">
+<pre><code>int student_count = 30;
+int max_score = 100;
+float average_temp = 27.5f;
+char middle_initial = 'K';
+
+// int 1st_place = 1;   // error: starts with a digit
+// int for = 10;        // error: keyword</code></pre>
+    </div>
+
+    <h2>Variables and format specifiers</h2>
+    <p>Use the specifier that matches the type, or <code class="inline">printf</code> will read the wrong bytes.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Type</th><th>Specifier</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td><code>int</code></td><td><code>%d</code></td><td><code>int n = 7;</code></td></tr>
+          <tr><td><code>unsigned int</code></td><td><code>%u</code></td><td><code>unsigned int n = 7;</code></td></tr>
+          <tr><td><code>long</code></td><td><code>%ld</code></td><td><code>long n = 100000L;</code></td></tr>
+          <tr><td><code>float</code></td><td><code>%f</code></td><td><code>float f = 3.5f;</code></td></tr>
+          <tr><td><code>double</code></td><td><code>%f</code> / <code>%lf</code> (scanf)</td><td><code>double d = 3.5;</code></td></tr>
+          <tr><td><code>char</code></td><td><code>%c</code></td><td><code>char c = 'A';</code></td></tr>
+          <tr><td>string</td><td><code>%s</code></td><td><code>char s[] = "Hi";</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Local and global variables</h2>
+    <p>A variable declared inside a function is <b>local</b>: it exists only while that function runs. A variable declared outside every function is <b>global</b>: it exists for the whole program and can be used by any function.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int global_count = 0;      // global
+
+void bump(void) {
+    int local = 5;         // local to bump()
+    global_count++;
+    printf("local = %d, global = %d\n", local, global_count);
+}
+
+int main(void) {
+    bump();
+    bump();
+    // printf("%d", local);  // error: local is not visible here
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>local = 5, global = 1
+local = 5, global = 2</pre></div>
+    <p>Prefer local variables. Globals make it hard to see which code changes a value.</p>
+
+    <h2>Constants</h2>
+    <p>Use <code class="inline">const</code> when a value must not change:</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>const double PI = 3.14159265358979;
+const int MAX_USERS = 100;
+
+// PI = 3.14;   // compile error: PI is read-only</code></pre>
+    </div>
+    <p>See the <a href="c-constants.html">Constants chapter</a> for <code class="inline">#define</code> and literal rules.</p>
+
+    <div class="warn">
+      <p><b>Warning:</b> reading an uninitialised local variable is undefined behaviour. Some compilers with <code class="inline">-Wall</code> will warn you; always initialise.</p>
+    </div>
+
+    <h2>Exercises</h2>
+    <ol>
+      <li>Declare variables for your name, age, height and favourite letter, then print them.</li>
+      <li>Create an <code class="inline">int</code> called <code class="inline">lives</code> set to 3, subtract 1, and print the result.</li>
+      <li>Predict what happens if you assign <code class="inline">3.99</code> to an <code class="inline">int</code>. Test it with a compiler.</li>
+    </ol>
+  </main>
+
+  <aside class="toc" id="toc"></aside>
+</div>
+
+<footer id="footer"></footer>
+<script src="assets/app.js"></script>
+</body>
+</html>

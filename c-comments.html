@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="C comments: single-line and multi-line comments, uses and common mistakes.">
+<title>C Comments — C Notes</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#04aa6d">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="c-comments.html">
+<a class="skip-link" href="#main">Skip to content</a>
+<header id="topbar"></header>
+
+<div class="layout">
+  <aside id="sidebar"></aside>
+
+  <main class="content" id="main">
+    <div class="breadcrumb"><a href="index.html">C Tutorial</a><span>›</span>Comments</div>
+    <h1>C Comments</h1>
+    <p class="lead">Comments are notes for humans. The compiler ignores them completely, so they cost nothing at run time and make code easier to understand.</p>
+
+    <h2>Single-line comments</h2>
+    <p>Start with <code class="inline">//</code>. Everything until the end of the line is a comment. This style was added to C in C99, but compilers supported it long before.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    // Print a greeting
+    printf("Hello, World!\n");
+
+    int score = 100;  // current score
+    printf("Score: %d\n", score);
+
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>Hello, World!
+Score: 100</pre></div>
+
+    <h2>Multi-line comments</h2>
+    <p>Wrap text in <code class="inline">/*</code> and <code class="inline">*/</code>. This works everywhere, including inside a line of code and in C89.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>/*
+   Program: greeting.c
+   Author:  Amit
+   Purpose: show how comments work
+*/
+
+#include &lt;stdio.h&gt;
+
+int main(void) {
+    printf("Hello!\n");   /* inline comment */
+
+    /*
+       This entire block
+       is ignored by the compiler.
+    */
+    return 0;
+}</code></pre>
+    </div>
+
+    <h2>What comments are for</h2>
+    <ul>
+      <li><b>Explaining why</b> code does something, not what it does. The code already says what.</li>
+      <li><b>Documenting functions</b> — purpose, parameters, return value.</li>
+      <li><b>Temporarily disabling code</b> while debugging.</li>
+      <li><b>Marking work</b> with <code class="inline">TODO</code> or <code class="inline">FIXME</code>.</li>
+      <li><b>File headers</b> — author, date, licence.</li>
+    </ul>
+
+    <div class="codebox" data-file="math_utils.c">
+<pre><code>/*
+ * Returns the larger of two integers.
+ * If the values are equal, returns a.
+ */
+int max(int a, int b) {
+    return (a &gt; b) ? a : b;
+}</code></pre>
+    </div>
+
+    <h2>Comments you should avoid</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>// BAD: repeats the code
+counter = counter + 1;  // add one to counter
+
+// BETTER: explains intent
+counter++;              // count this retry attempt
+
+// BAD: stale comment
+// returns 0 on success
+return -1;              // code changed, comment did not</code></pre>
+    </div>
+
+    <h2>Can comments be nested?</h2>
+    <p>No. Multi-line comments do <b>not</b> nest. The first <code class="inline">*/</code> ends the comment, even if an inner <code class="inline">/*</code> appeared earlier.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>/* outer comment
+   /* inner comment */   &lt;-- this ends the comment
+   still code? */
+</code></pre>
+    </div>
+    <p>The text after the closing <code class="inline">*/</code> is parsed as C and will cause an error. Use <code class="inline">//</code> on each line for commenting out blocks containing multi-line comments.</p>
+
+    <h2>Commented-out code</h2>
+    <p>You can comment out code to disable it:</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>int main(void) {
+    printf("This runs\n");
+
+    // printf("This does not run\n");
+
+    /*
+    printf("Neither does this\n");
+    printf("nor this\n");
+    */
+    return 0;
+}</code></pre>
+    </div>
+    <p>Do not leave large blocks of dead code in finished programs — use version control (Git) to keep old versions instead.</p>
+
+    <h2>Preprocessor comments</h2>
+    <p>Comments are removed before the preprocessor runs, so you cannot use them inside a <code class="inline">#define</code> in tricky ways. Keep macro definitions simple and comment above the line.</p>
+
+    <h2>Quick summary</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Style</th><th>Syntax</th><th>Ends at</th><th>Typical use</th></tr></thead>
+        <tbody>
+          <tr><td>Single line</td><td><code>// text</code></td><td>End of line</td><td>Short notes, inline explanations</td></tr>
+          <tr><td>Multi-line</td><td><code>/* text */</code></td><td>First <code>*/</code></td><td>Headers, long explanations, disabling blocks</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="tip">
+      <p><b>Tip:</b> write the comment before the code when the reason is not obvious. If the code needs a comment to explain <i>what</i> it does, consider renaming variables or splitting the function.</p>
+    </div>
+  </main>
+
+  <aside class="toc" id="toc"></aside>
+</div>
+
+<footer id="footer"></footer>
+<script src="assets/app.js"></script>
+</body>
+</html>

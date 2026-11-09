@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="C if, else if and else: making decisions with conditions, logical operators and the ternary operator.">
+<title>C If...Else — C Notes</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#04aa6d">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="c-conditions.html">
+<a class="skip-link" href="#main">Skip to content</a>
+<header id="topbar"></header>
+
+<div class="layout">
+  <aside id="sidebar"></aside>
+
+  <main class="content" id="main">
+    <div class="breadcrumb"><a href="index.html">C Tutorial</a><span>›</span>If...Else</div>
+    <h1>C If...Else</h1>
+    <p class="lead">Conditions let a program choose between different paths. In C, <b>0 is false</b> and <b>any non-zero value is true</b>.</p>
+
+    <h2>The if statement</h2>
+    <p>Run a block only when a condition is true.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int age = 20;
+
+    if (age &gt;= 18) {
+        printf("You are an adult.\n");
+    }
+
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>You are an adult.</pre></div>
+    <p>The condition must be in parentheses. The braces are optional for a single statement, but always using them prevents mistakes.</p>
+
+    <h2>if...else</h2>
+    <p>Provide a second path when the condition is false.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int age = 15;
+
+    if (age &gt;= 18) {
+        printf("You can vote.\n");
+    } else {
+        printf("You cannot vote yet.\n");
+    }
+
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>You cannot vote yet.</pre></div>
+
+    <h2>if...else if...else</h2>
+    <p>Test several conditions in order. The first true branch wins; the rest are skipped.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int score = 82;
+
+    if (score &gt;= 90) {
+        printf("Grade A\n");
+    } else if (score &gt;= 80) {
+        printf("Grade B\n");
+    } else if (score &gt;= 70) {
+        printf("Grade C\n");
+    } else if (score &gt;= 60) {
+        printf("Grade D\n");
+    } else {
+        printf("Grade F\n");
+    }
+
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>Grade B</pre></div>
+    <p>Order matters. If you tested <code class="inline">score &gt;= 60</code> first, every score above 60 would get a D.</p>
+
+    <h2>Comparison and logical operators</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Operator</th><th>Meaning</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td><code>==</code></td><td>equal</td><td><code>x == 10</code></td></tr>
+          <tr><td><code>!=</code></td><td>not equal</td><td><code>x != 10</code></td></tr>
+          <tr><td><code>&gt;</code> <code>&lt;</code></td><td>greater / less</td><td><code>x &gt; 0</code></td></tr>
+          <tr><td><code>&gt;=</code> <code>&lt;=</code></td><td>greater/less or equal</td><td><code>x &lt;= 100</code></td></tr>
+          <tr><td><code>&amp;&amp;</code></td><td>AND — both true</td><td><code>x &gt; 0 &amp;&amp; x &lt; 10</code></td></tr>
+          <tr><td><code>||</code></td><td>OR — at least one true</td><td><code>x == 0 || x == 1</code></td></tr>
+          <tr><td><code>!</code></td><td>NOT — reverses truth</td><td><code>!found</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="codebox" data-file="main.c">
+<pre><code>int age = 25;
+int member = 1;
+
+if (age &gt;= 18 &amp;&amp; member) {
+    printf("Discount applies\n");
+}
+
+if (age &lt; 12 || age &gt; 65) {
+    printf("Reduced price\n");
+}
+
+if (!member) {
+    printf("Sign up today\n");
+}</code></pre>
+    </div>
+
+    <h2>Nested conditions</h2>
+    <p>An <code class="inline">if</code> can contain another <code class="inline">if</code>. Keep nesting shallow; deep nesting is hard to read.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>int logged_in = 1;
+int is_admin = 0;
+
+if (logged_in) {
+    if (is_admin) {
+        printf("Admin panel\n");
+    } else {
+        printf("User dashboard\n");
+    }
+} else {
+    printf("Please log in\n");
+}</code></pre>
+    </div>
+    <p>A flatter version with <code class="inline">&amp;&amp;</code> is often clearer:</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>if (logged_in &amp;&amp; is_admin) {
+    printf("Admin panel\n");
+} else if (logged_in) {
+    printf("User dashboard\n");
+} else {
+    printf("Please log in\n");
+}</code></pre>
+    </div>
+
+    <h2>The ternary operator</h2>
+    <p>A compact one-line choice: <code class="inline">condition ? value_if_true : value_if_false</code>.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int number = 7;
+
+    const char *type = (number % 2 == 0) ? "even" : "odd";
+    printf("%d is %s\n", number, type);
+
+    int a = 10, b = 20;
+    int max = (a &gt; b) ? a : b;
+    printf("max = %d\n", max);
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>7 is odd
+max = 20</pre></div>
+    <p>Use the ternary form for short, simple choices. For anything longer, use <code class="inline">if...else</code>.</p>
+
+    <h2>Truthiness in C</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>if (1)      { /* runs */ }
+if (-5)     { /* runs: any non-zero is true */ }
+if (0)      { /* does not run */ }
+if ('A')    { /* runs: 'A' is 65 */ }
+if (NULL)   { /* does not run: NULL is 0 */ }
+
+int count = 0;
+if (count)  { /* does not run */ }
+if (!count) { /* runs */ }</code></pre>
+    </div>
+
+    <h2>Common mistakes</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Mistake</th><th>Why it is wrong</th><th>Fix</th></tr></thead>
+        <tbody>
+          <tr><td><code>if (x = 5)</code></td><td>Assigns 5; always true.</td><td><code>if (x == 5)</code></td></tr>
+          <tr><td><code>if (x &gt; 1 &amp;&amp; &lt; 10)</code></td><td>Each side needs its own variable.</td><td><code>if (x &gt; 1 &amp;&amp; x &lt; 10)</code></td></tr>
+          <tr><td><code>if (x &gt; 1 || x &lt; 10)</code></td><td>Always true — almost every number matches.</td><td>Use <code>&amp;&amp;</code> for a range.</td></tr>
+          <tr><td><code>if (x == 1, 2)</code></td><td>Comma operator; only the last value counts.</td><td><code>if (x == 1 || x == 2)</code></td></tr>
+          <tr><td>Missing braces with multiple statements</td><td>Only the first statement is conditional.</td><td>Always use <code>{ }</code>.</td></tr>
+          <tr><td><code>else if</code> after <code>else</code></td><td>Syntax error.</td><td>Test conditions before the final <code>else</code>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Complete example: a simple calculator check</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    char op = '+';
+    int a = 12, b = 4;
+    int result = 0;
+
+    if (op == '+') {
+        result = a + b;
+    } else if (op == '-') {
+        result = a - b;
+    } else if (op == '*') {
+        result = a * b;
+    } else if (op == '/') {
+        if (b != 0) {
+            result = a / b;
+        } else {
+            printf("Cannot divide by zero\n");
+            return 1;
+        }
+    } else {
+        printf("Unknown operator\n");
+        return 1;
+    }
+
+    printf("%d %c %d = %d\n", a, op, b, result);
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>12 + 4 = 16</pre></div>
+
+    <div class="tip">
+      <p><b>Tip:</b> when you have many fixed options to compare against one value, a <a href="c-switch.html"><code class="inline">switch</code></a> is usually cleaner than a long <code class="inline">if...else if</code> chain.</p>
+    </div>
+
+    <h2>Exercises</h2>
+    <ol>
+      <li>Read a number and print whether it is positive, negative or zero.</li>
+      <li>Read a year and print whether it is a leap year.</li>
+      <li>Read three numbers and print the largest.</li>
+      <li>Assign a letter grade from a score using <code class="inline">if...else if</code>.</li>
+    </ol>
+  </main>
+
+  <aside class="toc" id="toc"></aside>
+</div>
+
+<footer id="footer"></footer>
+<script src="assets/app.js"></script>
+</body>
+</html>

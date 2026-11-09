@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="C output: printf, puts, format specifiers, escape sequences, width and precision.">
+<title>C Output — C Notes</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#04aa6d">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="c-output.html">
+<a class="skip-link" href="#main">Skip to content</a>
+<header id="topbar"></header>
+
+<div class="layout">
+  <aside id="sidebar"></aside>
+
+  <main class="content" id="main">
+    <div class="breadcrumb"><a href="index.html">C Tutorial</a><span>›</span>Output</div>
+    <h1>C Output</h1>
+    <p class="lead">C prints output with functions from <code class="inline">&lt;stdio.h&gt;</code>. <code class="inline">printf</code> is the workhorse: it formats values and writes them to the screen.</p>
+
+    <h2>printf</h2>
+    <p>The name means <b>print formatted</b>. The first argument is a format string; the rest are the values to insert.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    printf("Hello, World!\n");
+    printf("I am learning C.\n");
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>Hello, World!
+I am learning C.</pre></div>
+
+    <h2>Format specifiers</h2>
+    <p>A <code class="inline">%</code> followed by a letter is a placeholder. The matching argument replaces it.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int age = 25;
+    float height = 5.9f;
+    char grade = 'A';
+    char name[] = "Amit";
+
+    printf("Name: %s\n", name);
+    printf("Age: %d\n", age);
+    printf("Height: %.1f feet\n", height);
+    printf("Grade: %c\n", grade);
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>Name: Amit
+Age: 25
+Height: 5.9 feet
+Grade: A</pre></div>
+
+    <h3>Common specifiers</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Specifier</th><th>Type</th><th>Example output</th></tr></thead>
+        <tbody>
+          <tr><td><code>%d</code> / <code>%i</code></td><td>int</td><td><code>42</code></td></tr>
+          <tr><td><code>%u</code></td><td>unsigned int</td><td><code>42</code></td></tr>
+          <tr><td><code>%ld</code> / <code>%lu</code></td><td>long / unsigned long</td><td><code>1000000</code></td></tr>
+          <tr><td><code>%lld</code></td><td>long long</td><td><code>9000000000</code></td></tr>
+          <tr><td><code>%f</code></td><td>float / double</td><td><code>3.140000</code></td></tr>
+          <tr><td><code>%.2f</code></td><td>float with 2 decimals</td><td><code>3.14</code></td></tr>
+          <tr><td><code>%e</code></td><td>scientific notation</td><td><code>3.140000e+00</code></td></tr>
+          <tr><td><code>%c</code></td><td>char</td><td><code>A</code></td></tr>
+          <tr><td><code>%s</code></td><td>string</td><td><code>Hello</code></td></tr>
+          <tr><td><code>%x</code> / <code>%X</code></td><td>hexadecimal</td><td><code>ff</code> / <code>FF</code></td></tr>
+          <tr><td><code>%o</code></td><td>octal</td><td><code>377</code></td></tr>
+          <tr><td><code>%p</code></td><td>pointer address</td><td><code>0x7ffd...</code></td></tr>
+          <tr><td><code>%%</code></td><td>a literal percent sign</td><td><code>%</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Printing several values</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int x = 10, y = 20;
+    printf("x = %d, y = %d, sum = %d\n", x, y, x + y);
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>x = 10, y = 20, sum = 30</pre></div>
+    <p>The order of the arguments must match the order of the specifiers. A mismatch such as passing a <code class="inline">double</code> to <code class="inline">%d</code> is undefined behaviour — it may print garbage or crash.</p>
+
+    <h2>Escape sequences</h2>
+    <p>These special character pairs start with a backslash and insert characters that are hard to type.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Sequence</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td><code>\n</code></td><td>New line</td></tr>
+          <tr><td><code>\t</code></td><td>Horizontal tab</td></tr>
+          <tr><td><code>\\</code></td><td>Backslash</td></tr>
+          <tr><td><code>\"</code></td><td>Double quote</td></tr>
+          <tr><td><code>\'</code></td><td>Single quote</td></tr>
+          <tr><td><code>\0</code></td><td>Null character (ends a string)</td></tr>
+          <tr><td><code>\r</code></td><td>Carriage return</td></tr>
+          <tr><td><code>\a</code></td><td>Alert / bell</td></tr>
+          <tr><td><code>\b</code></td><td>Backspace</td></tr>
+          <tr><td><code>\f</code></td><td>Form feed</td></tr>
+          <tr><td><code>\v</code></td><td>Vertical tab</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    printf("Name:\tAmit\n");
+    printf("Path:\tC:\\Users\\amit\n");
+    printf("She said, \"Hello!\"\n");
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>Name:	Amit
+Path:	C:\Users\amit
+She said, "Hello!"</pre></div>
+
+    <h2>Width, precision and padding</h2>
+    <p>You can control how wide a field is and how many decimal places are shown.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    printf("%d\n", 42);
+    printf("%5d\n", 42);        // width 5, right aligned
+    printf("%-5d|\n", 42);      // width 5, left aligned
+    printf("%05d\n", 42);       // zero padded
+    printf("%.2f\n", 3.14159);  // 2 decimal places
+    printf("%8.2f\n", 3.14159); // width 8, 2 decimals
+    printf("%+d\n", 42);        // always show sign
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>42
+   42
+42   |
+00042
+3.14
+    3.14
++42</pre></div>
+
+    <h2>puts and putchar</h2>
+    <p><code class="inline">puts</code> prints a string followed by a newline. <code class="inline">putchar</code> prints one character. They are simpler and slightly faster than <code class="inline">printf</code> when you do not need formatting.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    puts("Hello from puts");
+    putchar('C');
+    putchar('\n');
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>Hello from puts
+C</pre></div>
+
+    <h2>Output buffering</h2>
+    <p><code class="inline">printf</code> writes into a buffer that is flushed when it fills, when the program ends, or when you print a newline on a terminal. If your program crashes before flushing, some output may be lost. <code class="inline">fflush(stdout);</code> forces a flush.</p>
+
+    <div class="note">
+      <p><b>Note:</b> standard output is normally line-buffered on a terminal and fully buffered when redirected to a file. Errors should go to <code class="inline">stderr</code> with <code class="inline">fprintf(stderr, ...)</code>.</p>
+    </div>
+
+    <h2>Exercises</h2>
+    <ol>
+      <li>Print your name, age and city on three separate lines.</li>
+      <li>Print a table of five numbers, each right-aligned in a width of 8.</li>
+      <li>Print the value of <code class="inline">22.0 / 7.0</code> with exactly five decimal places.</li>
+    </ol>
+  </main>
+
+  <aside class="toc" id="toc"></aside>
+</div>
+
+<footer id="footer"></footer>
+<script src="assets/app.js"></script>
+</body>
+</html>

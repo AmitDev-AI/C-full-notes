@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="C user input: scanf, fgets, getchar, input validation and common pitfalls.">
+<title>C User Input — C Notes</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#04aa6d">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="c-input.html">
+<a class="skip-link" href="#main">Skip to content</a>
+<header id="topbar"></header>
+
+<div class="layout">
+  <aside id="sidebar"></aside>
+
+  <main class="content" id="main">
+    <div class="breadcrumb"><a href="index.html">C Tutorial</a><span>›</span>User Input</div>
+    <h1>C User Input</h1>
+    <p class="lead">Programs read keyboard input from <b>standard input</b> (<code class="inline">stdin</code>). The two main tools are <code class="inline">scanf</code> for formatted values and <code class="inline">fgets</code> for lines of text.</p>
+
+    <h2>Reading a number with scanf</h2>
+    <p><code class="inline">scanf</code> needs the <b>address</b> of the variable, so you write <code class="inline">&amp;age</code>, not <code class="inline">age</code>.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int age;
+
+    printf("Enter your age: ");
+    if (scanf("%d", &amp;age) == 1) {
+        printf("You are %d years old.\n", age);
+    } else {
+        printf("That was not a number.\n");
+    }
+
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Input</strong><pre>25</pre><strong>Output</strong><pre>Enter your age: You are 25 years old.</pre></div>
+
+    <h2>scanf conversion specifiers</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Type</th><th>Specifier</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td><code>int</code></td><td><code>%d</code></td><td><code>scanf("%d", &amp;n);</code></td></tr>
+          <tr><td><code>unsigned</code></td><td><code>%u</code></td><td><code>scanf("%u", &amp;n);</code></td></tr>
+          <tr><td><code>long</code></td><td><code>%ld</code></td><td><code>scanf("%ld", &amp;n);</code></td></tr>
+          <tr><td><code>long long</code></td><td><code>%lld</code></td><td><code>scanf("%lld", &amp;n);</code></td></tr>
+          <tr><td><code>float</code></td><td><code>%f</code></td><td><code>scanf("%f", &amp;f);</code></td></tr>
+          <tr><td><code>double</code></td><td><code>%lf</code></td><td><code>scanf("%lf", &amp;d);</code></td></tr>
+          <tr><td><code>char</code></td><td><code>%c</code></td><td><code>scanf(" %c", &amp;c);</code> (note the space)</td></tr>
+          <tr><td>string</td><td><code>%s</code></td><td><code>scanf("%49s", word);</code> (no <code>&amp;</code>)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="warn">
+      <p><b>Remember:</b> use <code class="inline">%f</code> when <i>printing</i> a float or double with <code class="inline">printf</code>, but <code class="inline">%lf</code> when <i>reading</i> a double with <code class="inline">scanf</code>.</p>
+    </div>
+
+    <h2>Reading several values</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int a, b;
+
+    printf("Enter two integers: ");
+    if (scanf("%d %d", &amp;a, &amp;b) == 2) {
+        printf("sum = %d\n", a + b);
+    } else {
+        printf("Invalid input\n");
+    }
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Input</strong><pre>12 30</pre><strong>Output</strong><pre>Enter two integers: sum = 42</pre></div>
+
+    <h2>scanf returns a count</h2>
+    <p>The return value is the number of items successfully read, or <code class="inline">EOF</code> on failure. <b>Always check it</b> — otherwise bad input leaves the variable unchanged and your program misbehaves.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>int n;
+int result = scanf("%d", &amp;n);
+
+if (result == 1) {
+    printf("Read %d\n", n);
+} else if (result == EOF) {
+    printf("End of input\n");
+} else {
+    printf("Not a number\n");
+}</code></pre>
+    </div>
+
+    <h2>Reading strings safely with fgets</h2>
+    <p><code class="inline">scanf("%s")</code> stops at whitespace and can overflow the buffer. <code class="inline">fgets</code> reads a whole line and takes a size limit.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int main(void) {
+    char name[100];
+
+    printf("Enter your full name: ");
+    if (fgets(name, sizeof(name), stdin) != NULL) {
+        size_t len = strlen(name);
+        if (len &gt; 0 &amp;&amp; name[len - 1] == '\n') {
+            name[len - 1] = '\0';      // strip newline
+        }
+        printf("Hello, %s!\n", name);
+    }
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Input</strong><pre>Amit Mahanta</pre><strong>Output</strong><pre>Enter your full name: Hello, Amit Mahanta!</pre></div>
+    <p><code class="inline">fgets</code> returns <code class="inline">NULL</code> at end-of-file or on error. If the line is longer than the buffer, the rest stays in the input stream.</p>
+
+    <h2>Reading one character with getchar</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    printf("Press Enter to continue...");
+    int c;
+    do {
+        c = getchar();
+    } while (c != '\n' &amp;&amp; c != EOF);
+
+    printf("Continuing!\n");
+    return 0;
+}</code></pre>
+    </div>
+    <p><code class="inline">getchar</code> returns an <code class="inline">int</code> so it can represent <code class="inline">EOF</code> (−1) as well as all byte values. Store its result in an <code class="inline">int</code>, not a <code class="inline">char</code>.</p>
+
+    <h2>The leftover-newline problem</h2>
+    <p>After <code class="inline">scanf("%d")</code>, the newline stays in the input buffer. A following <code class="inline">%c</code> or <code class="inline">fgets</code> may read it immediately.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>int age;
+char initial;
+
+printf("Age: ");
+scanf("%d", &amp;age);        // leaves '\n' in the buffer
+
+printf("Initial: ");
+scanf(" %c", &amp;initial);   // the leading space skips whitespace
+
+// Alternative: discard the rest of the line
+// int c;
+// while ((c = getchar()) != '\n' &amp;&amp; c != EOF) { }</code></pre>
+    </div>
+    <p>The space in <code class="inline">" %c"</code> is not decoration: it tells <code class="inline">scanf</code> to skip whitespace before reading the character.</p>
+
+    <h2>Parsing a whole line with sscanf</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    char line[] = "Amit 25 5.9";
+    char name[20];
+    int age;
+    double height;
+
+    if (sscanf(line, "%19s %d %lf", name, &amp;age, &amp;height) == 3) {
+        printf("%s is %d years old and %.1f ft tall.\n", name, age, height);
+    }
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>Amit is 25 years old and 5.9 ft tall.</pre></div>
+
+    <h2>Reading command-line arguments</h2>
+    <p>Arguments passed after the program name arrive through <code class="inline">main</code>'s parameters.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(int argc, char *argv[]) {
+    printf("Program: %s\n", argv[0]);
+
+    for (int i = 1; i &lt; argc; i++) {
+        printf("argument %d: %s\n", i, argv[i]);
+    }
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Command</strong><pre>./args hello world</pre><strong>Output</strong><pre>Program: ./args
+argument 1: hello
+argument 2: world</pre></div>
+
+    <h2>Input checklist</h2>
+    <ul>
+      <li>Check the return value of <code class="inline">scanf</code>.</li>
+      <li>Put <code class="inline">&amp;</code> before numeric variables, but not before strings in <code class="inline">scanf("%s")</code>.</li>
+      <li>Use a width limit with <code class="inline">%s</code>: <code class="inline">%49s</code> for a 50-byte array.</li>
+      <li>Use <code class="inline">fgets</code> for text that may contain spaces.</li>
+      <li>Strip the newline left by <code class="inline">fgets</code>.</li>
+      <li>Clear the input buffer when mixing <code class="inline">scanf</code> and character reads.</li>
+      <li>Never use <code class="inline">gets</code> — it was removed from C11 because it cannot be made safe.</li>
+    </ul>
+
+    <h2>Exercises</h2>
+    <ol>
+      <li>Read two numbers and print their sum, product and average.</li>
+      <li>Read a name with spaces using <code class="inline">fgets</code> and greet the user.</li>
+      <li>Ask for an age repeatedly until a valid positive number is entered.</li>
+      <li>Read a line like <code class="inline">"item 3 19.99"</code> with <code class="inline">sscanf</code> and print a formatted receipt line.</li>
+    </ol>
+  </main>
+
+  <aside class="toc" id="toc"></aside>
+</div>
+
+<footer id="footer"></footer>
+<script src="assets/app.js"></script>
+</body>
+</html>

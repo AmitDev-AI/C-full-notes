@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Complete C programming examples: hello world, loops, arrays, strings, structures, files and dynamic memory.">
+<title>C Examples — C Notes</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#04aa6d">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="c-examples.html">
+<a class="skip-link" href="#main">Skip to content</a>
+<header id="topbar"></header>
+
+<div class="layout">
+  <aside id="sidebar"></aside>
+
+  <main class="content" id="main">
+    <div class="breadcrumb"><a href="index.html">C Tutorial</a><span>›</span>Examples</div>
+    <h1>C Examples</h1>
+    <p class="lead">Complete, compilable programs. Load any of them into the editor with <b>Try it</b>, or compile them locally with <code class="inline">gcc file.c -o file</code>.</p>
+
+    <h2>1. Hello, World</h2>
+    <div class="codebox" data-file="hello.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    printf("Hello, World!\n");
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>Hello, World!</pre></div>
+
+    <h2>2. Add two numbers</h2>
+    <div class="codebox" data-file="add.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int a = 12, b = 30;
+    int sum = a + b;
+
+    printf("%d + %d = %d\n", a, b, sum);
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>12 + 30 = 42</pre></div>
+
+    <h2>3. Even or odd</h2>
+    <div class="codebox" data-file="even_odd.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int number = 17;
+
+    if (number % 2 == 0) {
+        printf("%d is even\n", number);
+    } else {
+        printf("%d is odd\n", number);
+    }
+
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>17 is odd</pre></div>
+
+    <h2>4. Largest of three numbers</h2>
+    <div class="codebox" data-file="largest.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int a = 14, b = 27, c = 19;
+    int largest = a;
+
+    if (b &gt; largest) largest = b;
+    if (c &gt; largest) largest = c;
+
+    printf("Largest = %d\n", largest);
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>Largest = 27</pre></div>
+
+    <h2>5. Multiplication table</h2>
+    <div class="codebox" data-file="table.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int n = 7;
+
+    for (int i = 1; i &lt;= 10; i++) {
+        printf("%d x %2d = %3d\n", n, i, n * i);
+    }
+
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>7 x  1 =   7
+7 x  2 =  14
+7 x  3 =  21
+7 x  4 =  28
+7 x  5 =  35
+7 x  6 =  42
+7 x  7 =  49
+7 x  8 =  56
+7 x  9 =  63
+7 x 10 =  70</pre></div>
+
+    <h2>6. Factorial</h2>
+    <div class="codebox" data-file="factorial.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int n = 6;
+    unsigned long long result = 1;
+
+    for (int i = 2; i &lt;= n; i++) {
+        result *= i;
+    }
+
+    printf("%d! = %llu\n", n, result);
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>6! = 720</pre></div>
+
+    <h2>7. Prime numbers below 50</h2>
+    <div class="codebox" data-file="primes.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int is_prime(int n) {
+    if (n &lt; 2) return 0;
+    for (int d = 2; d * d &lt;= n; d++) {
+        if (n % d == 0) return 0;
+    }
+    return 1;
+}
+
+int main(void) {
+    for (int n = 2; n &lt; 50; n++) {
+        if (is_prime(n)) {
+            printf("%d ", n);
+        }
+    }
+    printf("\n");
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>2 3 5 7 11 13 17 19 23 29 31 37 41 43 47</pre></div>
+
+    <h2>8. Reverse a string</h2>
+    <div class="codebox" data-file="reverse.c">
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int main(void) {
+    char text[] = "programming";
+    int left = 0;
+    int right = (int)strlen(text) - 1;
+
+    while (left &lt; right) {
+        char temp = text[left];
+        text[left] = text[right];
+        text[right] = temp;
+        left++;
+        right--;
+    }
+
+    printf("%s\n", text);
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>gnimmargorp</pre></div>
+
+    <h2>9. Average of an array</h2>
+    <div class="codebox" data-file="average.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int scores[] = {88, 92, 79, 95, 61};
+    int n = sizeof(scores) / sizeof(scores[0]);
+    int sum = 0;
+
+    for (int i = 0; i &lt; n; i++) {
+        sum += scores[i];
+    }
+
+    printf("Average = %.2f\n", (double)sum / n);
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>Average = 83.00</pre></div>
+
+    <h2>10. Sort an array (bubble sort)</h2>
+    <div class="codebox" data-file="sort.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int a[] = {5, 2, 9, 1, 5, 6};
+    int n = sizeof(a) / sizeof(a[0]);
+
+    for (int i = 0; i &lt; n - 1; i++) {
+        for (int j = 0; j &lt; n - 1 - i; j++) {
+            if (a[j] &gt; a[j + 1]) {
+                int temp = a[j];
+                a[j] = a[j + 1];
+                a[j + 1] = temp;
+            }
+        }
+    }
+
+    for (int i = 0; i &lt; n; i++) {
+        printf("%d ", a[i]);
+    }
+    printf("\n");
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>1 2 5 5 6 9</pre></div>
+
+    <h2>11. Count vowels</h2>
+    <div class="codebox" data-file="vowels.c">
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;ctype.h&gt;
+
+int main(void) {
+    const char *text = "C programming is fun";
+    int count = 0;
+
+    for (int i = 0; text[i] != '\0'; i++) {
+        char c = (char)tolower((unsigned char)text[i]);
+        if (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u') {
+            count++;
+        }
+    }
+
+    printf("Vowels: %d\n", count);
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>Vowels: 6</pre></div>
+
+    <h2>12. Student record with a structure</h2>
+    <div class="codebox" data-file="student.c">
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+typedef struct {
+    char name[40];
+    int age;
+    double gpa;
+} Student;
+
+void print_student(const Student *s) {
+    printf("%-10s age %d, GPA %.2f\n", s-&gt;name, s-&gt;age, s-&gt;gpa);
+}
+
+int main(void) {
+    Student s;
+
+    strcpy(s.name, "Amit");
+    s.age = 20;
+    s.gpa = 8.75;
+
+    print_student(&amp;s);
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>Amit       age 20, GPA 8.75</pre></div>
+
+    <h2>13. Swap with pointers</h2>
+    <div class="codebox" data-file="swap.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+void swap(int *a, int *b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+int main(void) {
+    int x = 3, y = 8;
+
+    printf("before: x=%d y=%d\n", x, y);
+    swap(&amp;x, &amp;y);
+    printf("after:  x=%d y=%d\n", x, y);
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>before: x=3 y=8
+after:  x=8 y=3</pre></div>
+
+    <h2>14. Write and read a file</h2>
+    <div class="codebox" data-file="file_demo.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    FILE *fp = fopen("demo.txt", "w");
+    if (fp == NULL) {
+        perror("demo.txt");
+        return 1;
+    }
+
+    fprintf(fp, "First line\n");
+    fprintf(fp, "Second line\n");
+    fclose(fp);
+
+    char line[100];
+    fp = fopen("demo.txt", "r");
+    if (fp == NULL) {
+        perror("demo.txt");
+        return 1;
+    }
+
+    while (fgets(line, sizeof(line), fp) != NULL) {
+        printf("%s", line);
+    }
+    fclose(fp);
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>First line
+Second line</pre></div>
+
+    <h2>15. Dynamic array with malloc</h2>
+    <div class="codebox" data-file="dynamic.c">
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main(void) {
+    int n = 8;
+    int *values = malloc(n * sizeof *values);
+
+    if (values == NULL) {
+        fprintf(stderr, "Allocation failed\n");
+        return 1;
+    }
+
+    for (int i = 0; i &lt; n; i++) {
+        values[i] = i * i;
+    }
+
+    for (int i = 0; i &lt; n; i++) {
+        printf("%d ", values[i]);
+    }
+    printf("\n");
+
+    free(values);
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>0 1 4 9 16 25 36 49</pre></div>
+
+    <h2>More practice</h2>
+    <ul>
+      <li><a href="c-quiz.html">Take the quiz</a> to check your understanding.</li>
+      <li>Work through the exercises at the end of each chapter.</li>
+      <li>Rebuild these examples without looking, then compare.</li>
+      <li>Try the same program with input instead of hard-coded values.</li>
+    </ul>
+  </main>
+
+  <aside class="toc" id="toc"></aside>
+</div>
+
+<footer id="footer"></footer>
+<script src="assets/app.js"></script>
+</body>
+</html>

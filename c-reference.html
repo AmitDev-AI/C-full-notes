@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="C reference: keywords, data types, format specifiers, escape sequences, standard headers and library functions.">
+<title>C Reference — C Notes</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#04aa6d">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="c-reference.html">
+<a class="skip-link" href="#main">Skip to content</a>
+<header id="topbar"></header>
+
+<div class="layout">
+  <aside id="sidebar"></aside>
+
+  <main class="content" id="main">
+    <div class="breadcrumb"><a href="index.html">C Tutorial</a><span>›</span>Reference</div>
+    <h1>C Reference</h1>
+    <p class="lead">A quick lookup for the things you reach for while writing C: keywords, types, format specifiers, headers and library functions.</p>
+
+    <h2>Keywords</h2>
+    <p>C89/C90 has 32 keywords. C99 added five, C11 added seven, and C23 added several more.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Category</th><th>Keywords</th></tr></thead>
+        <tbody>
+          <tr><td>Types</td><td><code>char</code> <code>double</code> <code>float</code> <code>int</code> <code>long</code> <code>short</code> <code>signed</code> <code>unsigned</code> <code>void</code> <code>_Bool</code></td></tr>
+          <tr><td>Storage / qualifiers</td><td><code>auto</code> <code>const</code> <code>extern</code> <code>register</code> <code>static</code> <code>volatile</code> <code>inline</code> <code>restrict</code> <code>_Atomic</code> <code>_Thread_local</code></td></tr>
+          <tr><td>Control flow</td><td><code>break</code> <code>case</code> <code>continue</code> <code>default</code> <code>do</code> <code>else</code> <code>for</code> <code>goto</code> <code>if</code> <code>return</code> <code>switch</code> <code>while</code></td></tr>
+          <tr><td>Aggregate types</td><td><code>enum</code> <code>struct</code> <code>union</code> <code>typedef</code></td></tr>
+          <tr><td>Operators</td><td><code>sizeof</code> <code>_Alignof</code> <code>_Generic</code></td></tr>
+          <tr><td>Other</td><td><code>_Static_assert</code> <code>_Noreturn</code> <code>_Complex</code> <code>_Imaginary</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>All keywords are lowercase and reserved. You cannot use them as identifiers.</p>
+
+    <h2>Data types</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Type</th><th>Typical size</th><th>Typical range</th><th>printf</th><th>scanf</th></tr></thead>
+        <tbody>
+          <tr><td><code>char</code></td><td>1</td><td>−128 to 127</td><td><code>%c</code></td><td><code>%c</code></td></tr>
+          <tr><td><code>unsigned char</code></td><td>1</td><td>0 to 255</td><td><code>%hhu</code></td><td><code>%hhu</code></td></tr>
+          <tr><td><code>short</code></td><td>2</td><td>−32,768 to 32,767</td><td><code>%hd</code></td><td><code>%hd</code></td></tr>
+          <tr><td><code>unsigned short</code></td><td>2</td><td>0 to 65,535</td><td><code>%hu</code></td><td><code>%hu</code></td></tr>
+          <tr><td><code>int</code></td><td>4</td><td>−2,147,483,648 to 2,147,483,647</td><td><code>%d</code></td><td><code>%d</code></td></tr>
+          <tr><td><code>unsigned int</code></td><td>4</td><td>0 to 4,294,967,295</td><td><code>%u</code></td><td><code>%u</code></td></tr>
+          <tr><td><code>long</code></td><td>4 or 8</td><td>platform dependent</td><td><code>%ld</code></td><td><code>%ld</code></td></tr>
+          <tr><td><code>unsigned long</code></td><td>4 or 8</td><td>platform dependent</td><td><code>%lu</code></td><td><code>%lu</code></td></tr>
+          <tr><td><code>long long</code></td><td>8</td><td>±9.2 × 10<sup>18</sup></td><td><code>%lld</code></td><td><code>%lld</code></td></tr>
+          <tr><td><code>float</code></td><td>4</td><td>~7 digits precision</td><td><code>%f</code></td><td><code>%f</code></td></tr>
+          <tr><td><code>double</code></td><td>8</td><td>~15 digits precision</td><td><code>%f</code> / <code>%lf</code></td><td><code>%lf</code></td></tr>
+          <tr><td><code>long double</code></td><td>8–16</td><td>extended precision</td><td><code>%Lf</code></td><td><code>%Lf</code></td></tr>
+          <tr><td><code>size_t</code></td><td>4 or 8</td><td>unsigned, holds sizes</td><td><code>%zu</code></td><td><code>%zu</code></td></tr>
+          <tr><td><code>char *</code></td><td>4 or 8</td><td>string</td><td><code>%s</code></td><td><code>%s</code></td></tr>
+          <tr><td><code>void *</code></td><td>4 or 8</td><td>any address</td><td><code>%p</code></td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Format specifiers</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Specifier</th><th>Meaning</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td><code>%d</code> <code>%i</code></td><td>Signed decimal int</td><td><code>-42</code></td></tr>
+          <tr><td><code>%u</code></td><td>Unsigned decimal</td><td><code>42</code></td></tr>
+          <tr><td><code>%o</code></td><td>Octal</td><td><code>52</code></td></tr>
+          <tr><td><code>%x</code> <code>%X</code></td><td>Hexadecimal</td><td><code>2a</code> / <code>2A</code></td></tr>
+          <tr><td><code>%f</code></td><td>Fixed-point decimal</td><td><code>3.140000</code></td></tr>
+          <tr><td><code>%e</code> <code>%E</code></td><td>Scientific notation</td><td><code>3.140000e+00</code></td></tr>
+          <tr><td><code>%g</code> <code>%G</code></td><td>Shorter of %f and %e</td><td><code>3.14</code></td></tr>
+          <tr><td><code>%c</code></td><td>Single character</td><td><code>A</code></td></tr>
+          <tr><td><code>%s</code></td><td>String</td><td><code>Hello</code></td></tr>
+          <tr><td><code>%p</code></td><td>Pointer</td><td><code>0x7ffd...</code></td></tr>
+          <tr><td><code>%%</code></td><td>Literal percent</td><td><code>%</code></td></tr>
+          <tr><td><code>%n</code></td><td>Store characters written so far</td><td>Rarely used; avoid</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Flag / width</th><th>Effect</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td><code>%5d</code></td><td>Minimum width 5, right aligned</td><td><code>   42</code></td></tr>
+          <tr><td><code>%-5d</code></td><td>Left aligned</td><td><code>42   </code></td></tr>
+          <tr><td><code>%05d</code></td><td>Zero padded</td><td><code>00042</code></td></tr>
+          <tr><td><code>%+d</code></td><td>Always show sign</td><td><code>+42</code></td></tr>
+          <tr><td><code>%.2f</code></td><td>Two decimal places</td><td><code>3.14</code></td></tr>
+          <tr><td><code>%8.2f</code></td><td>Width 8, two decimals</td><td><code>    3.14</code></td></tr>
+          <tr><td><code>%*d</code></td><td>Width from an argument</td><td><code>printf("%*d", 5, 42);</code></td></tr>
+          <tr><td><code>%.*f</code></td><td>Precision from an argument</td><td><code>printf("%.*f", 2, 3.14159);</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Escape sequences</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Sequence</th><th>Meaning</th><th>ASCII</th></tr></thead>
+        <tbody>
+          <tr><td><code>\n</code></td><td>Newline</td><td>10</td></tr>
+          <tr><td><code>\t</code></td><td>Horizontal tab</td><td>9</td></tr>
+          <tr><td><code>\r</code></td><td>Carriage return</td><td>13</td></tr>
+          <tr><td><code>\b</code></td><td>Backspace</td><td>8</td></tr>
+          <tr><td><code>\f</code></td><td>Form feed</td><td>12</td></tr>
+          <tr><td><code>\v</code></td><td>Vertical tab</td><td>11</td></tr>
+          <tr><td><code>\a</code></td><td>Alert (bell)</td><td>7</td></tr>
+          <tr><td><code>\\</code></td><td>Backslash</td><td>92</td></tr>
+          <tr><td><code>\'</code></td><td>Single quote</td><td>39</td></tr>
+          <tr><td><code>\"</code></td><td>Double quote</td><td>34</td></tr>
+          <tr><td><code>\?</code></td><td>Question mark</td><td>63</td></tr>
+          <tr><td><code>\0</code></td><td>Null</td><td>0</td></tr>
+          <tr><td><code>\xHH</code></td><td>Hex character code</td><td>varies</td></tr>
+          <tr><td><code>\ooo</code></td><td>Octal character code</td><td>varies</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Standard headers</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Header</th><th>Provides</th></tr></thead>
+        <tbody>
+          <tr><td><code>&lt;stdio.h&gt;</code></td><td>Input/output: printf, scanf, FILE, fopen</td></tr>
+          <tr><td><code>&lt;stdlib.h&gt;</code></td><td>malloc, free, atoi, rand, exit, qsort</td></tr>
+          <tr><td><code>&lt;string.h&gt;</code></td><td>strlen, strcpy, strcmp, memcpy, memset</td></tr>
+          <tr><td><code>&lt;math.h&gt;</code></td><td>sqrt, pow, sin, cos, floor, ceil, fabs</td></tr>
+          <tr><td><code>&lt;ctype.h&gt;</code></td><td>isalpha, isdigit, toupper, tolower</td></tr>
+          <tr><td><code>&lt;stdbool.h&gt;</code></td><td>bool, true, false (C99)</td></tr>
+          <tr><td><code>&lt;stdint.h&gt;</code></td><td>int8_t, uint32_t, INT_MAX, SIZE_MAX (C99)</td></tr>
+          <tr><td><code>&lt;inttypes.h&gt;</code></td><td>PRId32, PRIu64 format macros</td></tr>
+          <tr><td><code>&lt;limits.h&gt;</code></td><td>INT_MAX, CHAR_MIN, LONG_MAX</td></tr>
+          <tr><td><code>&lt;float.h&gt;</code></td><td>FLT_MAX, DBL_EPSILON, DBL_DIG</td></tr>
+          <tr><td><code>&lt;stddef.h&gt;</code></td><td>size_t, ptrdiff_t, NULL, offsetof</td></tr>
+          <tr><td><code>&lt;time.h&gt;</code></td><td>time, clock, strftime, struct tm</td></tr>
+          <tr><td><code>&lt;assert.h&gt;</code></td><td>assert macro</td></tr>
+          <tr><td><code>&lt;errno.h&gt;</code></td><td>errno, ENOENT, EINVAL</td></tr>
+          <tr><td><code>&lt;stdarg.h&gt;</code></td><td>va_list, va_start, va_arg, va_end</td></tr>
+          <tr><td><code>&lt;signal.h&gt;</code></td><td>signal, raise, SIGINT</td></tr>
+          <tr><td><code>&lt;locale.h&gt;</code></td><td>setlocale, LC_ALL</td></tr>
+          <tr><td><code>&lt;setjmp.h&gt;</code></td><td>setjmp, longjmp</td></tr>
+          <tr><td><code>&lt;stdatomic.h&gt;</code></td><td>Atomic types (C11)</td></tr>
+          <tr><td><code>&lt;threads.h&gt;</code></td><td>Threads (C11, optional)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>&lt;stdio.h&gt; functions</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Function</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td><code>printf</code>, <code>fprintf</code>, <code>sprintf</code>, <code>snprintf</code></td><td>Formatted output</td></tr>
+          <tr><td><code>scanf</code>, <code>fscanf</code>, <code>sscanf</code></td><td>Formatted input</td></tr>
+          <tr><td><code>puts</code>, <code>fputs</code></td><td>Write a string</td></tr>
+          <tr><td><code>fgets</code></td><td>Read a line safely</td></tr>
+          <tr><td><code>getchar</code>, <code>putchar</code></td><td>Read/write one character</td></tr>
+          <tr><td><code>fgetc</code>, <code>fputc</code></td><td>Read/write one character from a stream</td></tr>
+          <tr><td><code>fopen</code>, <code>fclose</code></td><td>Open/close a file</td></tr>
+          <tr><td><code>fread</code>, <code>fwrite</code></td><td>Binary read/write</td></tr>
+          <tr><td><code>fseek</code>, <code>ftell</code>, <code>rewind</code></td><td>File positioning</td></tr>
+          <tr><td><code>fflush</code></td><td>Flush buffered output</td></tr>
+          <tr><td><code>feof</code>, <code>ferror</code>, <code>clearerr</code></td><td>Stream status</td></tr>
+          <tr><td><code>perror</code></td><td>Print an error message</td></tr>
+          <tr><td><code>remove</code>, <code>rename</code></td><td>Delete or rename a file</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>&lt;stdlib.h&gt; functions</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Function</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td><code>malloc</code>, <code>calloc</code>, <code>realloc</code>, <code>free</code></td><td>Dynamic memory</td></tr>
+          <tr><td><code>exit</code>, <code>abort</code>, <code>atexit</code></td><td>Program termination</td></tr>
+          <tr><td><code>atoi</code>, <code>atol</code>, <code>atof</code></td><td>String to number (no error reporting)</td></tr>
+          <tr><td><code>strtol</code>, <code>strtoul</code>, <code>strtod</code></td><td>String to number with error reporting</td></tr>
+          <tr><td><code>rand</code>, <code>srand</code></td><td>Pseudo-random numbers</td></tr>
+          <tr><td><code>qsort</code>, <code>bsearch</code></td><td>Sorting and searching</td></tr>
+          <tr><td><code>abs</code>, <code>labs</code></td><td>Absolute value</td></tr>
+          <tr><td><code>getenv</code></td><td>Read an environment variable</td></tr>
+          <tr><td><code>system</code></td><td>Run a shell command</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>&lt;string.h&gt; functions</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Function</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td><code>strlen</code></td><td>Length, excluding the null terminator</td></tr>
+          <tr><td><code>strcpy</code>, <code>strncpy</code></td><td>Copy strings</td></tr>
+          <tr><td><code>strcat</code>, <code>strncat</code></td><td>Concatenate strings</td></tr>
+          <tr><td><code>strcmp</code>, <code>strncmp</code></td><td>Compare strings</td></tr>
+          <tr><td><code>strchr</code>, <code>strrchr</code></td><td>Find a character</td></tr>
+          <tr><td><code>strstr</code></td><td>Find a substring</td></tr>
+          <tr><td><code>strtok</code></td><td>Split into tokens (modifies the input)</td></tr>
+          <tr><td><code>memcpy</code></td><td>Copy bytes (no overlap)</td></tr>
+          <tr><td><code>memmove</code></td><td>Copy bytes (handles overlap)</td></tr>
+          <tr><td><code>memcmp</code></td><td>Compare bytes</td></tr>
+          <tr><td><code>memset</code></td><td>Fill bytes</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>&lt;math.h&gt; functions</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Function</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td><code>sqrt(x)</code>, <code>cbrt(x)</code></td><td>Square root, cube root</td></tr>
+          <tr><td><code>pow(x, y)</code></td><td>x raised to y</td></tr>
+          <tr><td><code>fabs(x)</code></td><td>Absolute value (double)</td></tr>
+          <tr><td><code>floor(x)</code>, <code>ceil(x)</code>, <code>round(x)</code></td><td>Rounding</td></tr>
+          <tr><td><code>fmod(x, y)</code></td><td>Floating-point remainder</td></tr>
+          <tr><td><code>sin</code>, <code>cos</code>, <code>tan</code></td><td>Trigonometry (radians)</td></tr>
+          <tr><td><code>log</code>, <code>log10</code>, <code>exp</code></td><td>Logarithms and exponential</td></tr>
+          <tr><td><code>fmin</code>, <code>fmax</code></td><td>Minimum / maximum</td></tr>
+          <tr><td><code>isnan</code>, <code>isinf</code></td><td>Test for NaN / infinity</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>On Linux, link with <code class="inline">-lm</code>: <code class="inline">gcc main.c -lm -o main</code>.</p>
+
+    <h2>Command-line arguments and exit codes</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>int main(int argc, char *argv[]) {
+    // argv[0] is the program name
+    // argv[1] .. argv[argc - 1] are the arguments
+    // argv[argc] is NULL
+    return 0;    // 0 = success, non-zero = failure
+}</code></pre>
+    </div>
+
+    <h2>Compiler quick reference</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Task</th><th>GCC / Clang</th><th>MSVC</th></tr></thead>
+        <tbody>
+          <tr><td>Compile</td><td><code>gcc main.c -o main</code></td><td><code>cl main.c</code></td></tr>
+          <tr><td>Warnings</td><td><code>-Wall -Wextra</code></td><td><code>/W4</code></td></tr>
+          <tr><td>Standard</td><td><code>-std=c17</code></td><td><code>/std:c17</code></td></tr>
+          <tr><td>Debug info</td><td><code>-g</code></td><td><code>/Zi</code></td></tr>
+          <tr><td>Optimise</td><td><code>-O2</code></td><td><code>/O2</code></td></tr>
+          <tr><td>Preprocess only</td><td><code>-E</code></td><td><code>/P</code></td></tr>
+          <tr><td>Assembly output</td><td><code>-S</code></td><td><code>/FA</code></td></tr>
+          <tr><td>Math library</td><td><code>-lm</code></td><td>(linked by default)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Frequently seen errors</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Message</th><th>Usual cause</th></tr></thead>
+        <tbody>
+          <tr><td><code>expected ';' before ...</code></td><td>Missing semicolon on the previous line</td></tr>
+          <tr><td><code>undeclared identifier</code></td><td>Typo, missing declaration, or missing <code>#include</code></td></tr>
+          <tr><td><code>implicit declaration of function</code></td><td>Missing header or prototype</td></tr>
+          <tr><td><code>undefined reference to ...</code></td><td>Function not linked; forgot to compile a source file or <code>-lm</code></td></tr>
+          <tr><td><code>segmentation fault</code></td><td>Invalid pointer, out-of-bounds access, NULL dereference</td></tr>
+          <tr><td><code>format '%d' expects int</code></td><td>Wrong printf specifier for the argument type</td></tr>
+          <tr><td><code>control reaches end of non-void function</code></td><td>Missing <code>return</code> on some path</td></tr>
+          <tr><td><code>conflicting types for ...</code></td><td>Prototype and definition disagree</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="tip">
+      <p><b>Tip:</b> bookmark this page. It is designed to be scanned, not read start to finish.</p>
+    </div>
+  </main>
+
+  <aside class="toc" id="toc"></aside>
+</div>
+
+<footer id="footer"></footer>
+<script src="assets/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="C loops: while, do-while and for loops, nested loops, break and continue.">
+<title>C Loops — C Notes</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#04aa6d">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="c-loops.html">
+<a class="skip-link" href="#main">Skip to content</a>
+<header id="topbar"></header>
+
+<div class="layout">
+  <aside id="sidebar"></aside>
+
+  <main class="content" id="main">
+    <div class="breadcrumb"><a href="index.html">C Tutorial</a><span>›</span>Loops</div>
+    <h1>C Loops</h1>
+    <p class="lead">Loops repeat a block of code. C has three loop statements — <code class="inline">while</code>, <code class="inline">do...while</code> and <code class="inline">for</code> — plus <code class="inline">break</code> and <code class="inline">continue</code> to control them.</p>
+
+    <h2>while loop</h2>
+    <p>Checks the condition <b>before</b> each iteration. If it is false at the start, the body never runs.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int i = 1;
+
+    while (i &lt;= 5) {
+        printf("%d\n", i);
+        i++;
+    }
+
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>1
+2
+3
+4
+5</pre></div>
+    <p>Forgetting <code class="inline">i++</code> makes the loop run forever.</p>
+
+    <h2>do...while loop</h2>
+    <p>Checks the condition <b>after</b> the body, so the body runs at least once. Note the semicolon after <code class="inline">while (...)</code>.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int i = 10;
+
+    do {
+        printf("i = %d\n", i);
+        i++;
+    } while (i &lt; 5);
+
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>i = 10</pre></div>
+
+    <h2>for loop</h2>
+    <p>The most common loop. It packs initialisation, condition and update into one line.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>for (initialise; condition; update) {
+    body;
+}</code></pre>
+    </div>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    for (int i = 1; i &lt;= 5; i++) {
+        printf("%d squared = %d\n", i, i * i);
+    }
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>1 squared = 1
+2 squared = 4
+3 squared = 9
+4 squared = 16
+5 squared = 25</pre></div>
+
+    <h3>Variations</h3>
+    <div class="codebox" data-file="main.c">
+<pre><code>// Count down
+for (int i = 10; i &gt; 0; i--) {
+    printf("%d ", i);
+}
+
+// Step by 2
+for (int i = 0; i &lt;= 10; i += 2) {
+    printf("%d ", i);
+}
+
+// Multiple variables
+for (int i = 0, j = 10; i &lt; j; i++, j--) {
+    printf("%d-%d ", i, j);
+}
+
+// Infinite (use break to exit)
+for (;;) {
+    break;
+}</code></pre>
+    </div>
+
+    <h2>Which loop should I use?</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Loop</th><th>Use when</th></tr></thead>
+        <tbody>
+          <tr><td><code>for</code></td><td>The number of iterations is known, or there is a clear counter.</td></tr>
+          <tr><td><code>while</code></td><td>Repeat while a condition holds; may run zero times.</td></tr>
+          <tr><td><code>do...while</code></td><td>The body must run at least once (menus, input validation).</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Nested loops</h2>
+    <p>A loop inside a loop. The inner loop completes fully for each iteration of the outer loop.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    for (int row = 1; row &lt;= 3; row++) {
+        for (int col = 1; col &lt;= 4; col++) {
+            printf("%d-%d ", row, col);
+        }
+        printf("\n");
+    }
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>1-1 1-2 1-3 1-4
+2-1 2-2 2-3 2-4
+3-1 3-2 3-3 3-4</pre></div>
+    <div class="codebox" data-file="main.c">
+<pre><code>// A triangle of stars
+for (int i = 1; i &lt;= 5; i++) {
+    for (int j = 1; j &lt;= i; j++) {
+        printf("*");
+    }
+    printf("\n");
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>*
+**
+***
+****
+*****</pre></div>
+
+    <h2>break</h2>
+    <p>Leaves the innermost loop immediately. Execution continues after the loop.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    for (int i = 1; i &lt;= 10; i++) {
+        if (i == 5) {
+            break;
+        }
+        printf("%d\n", i);
+    }
+    printf("Done\n");
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>1
+2
+3
+4
+Done</pre></div>
+
+    <h2>continue</h2>
+    <p>Skips the rest of the current iteration and goes to the next one.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    for (int i = 1; i &lt;= 10; i++) {
+        if (i % 2 == 0) {
+            continue;      // skip even numbers
+        }
+        printf("%d\n", i);
+    }
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>1
+3
+5
+7
+9</pre></div>
+
+    <h2>Common loop patterns</h2>
+    <h3>Sum and average</h3>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int sum = 0;
+    int n = 10;
+
+    for (int i = 1; i &lt;= n; i++) {
+        sum += i;
+    }
+
+    printf("sum = %d\n", sum);
+    printf("average = %.2f\n", (double)sum / n);
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>sum = 55
+average = 5.50</pre></div>
+
+    <h3>Factorial</h3>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int n = 5;
+    unsigned long long fact = 1;
+
+    for (int i = 1; i &lt;= n; i++) {
+        fact *= i;
+    }
+
+    printf("%d! = %llu\n", n, fact);
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>5! = 120</pre></div>
+
+    <h3>Reverse a number</h3>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int n = 1234;
+    int reversed = 0;
+
+    while (n &gt; 0) {
+        int digit = n % 10;
+        reversed = reversed * 10 + digit;
+        n /= 10;
+    }
+
+    printf("reversed = %d\n", reversed);
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>reversed = 4321</pre></div>
+
+    <h3>Input validation loop</h3>
+    <div class="codebox" data-file="main.c">
+<pre><code>int number;
+
+do {
+    printf("Enter a positive number: ");
+    if (scanf("%d", &amp;number) != 1) {
+        while (getchar() != '\n') { }  // discard bad input
+        number = -1;
+    }
+} while (number &lt;= 0);</code></pre>
+    </div>
+
+    <h2>Common mistakes</h2>
+    <ul>
+      <li><b>Off-by-one</b> — <code class="inline">&lt;=</code> vs <code class="inline">&lt;</code>. Choose deliberately.</li>
+      <li><b>Forgetting to update the counter</b> — infinite loop.</li>
+      <li><b>Semicolon after the loop header</b> — <code class="inline">for (i = 0; i &lt; 5; i++);</code> creates an empty loop.</li>
+      <li><b>Modifying the loop variable inside the body</b> — can cause skipped or repeated iterations.</li>
+      <li><b>Using the loop variable after the loop</b> — in C99 its scope ends with the loop.</li>
+      <li><b>break only exits one loop</b> — nested loops need a flag or <code class="inline">goto</code>.</li>
+    </ul>
+
+    <div class="warn">
+      <p><b>Warning:</b> an infinite loop is a logic bug, but some programs intentionally loop forever until <code class="inline">break</code> or user input. Make the exit condition obvious.</p>
+    </div>
+
+    <h2>Exercises</h2>
+    <ol>
+      <li>Print the multiplication table from 1 to 10.</li>
+      <li>Print all prime numbers below 100.</li>
+      <li>Read numbers until 0 is entered, then print their sum.</li>
+      <li>Print a pyramid of stars with 6 rows.</li>
+      <li>Count the digits in an integer using a loop.</li>
+    </ol>
+  </main>
+
+  <aside class="toc" id="toc"></aside>
+</div>
+
+<footer id="footer"></footer>
+<script src="assets/app.js"></script>
+</body>
+</html>

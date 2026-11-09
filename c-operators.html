@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="C operators: arithmetic, assignment, comparison, logical, bitwise, increment and precedence.">
+<title>C Operators — C Notes</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#04aa6d">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="c-operators.html">
+<a class="skip-link" href="#main">Skip to content</a>
+<header id="topbar"></header>
+
+<div class="layout">
+  <aside id="sidebar"></aside>
+
+  <main class="content" id="main">
+    <div class="breadcrumb"><a href="index.html">C Tutorial</a><span>›</span>Operators</div>
+    <h1>C Operators</h1>
+    <p class="lead">Operators are symbols that perform operations on values. C groups them into arithmetic, assignment, comparison, logical, bitwise and a few special ones.</p>
+
+    <h2>Arithmetic operators</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Operator</th><th>Name</th><th>Example (a = 10, b = 3)</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr><td><code>+</code></td><td>Addition</td><td><code>a + b</code></td><td>13</td></tr>
+          <tr><td><code>-</code></td><td>Subtraction</td><td><code>a - b</code></td><td>7</td></tr>
+          <tr><td><code>*</code></td><td>Multiplication</td><td><code>a * b</code></td><td>30</td></tr>
+          <tr><td><code>/</code></td><td>Division</td><td><code>a / b</code></td><td>3 (integer division)</td></tr>
+          <tr><td><code>%</code></td><td>Modulus (remainder)</td><td><code>a % b</code></td><td>1</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int a = 10, b = 3;
+
+    printf("%d + %d = %d\n", a, b, a + b);
+    printf("%d - %d = %d\n", a, b, a - b);
+    printf("%d * %d = %d\n", a, b, a * b);
+    printf("%d / %d = %d\n", a, b, a / b);
+    printf("%d %% %d = %d\n", a, b, a % b);
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>10 + 3 = 13
+10 - 3 = 7
+10 * 3 = 30
+10 / 3 = 3
+10 % 3 = 1</pre></div>
+
+    <div class="warn">
+      <p><b>Integer division truncates.</b> <code class="inline">7 / 2</code> is <code class="inline">3</code>, not <code class="inline">3.5</code>. Use a floating-point type: <code class="inline">7.0 / 2</code> or <code class="inline">(double)7 / 2</code>. The <code class="inline">%</code> operator works only with integers.</p>
+    </div>
+
+    <h2>Assignment operators</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Operator</th><th>Example</th><th>Equivalent to</th></tr></thead>
+        <tbody>
+          <tr><td><code>=</code></td><td><code>x = 5</code></td><td>Store 5 in x</td></tr>
+          <tr><td><code>+=</code></td><td><code>x += 5</code></td><td><code>x = x + 5</code></td></tr>
+          <tr><td><code>-=</code></td><td><code>x -= 5</code></td><td><code>x = x - 5</code></td></tr>
+          <tr><td><code>*=</code></td><td><code>x *= 5</code></td><td><code>x = x * 5</code></td></tr>
+          <tr><td><code>/=</code></td><td><code>x /= 5</code></td><td><code>x = x / 5</code></td></tr>
+          <tr><td><code>%=</code></td><td><code>x %= 5</code></td><td><code>x = x % 5</code></td></tr>
+          <tr><td><code>&amp;=</code> <code>|=</code> <code>^=</code></td><td><code>x |= 2</code></td><td><code>x = x | 2</code></td></tr>
+          <tr><td><code>&lt;&lt;=</code> <code>&gt;&gt;=</code></td><td><code>x &lt;&lt;= 1</code></td><td><code>x = x &lt;&lt; 1</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int x = 10;
+    x += 5;   printf("x = %d\n", x);   // 15
+    x -= 3;   printf("x = %d\n", x);   // 12
+    x *= 2;   printf("x = %d\n", x);   // 24
+    x /= 4;   printf("x = %d\n", x);   // 6
+    x %= 4;   printf("x = %d\n", x);   // 2
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>x = 15
+x = 12
+x = 24
+x = 6
+x = 2</pre></div>
+
+    <h2>Increment and decrement</h2>
+    <p><code class="inline">++</code> adds one; <code class="inline">--</code> subtracts one. Their position matters:</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>int i = 5;
+
+printf("%d\n", i++);   // prints 5, then i becomes 6 (postfix)
+printf("%d\n", i);     // 6
+
+printf("%d\n", ++i);   // i becomes 7, then prints 7 (prefix)
+printf("%d\n", i--);   // prints 7, then i becomes 6
+printf("%d\n", --i);   // i becomes 5, then prints 5</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>5
+6
+7
+7
+5</pre></div>
+    <div class="note">
+      <p><b>Note:</b> avoid modifying the same variable more than once in a single expression, as in <code class="inline">i = i++ + ++i</code>. That is undefined behaviour.</p>
+    </div>
+
+    <h2>Comparison operators</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Operator</th><th>Meaning</th><th>Example (a = 5, b = 8)</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr><td><code>==</code></td><td>Equal to</td><td><code>a == b</code></td><td>0 (false)</td></tr>
+          <tr><td><code>!=</code></td><td>Not equal to</td><td><code>a != b</code></td><td>1 (true)</td></tr>
+          <tr><td><code>&gt;</code></td><td>Greater than</td><td><code>a &gt; b</code></td><td>0</td></tr>
+          <tr><td><code>&lt;</code></td><td>Less than</td><td><code>a &lt; b</code></td><td>1</td></tr>
+          <tr><td><code>&gt;=</code></td><td>Greater or equal</td><td><code>a &gt;= b</code></td><td>0</td></tr>
+          <tr><td><code>&lt;=</code></td><td>Less or equal</td><td><code>a &lt;= b</code></td><td>1</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Comparison operators return <code class="inline">1</code> for true and <code class="inline">0</code> for false.</p>
+    <div class="warn">
+      <p><b>Do not confuse <code class="inline">=</code> with <code class="inline">==</code>.</b> <code class="inline">if (x = 5)</code> assigns 5 and is always true. <code class="inline">if (x == 5)</code> compares. Compile with <code class="inline">-Wall</code> to catch this.</p>
+    </div>
+
+    <h2>Logical operators</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Operator</th><th>Name</th><th>True when</th></tr></thead>
+        <tbody>
+          <tr><td><code>&amp;&amp;</code></td><td>AND</td><td>Both sides are true</td></tr>
+          <tr><td><code>||</code></td><td>OR</td><td>At least one side is true</td></tr>
+          <tr><td><code>!</code></td><td>NOT</td><td>The value is false (0)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="codebox" data-file="main.c">
+<pre><code>int age = 20;
+int has_id = 1;
+
+if (age &gt;= 18 &amp;&amp; has_id) {
+    printf("Entry allowed\n");
+}
+
+if (age &lt; 13 || age &gt; 65) {
+    printf("Discount\n");
+}
+
+if (!has_id) {
+    printf("No ID\n");
+}</code></pre>
+    </div>
+    <p><code class="inline">&amp;&amp;</code> and <code class="inline">||</code> short-circuit: the right side is not evaluated if the result is already known.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>int *p = NULL;
+
+// Safe: the second part is only evaluated if p is not NULL
+if (p != NULL &amp;&amp; *p == 10) {
+    printf("value is 10\n");
+}</code></pre>
+    </div>
+
+    <h2>Bitwise operators</h2>
+    <p>These work on individual bits of integers. They are common in systems programming, flags and embedded code.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Operator</th><th>Name</th><th>Example (a = 6, b = 3)</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr><td><code>&amp;</code></td><td>Bitwise AND</td><td><code>a &amp; b</code></td><td>2</td></tr>
+          <tr><td><code>|</code></td><td>Bitwise OR</td><td><code>a | b</code></td><td>7</td></tr>
+          <tr><td><code>^</code></td><td>Bitwise XOR</td><td><code>a ^ b</code></td><td>5</td></tr>
+          <tr><td><code>~</code></td><td>Bitwise NOT</td><td><code>~a</code></td><td>-7</td></tr>
+          <tr><td><code>&lt;&lt;</code></td><td>Shift left</td><td><code>a &lt;&lt; 1</code></td><td>12</td></tr>
+          <tr><td><code>&gt;&gt;</code></td><td>Shift right</td><td><code>a &gt;&gt; 1</code></td><td>3</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int a = 6;   // 0110
+    int b = 3;   // 0011
+
+    printf("a &amp; b  = %d\n", a &amp; b);    // 0010 = 2
+    printf("a | b  = %d\n", a | b);    // 0111 = 7
+    printf("a ^ b  = %d\n", a ^ b);    // 0101 = 5
+    printf("a &lt;&lt; 1 = %d\n", a &lt;&lt; 1);   // 1100 = 12
+    printf("a &gt;&gt; 1 = %d\n", a &gt;&gt; 1);   // 0011 = 3
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>a &amp; b  = 2
+a | b  = 7
+a ^ b  = 5
+a &lt;&lt; 1 = 12
+a &gt;&gt; 1 = 3</pre></div>
+    <p>Shifting left by <i>n</i> multiplies by 2<sup>n</sup>; shifting right divides by 2<sup>n</sup> (for non-negative values).</p>
+
+    <h2>Other operators</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Operator</th><th>Name</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td><code>sizeof</code></td><td>Size in bytes</td><td><code>sizeof(int)</code></td></tr>
+          <tr><td><code>&amp;</code></td><td>Address of</td><td><code>&amp;x</code></td></tr>
+          <tr><td><code>*</code></td><td>Dereference</td><td><code>*p</code></td></tr>
+          <tr><td><code>? :</code></td><td>Ternary conditional</td><td><code>x &gt; 0 ? 1 : -1</code></td></tr>
+          <tr><td><code>.</code></td><td>Structure member</td><td><code>p.x</code></td></tr>
+          <tr><td><code>-&gt;</code></td><td>Member through pointer</td><td><code>p-&gt;x</code></td></tr>
+          <tr><td><code>,</code></td><td>Comma</td><td><code>for (i = 0, j = 10; ...)</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>The ternary operator</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>int age = 20;
+const char *status = (age &gt;= 18) ? "adult" : "minor";
+printf("%s\n", status);   // adult
+
+// Equivalent if/else:
+// if (age &gt;= 18) status = "adult";
+// else status = "minor";</code></pre>
+    </div>
+
+    <h2>Precedence</h2>
+    <p>Operators with higher precedence bind first. When in doubt, add parentheses — they cost nothing and prevent bugs.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Level</th><th>Operators</th><th>Associativity</th></tr></thead>
+        <tbody>
+          <tr><td>1 (highest)</td><td><code>()</code> <code>[]</code> <code>.</code> <code>-&gt;</code> <code>++</code> <code>--</code> (postfix)</td><td>Left to right</td></tr>
+          <tr><td>2</td><td><code>!</code> <code>~</code> <code>++</code> <code>--</code> (prefix) <code>+</code> <code>-</code> (unary) <code>*</code> <code>&amp;</code> <code>sizeof</code> <code>(type)</code></td><td>Right to left</td></tr>
+          <tr><td>3</td><td><code>*</code> <code>/</code> <code>%</code></td><td>Left to right</td></tr>
+          <tr><td>4</td><td><code>+</code> <code>-</code></td><td>Left to right</td></tr>
+          <tr><td>5</td><td><code>&lt;&lt;</code> <code>&gt;&gt;</code></td><td>Left to right</td></tr>
+          <tr><td>6</td><td><code>&lt;</code> <code>&lt;=</code> <code>&gt;</code> <code>&gt;=</code></td><td>Left to right</td></tr>
+          <tr><td>7</td><td><code>==</code> <code>!=</code></td><td>Left to right</td></tr>
+          <tr><td>8</td><td><code>&amp;</code></td><td>Left to right</td></tr>
+          <tr><td>9</td><td><code>^</code></td><td>Left to right</td></tr>
+          <tr><td>10</td><td><code>|</code></td><td>Left to right</td></tr>
+          <tr><td>11</td><td><code>&amp;&amp;</code></td><td>Left to right</td></tr>
+          <tr><td>12</td><td><code>||</code></td><td>Left to right</td></tr>
+          <tr><td>13</td><td><code>?:</code></td><td>Right to left</td></tr>
+          <tr><td>14</td><td><code>=</code> <code>+=</code> <code>-=</code> etc.</td><td>Right to left</td></tr>
+          <tr><td>15 (lowest)</td><td><code>,</code></td><td>Left to right</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="codebox" data-file="main.c">
+<pre><code>int result = 2 + 3 * 4;        // 14, not 20
+int fixed  = (2 + 3) * 4;      // 20
+
+int x = 1, y = 2;
+int z = x + y &lt;&lt; 1;            // (1 + 2) &lt;&lt; 1 = 6
+int w = x + (y &lt;&lt; 1);          // 1 + 4 = 5</code></pre>
+    </div>
+
+    <h2>Common mistakes</h2>
+    <ul>
+      <li><code class="inline">=</code> instead of <code class="inline">==</code> in conditions.</li>
+      <li>Forgetting that <code class="inline">/</code> between integers truncates.</li>
+      <li>Using <code class="inline">%</code> with floats (not allowed).</li>
+      <li>Dividing by zero (undefined behaviour; the program may crash).</li>
+      <li>Assuming <code class="inline">&amp;</code> means logical AND — it is bitwise AND.</li>
+      <li>Confusing <code class="inline">a &amp; b == c</code> with <code class="inline">(a &amp; b) == c</code> — equality binds tighter.</li>
+    </ul>
+
+    <h2>Exercises</h2>
+    <ol>
+      <li>Ask for two integers and print their sum, difference, product, quotient and remainder.</li>
+      <li>Use a ternary operator to print "even" or "odd" for a number.</li>
+      <li>Set bits 0 and 3 of an integer using <code class="inline">|=</code>, then print the result in hex.</li>
+      <li>Predict the result of <code class="inline">5 + 2 * 3 - 4 / 2</code> before running it.</li>
+    </ol>
+  </main>
+
+  <aside class="toc" id="toc"></aside>
+</div>
+
+<footer id="footer"></footer>
+<script src="assets/app.js"></script>
+</body>
+</html>

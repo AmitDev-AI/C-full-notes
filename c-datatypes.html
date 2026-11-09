@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="C data types: int, float, double, char, sizeof, limits, signed and unsigned values, type casting.">
+<title>C Data Types — C Notes</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#04aa6d">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="c-datatypes.html">
+<a class="skip-link" href="#main">Skip to content</a>
+<header id="topbar"></header>
+
+<div class="layout">
+  <aside id="sidebar"></aside>
+
+  <main class="content" id="main">
+    <div class="breadcrumb"><a href="index.html">C Tutorial</a><span>›</span>Data Types</div>
+    <h1>C Data Types</h1>
+    <p class="lead">A data type tells the compiler what kind of value a variable stores and how many bytes to reserve. C has a small set of built-in types plus the ability to build your own from structures, unions and enums.</p>
+
+    <h2>The basic types</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Type</th><th>Typical size</th><th>Holds</th><th>Format</th></tr></thead>
+        <tbody>
+          <tr><td><code>char</code></td><td>1 byte</td><td>A single character or small integer</td><td><code>%c</code></td></tr>
+          <tr><td><code>int</code></td><td>2 or 4 bytes</td><td>Whole numbers</td><td><code>%d</code></td></tr>
+          <tr><td><code>short</code></td><td>usually 2 bytes</td><td>Smaller whole numbers</td><td><code>%hd</code></td></tr>
+          <tr><td><code>long</code></td><td>4 or 8 bytes</td><td>Larger whole numbers</td><td><code>%ld</code></td></tr>
+          <tr><td><code>long long</code></td><td>at least 8 bytes</td><td>Very large whole numbers</td><td><code>%lld</code></td></tr>
+          <tr><td><code>float</code></td><td>4 bytes</td><td>Decimal numbers, ~7 digits precision</td><td><code>%f</code></td></tr>
+          <tr><td><code>double</code></td><td>8 bytes</td><td>Decimal numbers, ~15 digits precision</td><td><code>%lf</code></td></tr>
+          <tr><td><code>void</code></td><td>none</td><td>No value / generic pointer</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="warn">
+      <p><b>Important:</b> the C standard does not fix most sizes. It guarantees only minimum ranges. Use <code class="inline">sizeof</code> and <code class="inline">&lt;stdint.h&gt;</code> when exact sizes matter.</p>
+    </div>
+
+    <h2>Example: the basic types</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    char letter = 'A';
+    int count = 42;
+    short small = 12;
+    long big = 1234567890L;
+    long long huge = 9000000000LL;
+    float ratio = 0.75f;
+    double precise = 3.141592653589793;
+
+    printf("char:        %c\n", letter);
+    printf("int:         %d\n", count);
+    printf("short:       %hd\n", small);
+    printf("long:        %ld\n", big);
+    printf("long long:   %lld\n", huge);
+    printf("float:       %.2f\n", ratio);
+    printf("double:      %.15f\n", precise);
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>char:        A
+int:         42
+short:       12
+long:        1234567890
+long long:   9000000000
+float:       0.75
+double:      3.141592653589793</pre></div>
+
+    <h2>How big is a type? sizeof</h2>
+    <p><code class="inline">sizeof</code> is an operator that returns the size in bytes. Use <code class="inline">%zu</code> to print it.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    printf("char      = %zu byte\n", sizeof(char));
+    printf("int       = %zu bytes\n", sizeof(int));
+    printf("float     = %zu bytes\n", sizeof(float));
+    printf("double    = %zu bytes\n", sizeof(double));
+    printf("long      = %zu bytes\n", sizeof(long));
+    printf("pointer   = %zu bytes\n", sizeof(void *));
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>char      = 1 byte
+int       = 4 bytes
+float     = 4 bytes
+double    = 8 bytes
+long      = 8 bytes
+pointer   = 8 bytes</pre></div>
+    <p>On a typical 64-bit system. On 32-bit systems <code class="inline">long</code> and pointers are usually 4 bytes.</p>
+
+    <h2>Ranges and limits.h</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;limits.h&gt;
+
+int main(void) {
+    printf("char min:  %d\n", CHAR_MIN);
+    printf("char max:  %d\n", CHAR_MAX);
+    printf("int min:   %d\n", INT_MIN);
+    printf("int max:   %d\n", INT_MAX);
+    printf("UINT max:  %u\n", UINT_MAX);
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>char min:  -128
+char max:  127
+int min:   -2147483648
+int max:   2147483647
+UINT max:  4294967295</pre></div>
+
+    <h2>Signed and unsigned</h2>
+    <p>Integer types can be <code class="inline">signed</code> (default, includes negatives) or <code class="inline">unsigned</code> (only zero and positives, with twice the positive range).</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>int a = -10;
+unsigned int b = 10;
+unsigned char c = 255;    // range 0..255
+
+printf("%d\n", a);   // -10
+printf("%u\n", b);   // 10
+printf("%u\n", c);   // 255
+
+c = c + 1;           // wraps around to 0
+printf("%u\n", c);</code></pre>
+    </div>
+    <p>Unsigned overflow wraps modulo 2<sup>n</sup>; signed overflow is undefined behaviour. Be careful when subtracting unsigned values.</p>
+
+    <h2>float vs double</h2>
+    <p><code class="inline">float</code> uses 4 bytes and about 7 significant decimal digits. <code class="inline">double</code> uses 8 bytes and about 15. Use <code class="inline">double</code> for most calculations and <code class="inline">float</code> when memory matters (large arrays, graphics, embedded).</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    float  f = 1.0f / 3.0f;
+    double d = 1.0 / 3.0;
+
+    printf("float:  %.10f\n", f);
+    printf("double: %.10f\n", d);
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>float:  0.3333333433
+double: 0.3333333333</pre></div>
+    <p>Floating-point numbers are approximations. Do not compare them with <code class="inline">==</code>; compare the difference to a small epsilon instead.</p>
+
+    <h2>Type conversion and casting</h2>
+    <p>C converts between types automatically when needed (implicit conversion), and you can force a conversion with a cast.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int i = 9;
+    int j = 2;
+
+    printf("%d\n", i / j);            // 4  (integer division)
+    printf("%f\n", (double)i / j);    // 4.500000
+    printf("%d\n", (int)3.99);        // 3  (truncation)
+
+    double d = 7.8;
+    int rounded = (int)(d + 0.5);     // 8
+    printf("%d\n", rounded);
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>4
+4.500000
+3
+8</pre></div>
+
+    <h2>Boolean values</h2>
+    <p>C traditionally uses <code class="inline">int</code> for truth: <b>0 is false, any non-zero value is true</b>. C99 added <code class="inline">&lt;stdbool.h&gt;</code> with <code class="inline">bool</code>, <code class="inline">true</code> and <code class="inline">false</code>.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdbool.h&gt;
+
+int main(void) {
+    bool logged_in = true;
+    bool finished = false;
+
+    printf("logged_in = %d\n", logged_in);   // 1
+    printf("finished  = %d\n", finished);    // 0
+
+    if (logged_in) {
+        printf("Welcome!\n");
+    }
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>logged_in = 1
+finished  = 0
+Welcome!</pre></div>
+
+    <h2>Fixed-width integers (stdint.h)</h2>
+    <p>When the exact number of bits matters — file formats, networking, hardware — use the typedefs from <code class="inline">&lt;stdint.h&gt;</code>:</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdint.h&gt;
+
+int8_t   a = -128;        // exactly 8 bits, signed
+uint8_t  b = 255;         // exactly 8 bits, unsigned
+int16_t  c = -32768;
+int32_t  d = 1000000;
+uint32_t e = 4000000000u;
+int64_t  f = -9000000000LL;
+uint64_t g = 18000000000000000000ULL;</code></pre>
+    </div>
+
+    <h2>Derived and user-defined types</h2>
+    <ul>
+      <li><b>Arrays</b> — many values of one type: <code class="inline">int scores[10];</code></li>
+      <li><b>Pointers</b> — hold addresses: <code class="inline">int *p;</code></li>
+      <li><b>Functions</b> — have a return type and parameter types.</li>
+      <li><b>Structures</b> — group different types: <code class="inline">struct Point { int x, y; };</code></li>
+      <li><b>Unions</b> — members share storage.</li>
+      <li><b>Enums</b> — named integer constants.</li>
+      <li><b>typedef</b> — an alias for an existing type.</li>
+    </ul>
+
+    <div class="tip">
+      <p><b>Tip:</b> choose the simplest type that fits. Use <code class="inline">int</code> for ordinary counters, <code class="inline">double</code> for maths, <code class="inline">size_t</code> for sizes and indexes, and fixed-width types only when the exact width matters.</p>
+    </div>
+  </main>
+
+  <aside class="toc" id="toc"></aside>
+</div>
+
+<footer id="footer"></footer>
+<script src="assets/app.js"></script>
+</body>
+</html>

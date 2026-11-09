@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="C strings: character arrays, the null terminator, string.h functions and safe input.">
+<title>C Strings — C Notes</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#04aa6d">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="c-strings.html">
+<a class="skip-link" href="#main">Skip to content</a>
+<header id="topbar"></header>
+
+<div class="layout">
+  <aside id="sidebar"></aside>
+
+  <main class="content" id="main">
+    <div class="breadcrumb"><a href="index.html">C Tutorial</a><span>›</span>Strings</div>
+    <h1>C Strings</h1>
+    <p class="lead">C has no separate string type. A string is an array of <code class="inline">char</code> ending with a special <b>null character</b> <code class="inline">'\0'</code>. Everything about strings follows from that one fact.</p>
+
+    <h2>String literals and character arrays</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    char greeting[] = "Hello";     // array of 6 chars: H e l l o \0
+    char name[20] = "Amit";        // room for 19 chars + terminator
+    const char *ptr = "World";     // pointer to a read-only literal
+
+    printf("%s\n", greeting);
+    printf("%s\n", name);
+    printf("%s\n", ptr);
+    printf("size of greeting = %zu\n", sizeof(greeting));
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>Hello
+Amit
+World
+size of greeting = 6</pre></div>
+
+    <h2>The null terminator</h2>
+    <p>The array has five visible letters but six bytes. Functions such as <code class="inline">printf</code> keep reading until they find <code class="inline">'\0'</code>. Without it, they run past the end of the array.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>char word[] = {'C', 'a', 't', '\0'};
+
+printf("%s\n", word);          // Cat
+printf("size = %zu\n", sizeof(word));   // 4
+printf("length = %zu\n", strlen(word)); // 3</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>Cat
+size = 4
+length = 3</pre></div>
+
+    <h2>sizeof vs strlen</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th></th><th><code>sizeof</code></th><th><code>strlen</code></th></tr></thead>
+        <tbody>
+          <tr><td>When evaluated</td><td>Compile time (for arrays)</td><td>Run time</td></tr>
+          <tr><td>Counts</td><td>Allocated bytes, including <code>'\0'</code></td><td>Characters before <code>'\0'</code></td></tr>
+          <tr><td>Include header</td><td>None</td><td><code>&lt;string.h&gt;</code></td></tr>
+          <tr><td>Result for <code>"Hello"</code></td><td>6</td><td>5</td></tr>
+          <tr><td>On a pointer</td><td>Size of the pointer (8)</td><td>Length of the string</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Common string.h functions</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Function</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td><code>strlen(s)</code></td><td>Length, excluding <code>'\0'</code></td></tr>
+          <tr><td><code>strcpy(dest, src)</code></td><td>Copy a string (unsafe — no size limit)</td></tr>
+          <tr><td><code>strncpy(dest, src, n)</code></td><td>Copy at most <code>n</code> chars (may omit the terminator)</td></tr>
+          <tr><td><code>strcat(dest, src)</code></td><td>Append <code>src</code> to <code>dest</code></td></tr>
+          <tr><td><code>strncat(dest, src, n)</code></td><td>Append at most <code>n</code> chars, then terminate</td></tr>
+          <tr><td><code>strcmp(a, b)</code></td><td>Compare; 0 if equal, &lt;0 if a&lt;b, &gt;0 if a&gt;b</td></tr>
+          <tr><td><code>strncmp(a, b, n)</code></td><td>Compare the first <code>n</code> characters</td></tr>
+          <tr><td><code>strchr(s, c)</code></td><td>Find first occurrence of a character</td></tr>
+          <tr><td><code>strstr(s, sub)</code></td><td>Find a substring</td></tr>
+          <tr><td><code>memcpy(dest, src, n)</code></td><td>Copy raw bytes (works for any type)</td></tr>
+          <tr><td><code>memset(dest, value, n)</code></td><td>Fill bytes with a value</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Copying strings</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int main(void) {
+    char source[] = "C programming";
+    char copy[50];
+
+    strcpy(copy, source);
+    printf("copy: %s\n", copy);
+
+    char safe[10];
+    strncpy(safe, source, sizeof(safe) - 1);
+    safe[sizeof(safe) - 1] = '\0';    // guarantee termination
+    printf("safe: %s\n", safe);
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>copy: C programming
+safe: C program</pre></div>
+    <p>You cannot assign strings with <code class="inline">=</code> after declaration. Use <code class="inline">strcpy</code>, or assign a new pointer.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>char a[20];
+// a = "hello";        // error
+
+strcpy(a, "hello");    // correct
+
+char b[20] = "hello";  // correct at declaration
+
+const char *p = "hello";  // p points at a literal; do not modify it</code></pre>
+    </div>
+
+    <h2>Concatenating strings</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int main(void) {
+    char result[50] = "Hello, ";
+    strcat(result, "World");
+    strcat(result, "!");
+    printf("%s\n", result);
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>Hello, World!</pre></div>
+    <p>The destination must have enough space for the original text, the appended text and the terminator. Buffer overflows from unchecked <code class="inline">strcat</code>/<code class="inline">strcpy</code> are a classic security bug.</p>
+
+    <h2>Comparing strings</h2>
+    <p><code class="inline">==</code> compares addresses, not contents. Use <code class="inline">strcmp</code>.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int main(void) {
+    char a[] = "apple";
+    char b[] = "apple";
+    char c[] = "banana";
+
+    printf("a == b gives %d\n", a == b);        // 0: different arrays
+    printf("strcmp(a,b) = %d\n", strcmp(a, b)); // 0: equal contents
+    printf("strcmp(a,c) = %d\n", strcmp(a, c)); // negative
+
+    if (strcmp(a, b) == 0) {
+        printf("a and b contain the same text\n");
+    }
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>a == b gives 0
+strcmp(a,b) = 0
+strcmp(a,c) = -1
+a and b contain the same text</pre></div>
+
+    <h2>Reading strings</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    char name[50];
+
+    printf("Enter your name: ");
+    if (fgets(name, sizeof(name), stdin) != NULL) {
+        // fgets keeps the newline; remove it
+        size_t len = strlen(name);
+        if (len &gt; 0 &amp;&amp; name[len - 1] == '\n') {
+            name[len - 1] = '\0';
+        }
+        printf("Hello, %s!\n", name);
+    }
+    return 0;
+}</code></pre>
+    </div>
+    <p>Prefer <code class="inline">fgets</code> over <code class="inline">scanf("%s", ...)</code>: it accepts spaces and respects the buffer size. See <a href="c-input.html">User Input</a>.</p>
+
+    <h2>Arrays of strings</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    const char *days[] = {
+        "Monday", "Tuesday", "Wednesday",
+        "Thursday", "Friday", "Saturday", "Sunday"
+    };
+
+    for (int i = 0; i &lt; 7; i++) {
+        printf("%d: %s\n", i + 1, days[i]);
+    }
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>1: Monday
+2: Tuesday
+3: Wednesday
+4: Thursday
+5: Friday
+6: Saturday
+7: Sunday</pre></div>
+
+    <h2>Useful character functions (&lt;ctype.h&gt;)</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Function</th><th>True when</th></tr></thead>
+        <tbody>
+          <tr><td><code>isalpha(c)</code></td><td>Letter</td></tr>
+          <tr><td><code>isdigit(c)</code></td><td>Digit 0–9</td></tr>
+          <tr><td><code>isalnum(c)</code></td><td>Letter or digit</td></tr>
+          <tr><td><code>isspace(c)</code></td><td>Space, tab, newline, etc.</td></tr>
+          <tr><td><code>isupper(c)</code> / <code>islower(c)</code></td><td>Upper / lower case</td></tr>
+          <tr><td><code>toupper(c)</code> / <code>tolower(c)</code></td><td>Convert case</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;ctype.h&gt;
+
+int main(void) {
+    char text[] = "Hello, World 123";
+    int letters = 0, digits = 0;
+
+    for (int i = 0; text[i] != '\0'; i++) {
+        if (isalpha((unsigned char)text[i])) letters++;
+        if (isdigit((unsigned char)text[i])) digits++;
+    }
+
+    printf("letters = %d, digits = %d\n", letters, digits);
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>letters = 10, digits = 3</pre></div>
+
+    <div class="tip">
+      <p><b>Tip:</b> cast to <code class="inline">unsigned char</code> when calling <code class="inline">&lt;ctype.h&gt;</code> functions. Passing a negative <code class="inline">char</code> is undefined behaviour.</p>
+    </div>
+
+    <h2>Exercises</h2>
+    <ol>
+      <li>Count the vowels in a string.</li>
+      <li>Reverse a string in place.</li>
+      <li>Check whether a string is a palindrome.</li>
+      <li>Convert a string to uppercase without using <code class="inline">strupr</code>.</li>
+      <li>Write a function that counts occurrences of a character.</li>
+    </ol>
+  </main>
+
+  <aside class="toc" id="toc"></aside>
+</div>
+
+<footer id="footer"></footer>
+<script src="assets/app.js"></script>
+</body>
+</html>

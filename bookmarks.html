@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Your saved C Notes pages, stored locally in this browser.">
+<title>Bookmarks — C Notes</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="bookmarks.html">
+<a class="skip-link" href="#main">Skip to content</a>
+<header id="topbar"></header>
+
+<div class="layout no-toc">
+  <aside id="sidebar"></aside>
+
+  <main class="content" id="main">
+    <div class="breadcrumb"><a href="index.html">C Tutorial</a><span>›</span>Tools<span>›</span>Bookmarks</div>
+    <h1>Bookmarks</h1>
+    <p class="lead">Pages you have starred are collected here. Bookmarks are stored in this browser only — no account, no syncing, no tracking.</p>
+
+    <div class="bookmark-list" id="bookmarkList"></div>
+    <div class="search-empty" id="bookmarkEmpty" hidden>
+      <p><b>No bookmarks yet.</b></p>
+      <p>Press the ☆ button in the top bar, or <kbd>B</kbd>, on any page to save it here.</p>
+    </div>
+
+    <p style="margin-top:20px"><button type="button" class="btn" id="clearBookmarks" hidden>Clear all bookmarks</button></p>
+
+    <div class="note" style="margin-top:26px">
+      <p><b>Looking for something else?</b> Try the <a href="search.html">full-text search</a>, the <a href="c-cheatsheet.html">cheat sheet</a>, or the <a href="c-exercises.html">exercise list</a>.</p>
+    </div>
+  </main>
+</div>
+
+<footer id="footer"></footer>
+<script src="assets/app.js"></script>
+<script src="assets/bookmarks.js"></script>
+</body>
+</html>

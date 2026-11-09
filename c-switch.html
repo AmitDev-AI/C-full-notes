@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="C switch statement: syntax, break, default, fall-through and when to use switch instead of if.">
+<title>C Switch — C Notes</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#04aa6d">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="c-switch.html">
+<a class="skip-link" href="#main">Skip to content</a>
+<header id="topbar"></header>
+
+<div class="layout">
+  <aside id="sidebar"></aside>
+
+  <main class="content" id="main">
+    <div class="breadcrumb"><a href="index.html">C Tutorial</a><span>›</span>Switch</div>
+    <h1>C Switch</h1>
+    <p class="lead">The <code class="inline">switch</code> statement selects one block from many options based on the value of a single integer or character expression.</p>
+
+    <h2>Syntax</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>switch (expression) {
+    case value1:
+        statements;
+        break;
+    case value2:
+        statements;
+        break;
+    default:
+        statements;
+        break;
+}</code></pre>
+    </div>
+
+    <h2>Basic example</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int day = 3;
+
+    switch (day) {
+        case 1:
+            printf("Monday\n");
+            break;
+        case 2:
+            printf("Tuesday\n");
+            break;
+        case 3:
+            printf("Wednesday\n");
+            break;
+        case 4:
+            printf("Thursday\n");
+            break;
+        case 5:
+            printf("Friday\n");
+            break;
+        case 6:
+            printf("Saturday\n");
+            break;
+        case 7:
+            printf("Sunday\n");
+            break;
+        default:
+            printf("Invalid day\n");
+            break;
+    }
+
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>Wednesday</pre></div>
+
+    <h2>Why break matters</h2>
+    <p>Without <code class="inline">break</code>, execution <b>falls through</b> into the next case. This is sometimes useful, but it is usually a bug.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int x = 1;
+
+    switch (x) {
+        case 1:
+            printf("One\n");
+            /* no break */
+        case 2:
+            printf("Two\n");
+            /* no break */
+        case 3:
+            printf("Three\n");
+            break;
+        default:
+            printf("Other\n");
+    }
+
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>One
+Two
+Three</pre></div>
+    <p>Intentional fall-through can group cases. Add a comment such as <code class="inline">/* fall through */</code> so readers know it is deliberate.</p>
+
+    <h2>Grouping cases</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    char grade = 'B';
+
+    switch (grade) {
+        case 'A':
+        case 'B':
+        case 'C':
+            printf("Pass\n");
+            break;
+        case 'D':
+        case 'F':
+            printf("Fail\n");
+            break;
+        default:
+            printf("Invalid grade\n");
+    }
+
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>Pass</pre></div>
+
+    <h2>The default case</h2>
+    <p><code class="inline">default</code> runs when no case matches. It can appear anywhere, but placing it last is conventional. Although optional, including it is good practice.</p>
+
+    <h2>Switch with characters and enums</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+enum Op { ADD, SUB, MUL };
+
+int main(void) {
+    char choice = 'm';
+    enum Op op = MUL;
+
+    switch (choice) {
+        case 'a':
+            printf("Add selected\n");
+            break;
+        case 's':
+            printf("Subtract selected\n");
+            break;
+        default:
+            printf("Unknown choice\n");
+    }
+
+    switch (op) {
+        case ADD: printf("add\n"); break;
+        case SUB: printf("subtract\n"); break;
+        case MUL: printf("multiply\n"); break;
+    }
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>Unknown choice
+multiply</pre></div>
+
+    <h2>Rules and limitations</h2>
+    <ul>
+      <li>The controlling expression must have an <b>integer</b> type: <code class="inline">int</code>, <code class="inline">char</code>, <code class="inline">short</code>, <code class="inline">long</code>, or <code class="inline">enum</code>.</li>
+      <li>Case labels must be <b>constant integer expressions</b> — no variables, no ranges, no strings.</li>
+      <li>Labels must be unique within one switch.</li>
+      <li><code class="inline">float</code>, <code class="inline">double</code> and strings cannot be switched on.</li>
+      <li>Declaring variables directly after a label needs a block <code class="inline">{ }</code>.</li>
+    </ul>
+    <div class="codebox" data-file="main.c">
+<pre><code>// Not allowed: non-constant case
+int limit = 10;
+switch (x) {
+    case limit:   // error
+        break;
+}
+
+// Not allowed: range case (use if/else instead)
+switch (x) {
+    case 1 ... 5:  // GNU extension, not standard C
+        break;
+}</code></pre>
+    </div>
+
+    <h2>switch vs if...else</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Use <code>switch</code> when</th><th>Use <code>if...else</code> when</th></tr></thead>
+        <tbody>
+          <tr><td>Comparing one value against several fixed constants</td><td>Testing ranges (<code>x &gt; 10</code>)</td></tr>
+          <tr><td>Working with an enum or menu choice</td><td>Combining different variables</td></tr>
+          <tr><td>The options are known at compile time</td><td>Comparing strings or floating-point values</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Complete example: menu</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int choice = 2;
+
+    printf("1. Say hello\n");
+    printf("2. Show a number\n");
+    printf("3. Quit\n");
+
+    switch (choice) {
+        case 1:
+            printf("Hello!\n");
+            break;
+        case 2:
+            printf("The answer is 42\n");
+            break;
+        case 3:
+            printf("Goodbye\n");
+            break;
+        default:
+            printf("Invalid option\n");
+            break;
+    }
+
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>1. Say hello
+2. Show a number
+3. Quit
+The answer is 42</pre></div>
+
+    <div class="warn">
+      <p><b>Warning:</b> forgetting <code class="inline">break</code> after the last case can also cause trouble later when new cases are added. Some compilers warn about implicit fall-through; heed those warnings.</p>
+    </div>
+
+    <h2>Exercises</h2>
+    <ol>
+      <li>Write a switch that prints the name of a month from a number 1–12.</li>
+      <li>Group the months by season using fall-through.</li>
+      <li>Rewrite a simple calculator using <code class="inline">switch</code> on the operator character.</li>
+    </ol>
+  </main>
+
+  <aside class="toc" id="toc"></aside>
+</div>
+
+<footer id="footer"></footer>
+<script src="assets/app.js"></script>
+</body>
+</html>

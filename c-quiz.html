@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Test your C knowledge with 15 multiple-choice questions and explanations.">
+<title>C Quiz — C Notes</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#04aa6d">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="c-quiz.html">
+<a class="skip-link" href="#main">Skip to content</a>
+<header id="topbar"></header>
+
+<div class="layout">
+  <aside id="sidebar"></aside>
+
+  <main class="content" id="main">
+    <div class="breadcrumb"><a href="index.html">C Tutorial</a><span>›</span>Quiz</div>
+    <h1>C Quiz</h1>
+    <p class="lead">Fifteen questions covering the whole tutorial. Pick an answer for each, then check your score. Explanations appear after checking.</p>
+
+    <form id="quizForm">
+      <div class="quiz-q" data-answer="b">
+        <h3>1. Which header declares <code class="inline">printf</code>?</h3>
+        <label data-opt="a"><input type="radio" name="q1" value="a"> &lt;stdlib.h&gt;</label>
+        <label data-opt="b"><input type="radio" name="q1" value="b"> &lt;stdio.h&gt;</label>
+        <label data-opt="c"><input type="radio" name="q1" value="c"> &lt;string.h&gt;</label>
+        <label data-opt="d"><input type="radio" name="q1" value="d"> &lt;math.h&gt;</label>
+        <div class="explain"><b>B.</b> <code>printf</code> is part of the standard input/output library in <code>&lt;stdio.h&gt;</code>.</div>
+      </div>
+
+      <div class="quiz-q" data-answer="c">
+        <h3>2. Which is a valid definition of the entry point?</h3>
+        <label data-opt="a"><input type="radio" name="q2" value="a"> void main()</label>
+        <label data-opt="b"><input type="radio" name="q2" value="b"> main()</label>
+        <label data-opt="c"><input type="radio" name="q2" value="c"> int main(void)</label>
+        <label data-opt="d"><input type="radio" name="q2" value="d"> int main[]</label>
+        <div class="explain"><b>C.</b> The standard form returns <code>int</code>. <code>void main</code> is not standard C.</div>
+      </div>
+
+      <div class="quiz-q" data-answer="a">
+        <h3>3. What does <code class="inline">printf("%d", 7 / 2);</code> print?</h3>
+        <label data-opt="a"><input type="radio" name="q3" value="a"> 3</label>
+        <label data-opt="b"><input type="radio" name="q3" value="b"> 3.5</label>
+        <label data-opt="c"><input type="radio" name="q3" value="c"> 4</label>
+        <label data-opt="d"><input type="radio" name="q3" value="d"> 7</label>
+        <div class="explain"><b>A.</b> Integer division truncates the fractional part.</div>
+      </div>
+
+      <div class="quiz-q" data-answer="b">
+        <h3>4. Which condition tests whether <code class="inline">x</code> equals 5?</h3>
+        <label data-opt="a"><input type="radio" name="q4" value="a"> if (x = 5)</label>
+        <label data-opt="b"><input type="radio" name="q4" value="b"> if (x == 5)</label>
+        <label data-opt="c"><input type="radio" name="q4" value="c"> if (x === 5)</label>
+        <label data-opt="d"><input type="radio" name="q4" value="d"> if (x != 5)</label>
+        <div class="explain"><b>B.</b> <code>==</code> compares; <code>=</code> assigns. <code>===</code> does not exist in C.</div>
+      </div>
+
+      <div class="quiz-q" data-answer="a">
+        <h3>5. What is the first valid index of an array?</h3>
+        <label data-opt="a"><input type="radio" name="q5" value="a"> 0</label>
+        <label data-opt="b"><input type="radio" name="q5" value="b"> 1</label>
+        <label data-opt="c"><input type="radio" name="q5" value="c"> -1</label>
+        <label data-opt="d"><input type="radio" name="q5" value="d"> It depends on the compiler</label>
+        <div class="explain"><b>A.</b> C arrays are zero-indexed: valid indices are <code>0</code> to <code>length - 1</code>.</div>
+      </div>
+
+      <div class="quiz-q" data-answer="c">
+        <h3>6. Which loop always executes its body at least once?</h3>
+        <label data-opt="a"><input type="radio" name="q6" value="a"> while</label>
+        <label data-opt="b"><input type="radio" name="q6" value="b"> for</label>
+        <label data-opt="c"><input type="radio" name="q6" value="c"> do...while</label>
+        <label data-opt="d"><input type="radio" name="q6" value="d"> None of them</label>
+        <div class="explain"><b>C.</b> <code>do...while</code> checks its condition after running the body.</div>
+      </div>
+
+      <div class="quiz-q" data-answer="b">
+        <h3>7. What character marks the end of a C string?</h3>
+        <label data-opt="a"><input type="radio" name="q7" value="a"> '\n'</label>
+        <label data-opt="b"><input type="radio" name="q7" value="b"> '\0'</label>
+        <label data-opt="c"><input type="radio" name="q7" value="c"> EOF</label>
+        <label data-opt="d"><input type="radio" name="q7" value="d"> 'NULL'</label>
+        <div class="explain"><b>B.</b> A null character <code>'\0'</code> (value 0) terminates every C string.</div>
+      </div>
+
+      <div class="quiz-q" data-answer="b">
+        <h3>8. How many bytes does <code class="inline">char s[] = "Hi";</code> occupy?</h3>
+        <label data-opt="a"><input type="radio" name="q8" value="a"> 2</label>
+        <label data-opt="b"><input type="radio" name="q8" value="b"> 3</label>
+        <label data-opt="c"><input type="radio" name="q8" value="c"> 4</label>
+        <label data-opt="d"><input type="radio" name="q8" value="d"> 8</label>
+        <div class="explain"><b>B.</b> Two visible characters plus the null terminator = 3 bytes.</div>
+      </div>
+
+      <div class="quiz-q" data-answer="d">
+        <h3>9. Which operator gives the address of a variable?</h3>
+        <label data-opt="a"><input type="radio" name="q9" value="a"> *</label>
+        <label data-opt="b"><input type="radio" name="q9" value="b"> -&gt;</label>
+        <label data-opt="c"><input type="radio" name="q9" value="c"> %</label>
+        <label data-opt="d"><input type="radio" name="q9" value="d"> &amp;</label>
+        <div class="explain"><b>D.</b> <code>&amp;x</code> yields the address of <code>x</code>; <code>*p</code> dereferences a pointer.</div>
+      </div>
+
+      <div class="quiz-q" data-answer="c">
+        <h3>10. What type does <code class="inline">malloc</code> return?</h3>
+        <label data-opt="a"><input type="radio" name="q10" value="a"> int</label>
+        <label data-opt="b"><input type="radio" name="q10" value="b"> int *</label>
+        <label data-opt="c"><input type="radio" name="q10" value="c"> void *</label>
+        <label data-opt="d"><input type="radio" name="q10" value="d"> char *</label>
+        <div class="explain"><b>C.</b> <code>malloc</code> returns <code>void *</code>, which converts to any object pointer type. It returns <code>NULL</code> on failure.</div>
+      </div>
+
+      <div class="quiz-q" data-answer="a">
+        <h3>11. Which is the correct way to release memory allocated with <code class="inline">malloc</code>?</h3>
+        <label data-opt="a"><input type="radio" name="q11" value="a"> free(ptr);</label>
+        <label data-opt="b"><input type="radio" name="q11" value="b"> delete ptr;</label>
+        <label data-opt="c"><input type="radio" name="q11" value="c"> release(ptr);</label>
+        <label data-opt="d"><input type="radio" name="q11" value="d"> ptr = NULL;</label>
+        <div class="explain"><b>A.</b> <code>free</code> returns the block to the allocator. Setting the pointer to <code>NULL</code> afterwards helps avoid use-after-free.</div>
+      </div>
+
+      <div class="quiz-q" data-answer="c">
+        <h3>12. Given <code class="inline">struct Point { int x, y; } p, *ptr = &amp;p;</code>, how do you access <code class="inline">x</code> through <code class="inline">ptr</code>?</h3>
+        <label data-opt="a"><input type="radio" name="q12" value="a"> ptr.x</label>
+        <label data-opt="b"><input type="radio" name="q12" value="b"> ptr-&gt;x (but only if p is an array)</label>
+        <label data-opt="c"><input type="radio" name="q12" value="c"> ptr-&gt;x</label>
+        <label data-opt="d"><input type="radio" name="q12" value="d"> *ptr.x</label>
+        <div class="explain"><b>C.</b> <code>ptr-&gt;x</code> is shorthand for <code>(*ptr).x</code>.</div>
+      </div>
+
+      <div class="quiz-q" data-answer="b">
+        <h3>13. What does <code class="inline">fopen("data.txt", "r")</code> return if the file does not exist?</h3>
+        <label data-opt="a"><input type="radio" name="q13" value="a"> An empty file pointer</label>
+        <label data-opt="b"><input type="radio" name="q13" value="b"> NULL</label>
+        <label data-opt="c"><input type="radio" name="q13" value="c"> 0</label>
+        <label data-opt="d"><input type="radio" name="q13" value="d"> It creates the file</label>
+        <div class="explain"><b>B.</b> Read mode fails with <code>NULL</code>; always check before using the stream.</div>
+      </div>
+
+      <div class="quiz-q" data-answer="a">
+        <h3>14. What happens if a <code class="inline">switch</code> case has no <code class="inline">break</code>?</h3>
+        <label data-opt="a"><input type="radio" name="q14" value="a"> Execution falls through into the next case</label>
+        <label data-opt="b"><input type="radio" name="q14" value="b"> The program stops with an error</label>
+        <label data-opt="c"><input type="radio" name="q14" value="c"> The switch exits immediately</label>
+        <label data-opt="d"><input type="radio" name="q14" value="d"> The compiler inserts a break automatically</label>
+        <div class="explain"><b>A.</b> Without <code>break</code>, control continues into the following case labels.</div>
+      </div>
+
+      <div class="quiz-q" data-answer="d">
+        <h3>15. What is the value of <code class="inline">GREEN</code> in <code class="inline">enum Color { RED, GREEN, BLUE };</code>?</h3>
+        <label data-opt="a"><input type="radio" name="q15" value="a"> 0</label>
+        <label data-opt="b"><input type="radio" name="q15" value="b"> "GREEN"</label>
+        <label data-opt="c"><input type="radio" name="q15" value="c"> 2</label>
+        <label data-opt="d"><input type="radio" name="q15" value="d"> 1</label>
+        <div class="explain"><b>D.</b> Enumerators start at 0 and increase by one: <code>RED</code> = 0, <code>GREEN</code> = 1, <code>BLUE</code> = 2.</div>
+      </div>
+
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:22px">
+        <button class="btn primary" id="checkQuiz" type="button">Check my score</button>
+        <button class="btn" id="resetQuiz" type="button">Try again</button>
+      </div>
+    </form>
+
+    <div class="quiz-result" id="quizResult" role="status" aria-live="polite"></div>
+
+    <h2>Where to review</h2>
+    <div class="cards">
+      <a class="card" href="c-datatypes.html"><h3>Data types</h3><p>Types, sizes and format specifiers.</p></a>
+      <a class="card" href="c-arrays.html"><h3>Arrays</h3><p>Indexing and bounds.</p></a>
+      <a class="card" href="c-strings.html"><h3>Strings</h3><p>Null terminators and string.h.</p></a>
+      <a class="card" href="c-pointers.html"><h3>Pointers</h3><p>Addresses, dereferencing and NULL.</p></a>
+      <a class="card" href="c-memory.html"><h3>Memory</h3><p>malloc and free.</p></a>
+      <a class="card" href="c-files.html"><h3>File handling</h3><p>fopen modes and error checks.</p></a>
+    </div>
+  </main>
+
+  <aside class="toc" id="toc"></aside>
+</div>
+
+<footer id="footer"></footer>
+<script src="assets/app.js"></script>
+<script src="assets/quiz.js"></script>
+</body>
+</html>

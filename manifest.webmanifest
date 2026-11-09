@@ -1,0 +1,14 @@
+{
+  "name": "C Notes — Learn C Offline",
+  "short_name": "C Notes",
+  "description": "A free, offline, W3Schools-style C tutorial with a real in-browser C interpreter.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#04aa6d",
+  "icons": [
+    { "src": "assets/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "assets/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

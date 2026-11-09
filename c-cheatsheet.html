@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="A printable one-page C cheat sheet: syntax, types, format specifiers, operators, pointers, structs, memory, files and the standard library.">
+<title>C Cheat Sheet — C Notes</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="c-cheatsheet.html">
+<a class="skip-link" href="#main">Skip to content</a>
+<header id="topbar"></header>
+
+<div class="layout">
+  <aside id="sidebar"></aside>
+
+  <main class="content" id="main">
+    <div class="breadcrumb"><a href="index.html">C Tutorial</a><span>›</span>Reference<span>›</span>Cheat Sheet</div>
+    <h1>C Cheat Sheet</h1>
+    <p class="lead">The whole language on one page: syntax, types, operators, pointers, memory, files and the functions you will actually use. Keep it open while you practise — or print it.</p>
+    <p><button type="button" class="btn" data-print>🖨 Print this cheat sheet</button></p>
+
+    <h2 id="skeleton">Program skeleton</h2>
+    <div class="codebox" data-file="skeleton.c"><pre><code>#include &lt;stdio.h&gt;   /* declarations of printf, scanf, FILE ... */
+
+#define MAX 100       /* preprocessor constant */
+
+int helper(int x);    /* function prototype */
+
+int main(void) {      /* entry point; returns int to the OS */
+    int n = 42;
+    printf("n = %d\n", n);
+    return 0;         /* 0 means success */
+}</code></pre></div>
+    <p class="small">Compile: <code class="inline">gcc main.c -o main</code> · Run: <code class="inline">./main</code> (Windows: <code class="inline">main.exe</code>). Add <code class="inline">-Wall -Wextra -std=c17</code> for useful warnings.</p>
+
+    <h2 id="types">Data types</h2>
+    <table class="cheat">
+      <tr><th>Type</th><th>Typical size</th><th>Use / range</th><th>Format</th></tr>
+      <tr><td><code>char</code></td><td>1 byte</td><td>one character / small integer; −128…127</td><td><code>%c</code></td></tr>
+      <tr><td><code>unsigned char</code></td><td>1 byte</td><td>0…255 (bytes, buffers)</td><td><code>%hhu</code></td></tr>
+      <tr><td><code>short</code></td><td>2 bytes</td><td>at least ±32,767</td><td><code>%hd</code></td></tr>
+      <tr><td><code>int</code></td><td>4 bytes</td><td>usually ±2.1 billion</td><td><code>%d</code></td></tr>
+      <tr><td><code>unsigned int</code></td><td>4 bytes</td><td>0…4,294,967,295</td><td><code>%u</code></td></tr>
+      <tr><td><code>long</code></td><td>4 or 8 bytes</td><td>at least 32 bits</td><td><code>%ld</code></td></tr>
+      <tr><td><code>long long</code></td><td>8 bytes</td><td>at least 64 bits</td><td><code>%lld</code></td></tr>
+      <tr><td><code>float</code></td><td>4 bytes</td><td>~6 decimal digits</td><td><code>%f</code></td></tr>
+      <tr><td><code>double</code></td><td>8 bytes</td><td>~15 decimal digits (default)</td><td><code>%lf</code> / <code>%f</code></td></tr>
+      <tr><td><code>size_t</code></td><td>8 bytes</td><td>sizes, indexes; unsigned</td><td><code>%zu</code></td></tr>
+      <tr><td><code>void</code></td><td>—</td><td>no value / generic pointer</td><td>—</td></tr>
+    </table>
+    <p class="small">Use <code class="inline">sizeof(type)</code> for the real size on your machine. <code class="inline">&lt;stdint.h&gt;</code> gives exact types: <code class="inline">int8_t</code>, <code class="inline">uint32_t</code>, <code class="inline">int64_t</code>.</p>
+
+    <h2 id="format">printf and scanf formats</h2>
+    <table class="cheat">
+      <tr><th>Specifier</th><th>Output (printf)</th><th>Input (scanf)</th></tr>
+      <tr><td><code>%d</code> / <code>%i</code></td><td>signed int</td><td>signed int</td></tr>
+      <tr><td><code>%u</code></td><td>unsigned int</td><td>unsigned int</td></tr>
+      <tr><td><code>%f</code></td><td>double (6 decimals by default)</td><td>float</td></tr>
+      <tr><td><code>%lf</code></td><td>double</td><td>double</td></tr>
+      <tr><td><code>%c</code></td><td>one character</td><td>one character (does not skip space)</td></tr>
+      <tr><td><code>%s</code></td><td>string up to <code>\0</code></td><td>word up to whitespace</td></tr>
+      <tr><td><code>%x</code> / <code>%X</code></td><td>hexadecimal</td><td>hexadecimal</td></tr>
+      <tr><td><code>%o</code></td><td>octal</td><td>octal</td></tr>
+      <tr><td><code>%p</code></td><td>pointer address</td><td>pointer address</td></tr>
+      <tr><td><code>%%</code></td><td>a literal <code>%</code></td><td>—</td></tr>
+    </table>
+    <p class="small">Width and precision: <code class="inline">%8.2f</code> (8 wide, 2 decimals), <code class="inline">%-8d</code> (left aligned), <code class="inline">%08d</code> (zero padded), <code class="inline">%.3s</code> (first 3 characters). For input, limit strings: <code class="inline">scanf("%63s", name)</code>.</p>
+
+    <h2 id="escapes">Escape sequences</h2>
+    <table class="cheat">
+      <tr><td><code>\n</code> newline</td><td><code>\t</code> tab</td><td><code>\\</code> backslash</td><td><code>\"</code> double quote</td></tr>
+      <tr><td><code>\'</code> single quote</td><td><code>\0</code> null terminator</td><td><code>\a</code> bell</td><td><code>\r</code> carriage return</td></tr>
+      <tr><td><code>\b</code> backspace</td><td><code>\f</code> form feed</td><td><code>\v</code> vertical tab</td><td><code>\x41</code> hex character</td></tr>
+    </table>
+
+    <h2 id="operators">Operators and precedence</h2>
+    <table class="cheat">
+      <tr><th>Priority</th><th>Operators</th><th>Notes</th></tr>
+      <tr><td>1</td><td><code>() [] . -&gt; ++ --</code></td><td>postfix forms, member access</td></tr>
+      <tr><td>2</td><td><code>! ~ ++ -- + - * &amp; (type) sizeof</code></td><td>unary / cast / dereference / address</td></tr>
+      <tr><td>3</td><td><code>* / %</code></td><td>multiplicative</td></tr>
+      <tr><td>4</td><td><code>+ -</code></td><td>additive</td></tr>
+      <tr><td>5</td><td><code>&lt;&lt; &gt;&gt;</code></td><td>bit shifts</td></tr>
+      <tr><td>6</td><td><code>&lt; &lt;= &gt; &gt;=</code></td><td>relational</td></tr>
+      <tr><td>7</td><td><code>== !=</code></td><td>equality</td></tr>
+      <tr><td>8–10</td><td><code>&amp; ^ |</code></td><td>bitwise AND, XOR, OR</td></tr>
+      <tr><td>11–12</td><td><code>&amp;&amp; ||</code></td><td>logical, short-circuit</td></tr>
+      <tr><td>13</td><td><code>?:</code></td><td>conditional</td></tr>
+      <tr><td>14</td><td><code>= += -= *= /= %= &amp;= |= ^= &lt;&lt;= &gt;&gt;=</code></td><td>assignment, right to left</td></tr>
+      <tr><td>15</td><td><code>,</code></td><td>comma</td></tr>
+    </table>
+    <div class="codebox" data-file="operators.c"><pre><code>int a = 10, b = 3;
+a + b     /* 13 */
+a / b     /* 3  — integer division */
+a % b     /* 1  — remainder */
+a / 3.0   /* 3.333... */
+a &gt; b &amp;&amp; b &gt; 0   /* 1 (true) */
+a &amp; b     /* 2  — bitwise AND */
+a &lt;&lt; 1    /* 20 — shift left */
+a &gt; b ? a : b   /* 10 */</code></pre></div>
+
+    <h2 id="control">Control flow</h2>
+    <div class="cheat-grid">
+      <div class="cheat-card">
+        <h3>if / else</h3>
+        <div class="codebox" data-file="if.c"><pre><code>if (score &gt;= 90) {
+    puts("A");
+} else if (score &gt;= 80) {
+    puts("B");
+} else {
+    puts("Keep trying");
+}</code></pre></div>
+      </div>
+      <div class="cheat-card">
+        <h3>switch</h3>
+        <div class="codebox" data-file="switch.c"><pre><code>switch (choice) {
+    case 1:
+        start();
+        break;
+    case 2:
+        stop();
+        break;
+    default:
+        puts("Unknown");
+}</code></pre></div>
+      </div>
+      <div class="cheat-card">
+        <h3>Loops</h3>
+        <div class="codebox" data-file="loops.c"><pre><code>for (int i = 0; i &lt; 10; i++) { }
+
+while (n &gt; 0) { n--; }
+
+do {
+    ask();
+} while (!valid);
+
+break;     /* leave the loop  */
+continue;  /* next iteration */</code></pre></div>
+      </div>
+    </div>
+
+    <h2 id="functions">Functions and storage</h2>
+    <div class="codebox" data-file="functions.c"><pre><code>int add(int a, int b);              /* prototype */
+
+int add(int a, int b) {             /* definition */
+    return a + b;
+}
+
+void greet(void) {                  /* no parameters, no return */
+    puts("Hello");
+}
+
+int main(void) {
+    printf("%d\n", add(2, 3));
+    greet();
+    return 0;
+}</code></pre></div>
+    <table class="cheat">
+      <tr><th>Keyword</th><th>Meaning</th></tr>
+      <tr><td><code>static</code></td><td>At file scope: visible only in this file. Inside a function: keeps its value between calls.</td></tr>
+      <tr><td><code>extern</code></td><td>Declares something defined in another file.</td></tr>
+      <tr><td><code>const</code></td><td>Value cannot be changed through this name.</td></tr>
+      <tr><td><code>inline</code></td><td>Hint to expand the function at the call site.</td></tr>
+      <tr><td><code>register</code></td><td>Historic hint; rarely useful today.</td></tr>
+      <tr><td><code>volatile</code></td><td>The value may change outside the program's control (hardware, signals). Prevents some optimisations.</td></tr>
+    </table>
+
+    <h2 id="pointers">Pointers and arrays</h2>
+    <div class="codebox" data-file="pointers.c"><pre><code>int n = 42;
+int *p = &amp;n;        /* p holds the address of n */
+printf("%d\n", *p); /* dereference: 42 */
+*p = 99;            /* n is now 99 */
+
+int a[5] = {10, 20, 30, 40, 50};
+int *q = a;         /* array name decays to &amp;a[0] */
+printf("%d\n", q[2]);      /* 30 */
+printf("%d\n", *(q + 2));  /* 30 — same thing */
+
+int matrix[2][3];   /* 2 rows, 3 columns */
+matrix[1][2] = 7;</code></pre></div>
+    <ul>
+      <li><code class="inline">a[i]</code> is exactly <code class="inline">*(a + i)</code>.</li>
+      <li>Passing an array to a function passes a pointer; the function cannot know its length unless you pass it.</li>
+      <li><code class="inline">NULL</code> means “points to nothing”. Always check a pointer before dereferencing it.</li>
+      <li>Pointer arithmetic moves in units of the pointed-to type: <code class="inline">p + 1</code> skips <code class="inline">sizeof(*p)</code> bytes.</li>
+    </ul>
+
+    <h2 id="strings">Strings</h2>
+    <div class="codebox" data-file="strings.c"><pre><code>#include &lt;string.h&gt;
+
+char name[32] = "Ada";        /* 31 characters + '\0' */
+char copy[32];
+
+strlen(name)                  /* 3 (does not count '\0') */
+strcpy(copy, name);           /* unsafe without a size check */
+strncpy(copy, name, 31);      /* bounded copy */
+strcat(copy, " Lovelace");    /* append */
+strcmp(a, b)                  /* 0 if equal, &lt;0 or &gt;0 otherwise */
+strchr(name, 'd')             /* pointer to first 'd', or NULL */
+strstr(text, "love")          /* pointer to substring, or NULL */
+sprintf(buf, "%d", 42);       /* format into a string */
+snprintf(buf, sizeof(buf), "%d", 42);  /* safer */</code></pre></div>
+
+    <h2 id="structs">Structs, unions, enums, typedef</h2>
+    <div class="codebox" data-file="structs.c"><pre><code>struct Point {
+    int x;
+    int y;
+};
+
+struct Point p = {3, 4};      /* initialise in order */
+p.x = 10;
+struct Point *ptr = &amp;p;
+printf("%d\n", ptr-&gt;y);       /* arrow: member through pointer */
+
+typedef struct {
+    char name[40];
+    int age;
+} Person;                     /* Person is now a type name */
+
+enum Color { RED, GREEN = 5, BLUE };   /* 0, 5, 6 */
+
+union Number {
+    int i;
+    float f;
+};                            /* members share the same memory */</code></pre></div>
+
+    <h2 id="memory">Memory management</h2>
+    <table class="cheat">
+      <tr><th>Function</th><th>Purpose</th></tr>
+      <tr><td><code>malloc(size)</code></td><td>Allocate uninitialised bytes; returns <code>NULL</code> on failure.</td></tr>
+      <tr><td><code>calloc(n, size)</code></td><td>Allocate <code>n</code> zeroed elements.</td></tr>
+      <tr><td><code>realloc(p, size)</code></td><td>Resize an allocation; may move it.</td></tr>
+      <tr><td><code>free(p)</code></td><td>Release memory; <code>p</code> must come from malloc/calloc/realloc.</td></tr>
+    </table>
+    <div class="codebox" data-file="memory.c"><pre><code>int *a = malloc(10 * sizeof *a);
+if (a == NULL) {
+    fprintf(stderr, "out of memory\n");
+    return 1;
+}
+a[0] = 1;
+free(a);
+a = NULL;          /* avoid a dangling pointer */</code></pre></div>
+    <p class="small">Every <code class="inline">malloc</code> needs exactly one matching <code class="inline">free</code>. Never free the same block twice, and never use memory after freeing it.</p>
+
+    <h2 id="files">File I/O</h2>
+    <div class="codebox" data-file="files.c"><pre><code>#include &lt;stdio.h&gt;
+
+FILE *fp = fopen("data.txt", "w");
+if (fp == NULL) {
+    perror("data.txt");
+    return 1;
+}
+fprintf(fp, "score = %d\n", 42);
+fclose(fp);
+
+fp = fopen("data.txt", "r");
+char line[128];
+while (fgets(line, sizeof line, fp) != NULL) {
+    fputs(line, stdout);
+}
+fclose(fp);</code></pre></div>
+    <table class="cheat">
+      <tr><th>Mode</th><th>Meaning</th></tr>
+      <tr><td><code>"r"</code></td><td>Read; fails if the file does not exist.</td></tr>
+      <tr><td><code>"w"</code></td><td>Write; creates or truncates.</td></tr>
+      <tr><td><code>"a"</code></td><td>Append; creates if needed.</td></tr>
+      <tr><td><code>"r+"</code> / <code>"w+"</code> / <code>"a+"</code></td><td>Read and write variants.</td></tr>
+      <tr><td><code>"rb"</code> / <code>"wb"</code></td><td>Binary mode (important on Windows).</td></tr>
+    </table>
+
+    <h2 id="preprocessor">Preprocessor</h2>
+    <div class="codebox" data-file="preprocessor.c"><pre><code>#include &lt;stdio.h&gt;          /* library header */
+#include "myheader.h"       /* local header */
+
+#define PI 3.14159
+#define MAX(a, b) ((a) &gt; (b) ? (a) : (b))
+#define STR(x) #x           /* stringify */
+#define CAT(a, b) a##b      /* token paste */
+
+#ifdef DEBUG
+    fprintf(stderr, "debug build\n");
+#endif
+
+#if __STDC_VERSION__ &gt;= 201112L
+    /* C11 or newer */
+#endif
+
+#ifndef MYHEADER_H
+#define MYHEADER_H
+/* include guard contents */
+#endif</code></pre></div>
+
+    <h2 id="library">Standard library quick list</h2>
+    <table class="cheat">
+      <tr><th>Header</th><th>Common functions</th></tr>
+      <tr><td><code>&lt;stdio.h&gt;</code></td><td><code>printf</code>, <code>scanf</code>, <code>puts</code>, <code>fgets</code>, <code>fopen</code>, <code>fclose</code>, <code>fprintf</code>, <code>fread</code>, <code>fwrite</code></td></tr>
+      <tr><td><code>&lt;stdlib.h&gt;</code></td><td><code>malloc</code>, <code>calloc</code>, <code>realloc</code>, <code>free</code>, <code>atoi</code>, <code>strtol</code>, <code>rand</code>, <code>qsort</code>, <code>exit</code></td></tr>
+      <tr><td><code>&lt;string.h&gt;</code></td><td><code>strlen</code>, <code>strcpy</code>, <code>strncpy</code>, <code>strcmp</code>, <code>strcat</code>, <code>strchr</code>, <code>strstr</code>, <code>memcpy</code>, <code>memset</code></td></tr>
+      <tr><td><code>&lt;math.h&gt;</code></td><td><code>sqrt</code>, <code>pow</code>, <code>fabs</code>, <code>floor</code>, <code>ceil</code>, <code>round</code>, <code>sin</code>, <code>cos</code>, <code>log</code></td></tr>
+      <tr><td><code>&lt;ctype.h&gt;</code></td><td><code>isalpha</code>, <code>isdigit</code>, <code>isspace</code>, <code>isupper</code>, <code>tolower</code>, <code>toupper</code></td></tr>
+      <tr><td><code>&lt;time.h&gt;</code></td><td><code>time</code>, <code>clock</code>, <code>difftime</code>, <code>strftime</code></td></tr>
+      <tr><td><code>&lt;stdbool.h&gt;</code></td><td><code>bool</code>, <code>true</code>, <code>false</code></td></tr>
+      <tr><td><code>&lt;stdint.h&gt;</code></td><td><code>int8_t</code>, <code>uint32_t</code>, <code>int64_t</code>, <code>INT_MAX</code></td></tr>
+      <tr><td><code>&lt;limits.h&gt;</code></td><td><code>INT_MAX</code>, <code>INT_MIN</code>, <code>CHAR_BIT</code>, <code>LONG_MAX</code></td></tr>
+      <tr><td><code>&lt;assert.h&gt;</code></td><td><code>assert(condition)</code> — aborts if false</td></tr>
+    </table>
+
+    <h2 id="errors">Common beginner errors</h2>
+    <table class="cheat">
+      <tr><th>Symptom</th><th>Likely cause</th></tr>
+      <tr><td><code>expected ';' before ...</code></td><td>Missing semicolon, brace or parenthesis on the previous line.</td></tr>
+      <tr><td><code>undefined reference to 'foo'</code></td><td>Function declared but not defined, or the object file/library was not linked.</td></tr>
+      <tr><td><code>implicit declaration of function</code></td><td>Missing <code>#include</code> or prototype.</td></tr>
+      <tr><td>Program crashes with a segmentation fault</td><td>Dereferencing NULL/uninitialised pointer, out-of-bounds array access, or using freed memory.</td></tr>
+      <tr><td><code>scanf</code> seems to skip input</td><td>Use <code>" %c"</code> (leading space) after reading a number, or read whole lines with <code>fgets</code>.</td></tr>
+      <tr><td>Infinite loop</td><td>Loop variable never changes, or the condition can never become false.</td></tr>
+      <tr><td>Garbage string output</td><td>Missing <code>'\0'</code>, buffer overflow, or returning a pointer to a local array.</td></tr>
+      <tr><td>Wrong integer division</td><td><code>5 / 2</code> is <code>2</code>; use <code>5 / 2.0</code> or cast to <code>double</code>.</td></tr>
+    </table>
+
+    <div class="tip">
+      <p><b>Next:</b> look up a term in the <a href="c-glossary.html">glossary</a>, browse the <a href="c-reference.html">full reference</a>, or test a snippet in the <a href="tryit.html">Try It Editor</a>.</p>
+    </div>
+  </main>
+
+  <aside class="toc" id="toc"></aside>
+</div>
+
+<footer id="footer"></footer>
+<script src="assets/app.js"></script>
+</body>
+</html>

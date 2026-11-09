@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="C constants: literals, const variables and #define macros, with examples and pitfalls.">
+<title>C Constants — C Notes</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#04aa6d">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="c-constants.html">
+<a class="skip-link" href="#main">Skip to content</a>
+<header id="topbar"></header>
+
+<div class="layout">
+  <aside id="sidebar"></aside>
+
+  <main class="content" id="main">
+    <div class="breadcrumb"><a href="index.html">C Tutorial</a><span>›</span>Constants</div>
+    <h1>C Constants</h1>
+    <p class="lead">A constant is a value that must not change while the program runs. C gives you three ways to express one: literal values, <code class="inline">const</code> variables, and <code class="inline">#define</code> macros.</p>
+
+    <h2>Literal constants</h2>
+    <p>A literal is a value written directly in the source code.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>42          // integer literal (decimal)
+0x2A        // hexadecimal 42
+052         // octal 42
+0b101010    // binary 42 (C23 / GCC extension)
+
+3.14        // double literal
+3.14f       // float literal
+3.14L       // long double literal
+
+'A'         // char literal
+"Hello"     // string literal</code></pre>
+    </div>
+
+    <h3>Integer suffixes</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Suffix</th><th>Type</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td><code>u</code> / <code>U</code></td><td>unsigned</td><td><code>4000000000u</code></td></tr>
+          <tr><td><code>l</code> / <code>L</code></td><td>long</td><td><code>1000000L</code></td></tr>
+          <tr><td><code>ll</code> / <code>LL</code></td><td>long long</td><td><code>9000000000LL</code></td></tr>
+          <tr><td><code>ul</code> / <code>ULL</code></td><td>unsigned long / long long</td><td><code>18446744073709551615ULL</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Character escapes</h3>
+    <div class="codebox" data-file="main.c">
+<pre><code>'\n'     // newline
+'\t'     // tab
+'\0'     // null character
+'\\'     // backslash
+'\''     // single quote
+'\x41'   // hex code for 'A'
+'\101'   // octal code for 'A'</code></pre>
+    </div>
+
+    <h2>const variables</h2>
+    <p>Adding <code class="inline">const</code> makes a variable read-only. The compiler rejects any attempt to assign to it.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    const double PI = 3.141592653589793;
+    const int MAX_USERS = 100;
+
+    printf("PI = %.5f\n", PI);
+    printf("Max users = %d\n", MAX_USERS);
+
+    // PI = 3.14;   // error: assignment of read-only variable
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>PI = 3.14159
+Max users = 100</pre></div>
+
+    <p><code class="inline">const</code> variables have a type, so the compiler can check them and a debugger can see them. They also follow normal scope rules.</p>
+
+    <h3>const pointers</h3>
+    <p>The position of <code class="inline">const</code> changes its meaning:</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>int value = 10;
+
+const int *p1 = &amp;value;        // pointer to const int: *p1 cannot change
+int * const p2 = &amp;value;       // const pointer: p2 cannot change
+const int * const p3 = &amp;value; // neither can change
+
+*p1 = 20;      // error
+p1 = NULL;     // OK: the pointer itself can move
+*p2 = 20;      // OK: the value can change
+p2 = NULL;     // error</code></pre>
+    </div>
+    <p>Read declarations right-to-left: "p1 is a pointer to a const int", "p2 is a const pointer to int".</p>
+
+    <h2>#define macros</h2>
+    <p>The preprocessor replaces text before the compiler sees it. A macro is not a variable — it has no type, no scope and no memory.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+#define PI 3.141592653589793
+#define MAX_USERS 100
+#define NEWLINE '\n'
+
+int main(void) {
+    printf("PI = %.5f\n", PI);
+    printf("Max users = %d\n", MAX_USERS);
+    putchar(NEWLINE);
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>PI = 3.14159
+Max users = 100
+</pre></div>
+
+    <h3>Macros with arguments</h3>
+    <div class="codebox" data-file="main.c">
+<pre><code>#define SQUARE(x) ((x) * (x))
+#define MAX(a, b) ((a) &gt; (b) ? (a) : (b))
+
+printf("%d\n", SQUARE(5));     // 25
+printf("%d\n", MAX(3, 9));     // 9</code></pre>
+    </div>
+    <p>The extra parentheses are essential. Without them, <code class="inline">SQUARE(2 + 3)</code> would expand to <code class="inline">2 + 3 * 2 + 3</code> and produce 11 instead of 25.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>// Dangerous macro: arguments evaluated twice
+#define BAD_MAX(a, b) ((a) &gt; (b) ? (a) : (b))
+
+int i = 0;
+int m = BAD_MAX(i++, 10);   // i may be incremented twice
+
+// Safer: use an inline function
+static inline int max_int(int a, int b) {
+    return a &gt; b ? a : b;
+}</code></pre>
+    </div>
+
+    <h2>const vs #define</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th></th><th><code>const</code></th><th><code>#define</code></th></tr></thead>
+        <tbody>
+          <tr><td>Handled by</td><td>Compiler</td><td>Preprocessor</td></tr>
+          <tr><td>Has a type</td><td>Yes</td><td>No</td></tr>
+          <tr><td>Debugger visible</td><td>Yes</td><td>Usually no</td></tr>
+          <tr><td>Scope</td><td>Normal scope rules</td><td>From definition to end of file</td></tr>
+          <tr><td>Works for types/headers</td><td>No</td><td>Yes</td></tr>
+          <tr><td>Can take arguments</td><td>No</td><td>Yes (text substitution)</td></tr>
+          <tr><td>Preferred for</td><td>Values, function parameters</td><td>Include guards, conditional compilation, constants in array sizes</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="tip">
+      <p><b>Tip:</b> prefer <code class="inline">const</code> (or <code class="inline">enum</code>) over object-like macros. Use macros for include guards and conditional compilation, where the preprocessor is actually needed.</p>
+    </div>
+
+    <h2>enum constants</h2>
+    <p>An enumeration creates a set of named integer constants. It is the clean way to express a fixed list of values.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+enum Color { RED, GREEN, BLUE };          // 0, 1, 2
+
+int main(void) {
+    enum Color c = GREEN;
+    printf("%d\n", c);                    // 1
+
+    if (c == GREEN) {
+        printf("The colour is green\n");
+    }
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>1
+The colour is green</pre></div>
+    <p>See <a href="c-unions-enums.html">Unions &amp; Enums</a> for more.</p>
+
+    <h2>Common mistakes</h2>
+    <ul>
+      <li><b>Missing parentheses in macros</b> — <code class="inline">#define HALF(x) x/2</code> breaks for expressions.</li>
+      <li><b>Semicolon after a macro</b> — <code class="inline">#define MAX 100;</code> puts a semicolon into every expansion. Do not add one.</li>
+      <li><b>Trying to modify a const</b> — the compiler stops you; casting away <code class="inline">const</code> and writing is undefined behaviour.</li>
+      <li><b>Assuming <code class="inline">const</code> means compile-time constant</b> — in C it means read-only. For array sizes, use an <code class="inline">enum</code> constant, a macro, or (C99+) a variable-length array.</li>
+    </ul>
+
+    <h2>Exercises</h2>
+    <ol>
+      <li>Define <code class="inline">const double GRAVITY = 9.81;</code> and print an object's weight for masses 1 to 5 kg.</li>
+      <li>Write a <code class="inline">SQUARE</code> macro and test it with <code class="inline">SQUARE(2 + 3)</code>.</li>
+      <li>Create an enum for the days of the week and print Wednesday's numeric value.</li>
+    </ol>
+  </main>
+
+  <aside class="toc" id="toc"></aside>
+</div>
+
+<footer id="footer"></footer>
+<script src="assets/app.js"></script>
+</body>
+</html>

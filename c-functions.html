@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="C functions: defining, calling, prototypes, parameters, return values, scope and recursion.">
+<title>C Functions — C Notes</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#04aa6d">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="c-functions.html">
+<a class="skip-link" href="#main">Skip to content</a>
+<header id="topbar"></header>
+
+<div class="layout">
+  <aside id="sidebar"></aside>
+
+  <main class="content" id="main">
+    <div class="breadcrumb"><a href="index.html">C Tutorial</a><span>›</span>Functions</div>
+    <h1>C Functions</h1>
+    <p class="lead">A function is a named block of code that performs a task. Functions let you reuse logic, keep <code class="inline">main</code> short, and test pieces of a program independently.</p>
+
+    <h2>Defining and calling a function</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+// return_type name(parameters) { body }
+void greet(void) {
+    printf("Hello from a function!\n");
+}
+
+int main(void) {
+    greet();      // call it
+    greet();      // call it again
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>Hello from a function!
+Hello from a function!</pre></div>
+    <ul>
+      <li><code class="inline">void</code> as the return type means the function returns no value.</li>
+      <li><code class="inline">(void)</code> means it takes no parameters.</li>
+      <li>A function must be declared before it is called — either define it above the call or write a prototype.</li>
+    </ul>
+
+    <h2>Parameters and return values</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int add(int a, int b) {
+    return a + b;
+}
+
+double average(double a, double b) {
+    return (a + b) / 2.0;
+}
+
+void print_line(int length) {
+    for (int i = 0; i &lt; length; i++) {
+        putchar('-');
+    }
+    putchar('\n');
+}
+
+int main(void) {
+    int sum = add(12, 30);
+    printf("sum = %d\n", sum);
+    printf("average = %.2f\n", average(10, 15));
+    print_line(20);
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>sum = 42
+average = 12.50
+--------------------</pre></div>
+
+    <h2>Function prototypes</h2>
+    <p>A prototype tells the compiler the function's signature before its body appears. It lets you put <code class="inline">main</code> first and helper functions below.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+// prototypes
+int square(int n);
+void show_result(int value);
+
+int main(void) {
+    show_result(square(7));
+    return 0;
+}
+
+int square(int n) {
+    return n * n;
+}
+
+void show_result(int value) {
+    printf("Result: %d\n", value);
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>Result: 49</pre></div>
+
+    <h2>Pass by value</h2>
+    <p>C passes arguments <b>by value</b>: the function receives copies. Changing a parameter does not change the caller's variable.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+void try_change(int x) {
+    x = 100;
+    printf("inside: %d\n", x);
+}
+
+int main(void) {
+    int n = 5;
+    try_change(n);
+    printf("outside: %d\n", n);   // still 5
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>inside: 100
+outside: 5</pre></div>
+    <p>To let a function modify the caller's variable, pass its <b>address</b> and accept a pointer — see the <a href="c-pointers.html">Pointers chapter</a>.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>void set_to_100(int *x) {
+    *x = 100;
+}
+
+int main(void) {
+    int n = 5;
+    set_to_100(&amp;n);
+    printf("%d\n", n);    // 100
+    return 0;
+}</code></pre>
+    </div>
+
+    <h2>Returning values</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>int max(int a, int b) {
+    return a &gt; b ? a : b;
+}
+
+// A function can return early
+int safe_divide(int a, int b) {
+    if (b == 0) {
+        return 0;         // caller should check
+    }
+    return a / b;
+}
+
+// void returns nothing
+void log_message(void) {
+    puts("log entry");
+    // return; is optional
+}</code></pre>
+    </div>
+    <p>Return at most one value in C. To return several results, use pointers as output parameters or return a structure.</p>
+
+    <h2>Local scope</h2>
+    <p>Variables declared inside a function are local and disappear when it returns. Each call gets a fresh copy.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>int counter(void) {
+    int count = 0;    // new every call
+    count++;
+    return count;
+}
+
+// counter() always returns 1.</code></pre>
+    </div>
+    <p>Use <code class="inline">static</code> to keep a local variable alive between calls:</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int counter(void) {
+    static int count = 0;   // initialised once
+    count++;
+    return count;
+}
+
+int main(void) {
+    printf("%d\n", counter());   // 1
+    printf("%d\n", counter());   // 2
+    printf("%d\n", counter());   // 3
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>1
+2
+3</pre></div>
+
+    <h2>Recursion</h2>
+    <p>A recursive function calls itself. Every recursive function needs a <b>base case</b> that stops the recursion.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+long long factorial(int n) {
+    if (n &lt;= 1) {
+        return 1;              // base case
+    }
+    return n * factorial(n - 1);  // recursive case
+}
+
+int main(void) {
+    printf("5! = %lld\n", factorial(5));
+    printf("10! = %lld\n", factorial(10));
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>5! = 120
+10! = 3628800</pre></div>
+    <div class="codebox" data-file="main.c">
+<pre><code>// Fibonacci — simple but slow (exponential)
+int fib(int n) {
+    if (n &lt;= 1) return n;
+    return fib(n - 1) + fib(n - 2);
+}
+
+// Iterative version — fast
+int fib_fast(int n) {
+    int a = 0, b = 1;
+    for (int i = 0; i &lt; n; i++) {
+        int next = a + b;
+        a = b;
+        b = next;
+    }
+    return a;
+}</code></pre>
+    </div>
+    <div class="warn">
+      <p><b>Warning:</b> each recursive call uses stack memory. Deep recursion can overflow the stack and crash. Prefer iteration when the depth may be large.</p>
+    </div>
+
+    <h2>Functions and arrays</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int sum_array(const int values[], int length) {
+    int total = 0;
+    for (int i = 0; i &lt; length; i++) {
+        total += values[i];
+    }
+    return total;
+}
+
+int main(void) {
+    int data[] = {1, 2, 3, 4, 5};
+    int n = sizeof(data) / sizeof(data[0]);
+    printf("sum = %d\n", sum_array(data, n));
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>sum = 15</pre></div>
+
+    <h2>Multiple source files</h2>
+    <p>Large programs are split across files. Put declarations in a header and definitions in a <code class="inline">.c</code> file.</p>
+    <div class="codebox" data-file="math_utils.h">
+<pre><code>#ifndef MATH_UTILS_H
+#define MATH_UTILS_H
+
+int add(int a, int b);
+int multiply(int a, int b);
+
+#endif</code></pre>
+    </div>
+    <div class="codebox" data-file="math_utils.c">
+<pre><code>#include "math_utils.h"
+
+int add(int a, int b) {
+    return a + b;
+}
+
+int multiply(int a, int b) {
+    return a * b;
+}</code></pre>
+    </div>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+#include "math_utils.h"
+
+int main(void) {
+    printf("%d\n", add(3, 4));
+    printf("%d\n", multiply(3, 4));
+    return 0;
+}</code></pre>
+    </div>
+    <p>Compile all the source files together: <code class="inline">gcc main.c math_utils.c -o app</code>.</p>
+
+    <h2>Good function design</h2>
+    <ul>
+      <li><b>One job per function.</b> If you need "and" to describe it, split it.</li>
+      <li><b>Short parameter lists.</b> More than four or five parameters suggests a structure.</li>
+      <li><b>Clear names.</b> <code class="inline">calculate_average</code> beats <code class="inline">calc</code>.</li>
+      <li><b>Document behaviour</b> — especially edge cases and error returns.</li>
+      <li><b>Avoid hidden state.</b> Prefer parameters and return values over globals.</li>
+    </ul>
+
+    <h2>Exercises</h2>
+    <ol>
+      <li>Write <code class="inline">is_prime(int n)</code> that returns 1 or 0.</li>
+      <li>Write a function that reverses an array in place.</li>
+      <li>Write recursive and iterative versions of a power function.</li>
+      <li>Write <code class="inline">swap(int *a, int *b)</code> using pointers.</li>
+      <li>Split a small program into a <code class="inline">.c</code> file and a <code class="inline">.h</code> header.</li>
+    </ol>
+  </main>
+
+  <aside class="toc" id="toc"></aside>
+</div>
+
+<footer id="footer"></footer>
+<script src="assets/app.js"></script>
+</body>
+</html>

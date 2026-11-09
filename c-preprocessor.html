@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="C preprocessor: #include, #define, macros, conditional compilation and include guards.">
+<title>C Preprocessor — C Notes</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#04aa6d">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="c-preprocessor.html">
+<a class="skip-link" href="#main">Skip to content</a>
+<header id="topbar"></header>
+
+<div class="layout">
+  <aside id="sidebar"></aside>
+
+  <main class="content" id="main">
+    <div class="breadcrumb"><a href="index.html">C Tutorial</a><span>›</span>Preprocessor</div>
+    <h1>C Preprocessor</h1>
+    <p class="lead">Before compilation, the <b>preprocessor</b> scans the source for lines beginning with <code class="inline">#</code> and transforms the text. It knows nothing about C types or syntax — it only substitutes and includes.</p>
+
+    <h2>#include</h2>
+    <p>Copies the contents of another file into your source at that point.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;     // system header: search standard paths
+#include &lt;stdlib.h&gt;
+#include "myheader.h"   // local header: search the current directory first</code></pre>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Form</th><th>Searches</th><th>Use for</th></tr></thead>
+        <tbody>
+          <tr><td><code>&lt;name.h&gt;</code></td><td>System include directories</td><td>Standard and installed libraries</td></tr>
+          <tr><td><code>"name.h"</code></td><td>Current directory, then system directories</td><td>Your own project headers</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>#define: object-like macros</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+#define PI 3.141592653589793
+#define MAX_USERS 100
+#define PROGRAM_NAME "MyApp"
+
+int main(void) {
+    printf("%s supports %d users\n", PROGRAM_NAME, MAX_USERS);
+    printf("PI = %.5f\n", PI);
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>MyApp supports 100 users
+PI = 3.14159</pre></div>
+    <p>The preprocessor performs <b>text substitution</b>. <code class="inline">PI</code> is replaced everywhere before the compiler runs.</p>
+
+    <h2>#define: function-like macros</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>#define SQUARE(x) ((x) * (x))
+#define MAX(a, b) ((a) &gt; (b) ? (a) : (b))
+#define MIN(a, b) ((a) &lt; (b) ? (a) : (b))
+
+printf("%d\n", SQUARE(5));      // 25
+printf("%d\n", SQUARE(2 + 3));  // 25
+printf("%d\n", MAX(10, 20));    // 20</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>25
+25
+20</pre></div>
+    <div class="warn">
+      <p><b>Parenthesise everything.</b> <code class="inline">#define SQUARE(x) x * x</code> makes <code class="inline">SQUARE(2 + 3)</code> expand to <code class="inline">2 + 3 * 2 + 3</code> = 11. Even with parentheses, arguments may be evaluated twice — prefer <code class="inline">static inline</code> functions for real logic.</p>
+    </div>
+
+    <h2>#undef</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>#define TEMP 100
+printf("%d\n", TEMP);   // 100
+
+#undef TEMP
+// printf("%d\n", TEMP);   // error: TEMP is no longer defined</code></pre>
+    </div>
+
+    <h2>Conditional compilation</h2>
+    <p>Compile different code depending on macros. This is how one codebase supports several platforms.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+#define DEBUG 1
+#define VERSION 3
+
+int main(void) {
+#if DEBUG
+    printf("Debug build\n");
+#endif
+
+#if VERSION &gt;= 3
+    printf("New API\n");
+#elif VERSION == 2
+    printf("Legacy API\n");
+#else
+    printf("Old API\n");
+#endif
+
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>Debug build
+New API</pre></div>
+
+    <h2>#ifdef and #ifndef</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>#ifdef _WIN32
+    #define PATH_SEPARATOR '\\'
+#else
+    #define PATH_SEPARATOR '/'
+#endif
+
+#ifndef BUFFER_SIZE
+    #define BUFFER_SIZE 1024
+#endif</code></pre>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Directive</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td><code>#if expr</code></td><td>Compile the block if <code>expr</code> is non-zero</td></tr>
+          <tr><td><code>#ifdef NAME</code></td><td>Compile if <code>NAME</code> is defined</td></tr>
+          <tr><td><code>#ifndef NAME</code></td><td>Compile if <code>NAME</code> is not defined</td></tr>
+          <tr><td><code>#elif expr</code></td><td>Else-if for the preprocessor</td></tr>
+          <tr><td><code>#else</code></td><td>Fallback branch</td></tr>
+          <tr><td><code>#endif</code></td><td>Ends the conditional block</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Include guards</h2>
+    <p>If a header is included twice, its definitions appear twice and the compiler complains. Include guards prevent that.</p>
+    <div class="codebox" data-file="myheader.h">
+<pre><code>#ifndef MYHEADER_H
+#define MYHEADER_H
+
+struct Point {
+    int x;
+    int y;
+};
+
+int distance_sq(struct Point a, struct Point b);
+
+#endif  /* MYHEADER_H */</code></pre>
+    </div>
+    <p>Many compilers also support the shorter <code class="inline">#pragma once</code>, but include guards are standard C.</p>
+
+    <h2>Predefined macros</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Macro</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td><code>__FILE__</code></td><td>Current source file name</td></tr>
+          <tr><td><code>__LINE__</code></td><td>Current line number</td></tr>
+          <tr><td><code>__DATE__</code></td><td>Compilation date</td></tr>
+          <tr><td><code>__TIME__</code></td><td>Compilation time</td></tr>
+          <tr><td><code>__func__</code></td><td>Current function name (C99, not a macro strictly)</td></tr>
+          <tr><td><code>__STDC_VERSION__</code></td><td>Standard version, e.g. <code>201710L</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+#define LOG(msg) \
+    printf("[%s:%d] %s\n", __FILE__, __LINE__, msg)
+
+int main(void) {
+    LOG("starting");
+    LOG("finished");
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>[main.c:6] starting
+[main.c:7] finished</pre></div>
+
+    <h2>Stringizing and token pasting</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>#define STR(x) #x
+#define XSTR(x) STR(x)
+#define CONCAT(a, b) a##b
+
+printf("%s\n", STR(hello));          // "hello"
+printf("%s\n", XSTR(123));           // "123"
+int CONCAT(my, var) = 5;             // int myvar = 5;</code></pre>
+    </div>
+
+    <h2>Preprocessor pitfalls</h2>
+    <ul>
+      <li><b>No type checking</b> — macros accept anything.</li>
+      <li><b>Side effects</b> — arguments can be evaluated more than once.</li>
+      <li><b>Operator precedence</b> — missing parentheses change meaning.</li>
+      <li><b>Debugging</b> — macro-expanded code is harder to step through.</li>
+      <li><b>Name clashes</b> — macros ignore scope and can replace unintended identifiers.</li>
+      <li><b>Semicolons</b> — never end a macro definition with <code class="inline">;</code> unless you want it in every expansion.</li>
+    </ul>
+
+    <h2>Viewing preprocessor output</h2>
+    <pre><code>gcc -E main.c -o main.i      # stop after preprocessing
+gcc -E -dM main.c            # list all macros</code></pre>
+    <p>Reading the preprocessed output is the fastest way to understand why a macro is misbehaving.</p>
+
+    <div class="tip">
+      <p><b>Tip:</b> use the preprocessor for inclusion, platform switches and simple constants; use <code class="inline">const</code>, <code class="inline">enum</code> and <code class="inline">static inline</code> functions for everything the type system can check.</p>
+    </div>
+
+    <h2>Exercises</h2>
+    <ol>
+      <li>Write a header file with an include guard and include it twice in one file.</li>
+      <li>Create a <code class="inline">SQUARE</code> macro and verify it works with expressions.</li>
+      <li>Use <code class="inline">#ifdef</code> to print different messages on Windows and Linux.</li>
+      <li>Write a <code class="inline">LOG</code> macro that prints the file, line and message.</li>
+      <li>Run <code class="inline">gcc -E</code> on a small file and inspect the expansion.</li>
+    </ol>
+  </main>
+
+  <aside class="toc" id="toc"></aside>
+</div>
+
+<footer id="footer"></footer>
+<script src="assets/app.js"></script>
+</body>
+</html>

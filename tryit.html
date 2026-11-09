@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Write, run and debug C code entirely offline in your browser with a built-in WebAssembly C interpreter.">
+<title>Try It Editor — C Notes</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#04aa6d">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="tryit.html">
+<a class="skip-link" href="#main">Skip to content</a>
+<header id="topbar"></header>
+
+<main class="editor-page" id="main">
+  <div class="breadcrumb"><a href="index.html">C Tutorial</a><span>›</span>Try It Editor</div>
+  <h1>Try It Editor</h1>
+  <p class="lead">Write C code, press <b>Run</b>, and see real output — no internet connection, no account, and nothing sent to a server. The editor uses <b>PicoC</b>, a small C interpreter compiled to WebAssembly.</p>
+
+  <div class="editor-shell">
+    <div class="editor-bar">
+      <span class="filename" id="editorFile">main.c</span>
+      <span class="spacer"></span>
+      <button type="button" id="openBtn" title="Open a .c file from your computer">Open .c</button>
+      <button type="button" id="copyBtn">Copy</button>
+      <button type="button" id="downloadBtn">Download .c</button>
+      <button type="button" id="resetBtn">Reset</button>
+      <button type="button" class="run" id="runBtn">▶ Run</button>
+      <input type="file" id="openFile" accept=".c,.h,.txt,text/plain" hidden>
+    </div>
+
+    <div class="editor-code">
+      <pre class="line-numbers" id="lineNumbers" aria-hidden="true">1</pre>
+      <textarea id="editor" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="C source code editor"></textarea>
+    </div>
+
+    <details class="stdin-box" id="stdinBox">
+      <summary>Program input (stdin) — used by scanf, fgets and getchar</summary>
+      <textarea id="stdin" spellcheck="false" autocomplete="off" aria-label="Program input" placeholder="Type the input your program should read, for example:&#10;Alice&#10;30"></textarea>
+    </details>
+
+    <div class="runbar">
+      <button type="button" id="runBtn2">▶ Run</button>
+      <button type="button" id="sampleBtn" class="ghost">Show sample output</button>
+      <span class="status" id="editorStatus">Press Run to execute your code.</span>
+      <span class="spacer"></span>
+      <span class="status">Ctrl/⌘ + Enter</span>
+    </div>
+
+    <div class="output-panel">
+      <div class="op-head"><span>Output</span><span class="badge" id="outputBadge">sample output</span></div>
+      <pre id="editorOutput">Hello, World!</pre>
+    </div>
+  </div>
+
+  <p class="editor-hint">
+    <b>Want a native executable?</b> Use <b>Download .c</b>, then run
+    <code class="inline">gcc main.c -o main</code> and <code class="inline">./main</code>
+    (or <code class="inline">main.exe</code> on Windows). See <a href="c-setup.html">Get Started</a> for compiler installation.
+  </p>
+
+  <div class="note" style="margin-top:22px">
+    <p><b>About the built-in engine.</b> PicoC is an interpreter for a practical subset of C89/C99. It supports <code class="inline">printf</code>, <code class="inline">scanf</code>, arrays, strings, pointers, structs, unions, enums, recursion, <code class="inline">malloc</code>, file-style I/O and most of the standard library. A few valid C features — such as aggregate initialisers for structs, very complex macros and variable-length arrays — are not supported. For full standard C, compile with GCC or Clang.</p>
+    <p class="small">PicoC is BSD-licensed. See <a href="assets/picoc/NOTICE.md">attribution</a>. Runs are limited to 10 seconds; infinite loops are stopped automatically.</p>
+  </div>
+</main>
+
+<footer id="footer"></footer>
+<script src="assets/app.js"></script>
+<script src="assets/compiler.js"></script>
+<script src="assets/tryit.js"></script>
+</body>
+</html>

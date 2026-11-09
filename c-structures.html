@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="C structures: defining structs, accessing members, nesting, arrays of structs, pointers and typedef.">
+<title>C Structures — C Notes</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#04aa6d">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="c-structures.html">
+<a class="skip-link" href="#main">Skip to content</a>
+<header id="topbar"></header>
+
+<div class="layout">
+  <aside id="sidebar"></aside>
+
+  <main class="content" id="main">
+    <div class="breadcrumb"><a href="index.html">C Tutorial</a><span>›</span>Structures</div>
+    <h1>C Structures</h1>
+    <p class="lead">A structure (<code class="inline">struct</code>) groups variables of different types under one name. It is how C models real-world objects: a point, a student, a bank account.</p>
+
+    <h2>Defining a structure</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>struct Point {
+    int x;
+    int y;
+};</code></pre>
+    </div>
+    <p>This defines a new type, <code class="inline">struct Point</code>, with two members. It does not create any variable yet. Note the semicolon after the closing brace.</p>
+
+    <h2>Creating and using a structure</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+struct Point {
+    int x;
+    int y;
+};
+
+int main(void) {
+    struct Point p;          // declare
+    p.x = 10;                // assign members
+    p.y = 20;
+
+    printf("(%d, %d)\n", p.x, p.y);
+
+    struct Point q = {3, 7}; // initialise
+    printf("(%d, %d)\n", q.x, q.y);
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>(10, 20)
+(3, 7)</pre></div>
+    <p>Access members with the dot operator <code class="inline">.</code>.</p>
+
+    <h2>Initialising structures</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>struct Point {
+    int x;
+    int y;
+};
+
+struct Point a = {1, 2};          // positional
+struct Point b = {.y = 2, .x = 1};// designated (C99)
+struct Point c = {0};             // all members zero
+
+// Assignment copies all members
+struct Point d = a;
+d.x = 99;                         // a is unchanged</code></pre>
+    </div>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    struct Point a = {1, 2};
+    struct Point b = a;      // copy
+
+    b.x = 99;
+    printf("a.x = %d, b.x = %d\n", a.x, b.x);
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>a.x = 1, b.x = 99</pre></div>
+
+    <h2>A realistic example</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+struct Student {
+    char name[50];
+    int age;
+    double gpa;
+};
+
+int main(void) {
+    struct Student s;
+
+    strcpy(s.name, "Amit");
+    s.age = 20;
+    s.gpa = 8.75;
+
+    printf("Name: %s\n", s.name);
+    printf("Age:  %d\n", s.age);
+    printf("GPA:  %.2f\n", s.gpa);
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>Name: Amit
+Age:  20
+GPA:  8.75</pre></div>
+
+    <h2>Pointers to structures</h2>
+    <p>Use <code class="inline">-&gt;</code> instead of <code class="inline">(*ptr).</code>:</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+struct Point { int x, y; };
+
+int main(void) {
+    struct Point p = {4, 9};
+    struct Point *ptr = &amp;p;
+
+    printf("%d\n", ptr-&gt;x);      // 4
+    printf("%d\n", (*ptr).y);    // 9 — same thing
+
+    ptr-&gt;x = 40;
+    printf("%d\n", p.x);         // 40
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>4
+9
+40</pre></div>
+
+    <h2>Arrays of structures</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+struct Product {
+    char name[30];
+    double price;
+};
+
+int main(void) {
+    struct Product items[3] = {
+        {"Pen", 1.50},
+        {"Notebook", 4.25},
+        {"Bag", 25.00}
+    };
+
+    double total = 0;
+    for (int i = 0; i &lt; 3; i++) {
+        printf("%-10s $%.2f\n", items[i].name, items[i].price);
+        total += items[i].price;
+    }
+
+    printf("Total: $%.2f\n", total);
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>Pen        $1.50
+Notebook   $4.25
+Bag        $25.00
+Total: $30.75</pre></div>
+
+    <h2>Nested structures</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>struct Date {
+    int day, month, year;
+};
+
+struct Employee {
+    char name[40];
+    struct Date hired;
+    double salary;
+};
+
+struct Employee e = {
+    "Rina",
+    {15, 6, 2021},
+    52000.0
+};
+
+printf("%s hired %02d/%02d/%d\n",
+       e.name, e.hired.day, e.hired.month, e.hired.year);</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>Rina hired 15/06/2021</pre></div>
+
+    <h2>Structures and functions</h2>
+    <p>Passing a structure by value copies all its members. For large structures, pass a pointer instead — preferably <code class="inline">const</code> if the function only reads.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+struct Point { int x, y; };
+
+struct Point make_point(int x, int y) {
+    struct Point p = {x, y};
+    return p;
+}
+
+void move(struct Point *p, int dx, int dy) {
+    p-&gt;x += dx;
+    p-&gt;y += dy;
+}
+
+int distance_sq(const struct Point *a, const struct Point *b) {
+    int dx = a-&gt;x - b-&gt;x;
+    int dy = a-&gt;y - b-&gt;y;
+    return dx * dx + dy * dy;
+}
+
+int main(void) {
+    struct Point a = make_point(1, 2);
+    struct Point b = {5, 6};
+
+    move(&amp;a, 2, 3);
+    printf("a = (%d, %d)\n", a.x, a.y);
+    printf("distance squared = %d\n", distance_sq(&amp;a, &amp;b));
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>a = (3, 5)
+distance squared = 5</pre></div>
+
+    <h2>typedef: shorter names</h2>
+    <p><code class="inline">typedef</code> creates an alias, so you can write <code class="inline">Point</code> instead of <code class="inline">struct Point</code>.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>typedef struct {
+    int x;
+    int y;
+} Point;
+
+Point p = {1, 2};
+printf("%d\n", p.x);</code></pre>
+    </div>
+    <p>You can also define the struct and the alias together, as above. The structure tag is then optional.</p>
+
+    <h2>Self-referential structures</h2>
+    <p>A structure can contain a pointer to another structure of the same type — the basis of linked lists and trees.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>struct Node {
+    int value;
+    struct Node *next;   // pointer to the same type
+};
+
+int main(void) {
+    struct Node a = {1, NULL};
+    struct Node b = {2, NULL};
+    a.next = &amp;b;
+
+    printf("%d -&gt; %d\n", a.value, a.next-&gt;value);
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>1 -&gt; 2</pre></div>
+
+    <h2>Size, padding and alignment</h2>
+    <p>Structures may contain padding bytes so members align on sensible boundaries. As a result, the size of a struct can be larger than the sum of its members.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+struct Mixed {
+    char c;      // 1 byte
+    int i;       // 4 bytes (3 padding bytes before it)
+    char d;      // 1 byte (3 padding after, to align the struct)
+};
+
+int main(void) {
+    printf("%zu\n", sizeof(struct Mixed));   // often 12
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>12</pre></div>
+    <p>Order members from largest to smallest to reduce padding. Use <code class="inline">#pragma pack</code> only when a binary format requires it.</p>
+
+    <h2>Common mistakes</h2>
+    <ul>
+      <li>Forgetting the semicolon after the closing brace of a struct definition.</li>
+      <li>Using <code class="inline">==</code> to compare structures — C does not define it. Compare members or use <code class="inline">memcmp</code> (careful with padding).</li>
+      <li>Assigning to a string member with <code class="inline">=</code> — use <code class="inline">strcpy</code>.</li>
+      <li>Using <code class="inline">.</code> on a pointer or <code class="inline">-&gt;</code> on a value.</li>
+      <li>Assuming <code class="inline">sizeof(struct)</code> equals the sum of member sizes.</li>
+    </ul>
+
+    <h2>Exercises</h2>
+    <ol>
+      <li>Define a <code class="inline">Book</code> structure with title, author, year and price. Print one book.</li>
+      <li>Create an array of five books and print the most expensive.</li>
+      <li>Write a function that takes a pointer to a Book and applies a 10% discount.</li>
+      <li>Define a nested <code class="inline">Date</code> inside an <code class="inline">Event</code> structure and print it.</li>
+      <li>Build a three-node linked list and traverse it.</li>
+    </ol>
+  </main>
+
+  <aside class="toc" id="toc"></aside>
+</div>
+
+<footer id="footer"></footer>
+<script src="assets/app.js"></script>
+</body>
+</html>

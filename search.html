@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Search every page of the offline C Notes tutorial, reference, exercises and glossary.">
+<title>Search — C Notes</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="search.html">
+<a class="skip-link" href="#main">Skip to content</a>
+<header id="topbar"></header>
+
+<div class="layout no-toc">
+  <aside id="sidebar"></aside>
+
+  <main class="content" id="main">
+    <div class="breadcrumb"><a href="index.html">C Tutorial</a><span>›</span>Search</div>
+    <div class="search-hero">
+      <h1>Search C Notes</h1>
+      <p class="lead">Find a topic, function or term across every chapter, example, exercise and reference table. Search runs entirely in your browser.</p>
+    </div>
+
+    <div class="search-box">
+      <span class="search-icon" aria-hidden="true">⌕</span>
+      <input id="searchInput" type="search" placeholder="Search C Notes…" aria-label="Search all content" autocomplete="off" spellcheck="false">
+    </div>
+
+    <div class="search-filters" role="group" aria-label="Filter results by section">
+      <button type="button" data-filter="All" class="active">All</button>
+      <button type="button" data-filter="Tutorial">Tutorial</button>
+      <button type="button" data-filter="Advanced">Advanced</button>
+      <button type="button" data-filter="Practice">Practice</button>
+      <button type="button" data-filter="Reference">Reference</button>
+      <button type="button" data-filter="Tools">Tools</button>
+    </div>
+
+    <div class="search-summary" id="searchSummary">Loading the search index…</div>
+    <div class="search-results" id="searchResults"></div>
+    <div class="search-empty" id="searchEmpty" hidden>No results. Try a shorter word, a function name such as <code class="inline">malloc</code>, or browse the chapters in the sidebar.</div>
+
+    <div class="search-tips" aria-label="Suggested searches">
+      <a href="search.html?q=pointer">pointer</a>
+      <a href="search.html?q=malloc">malloc</a>
+      <a href="search.html?q=printf">printf</a>
+      <a href="search.html?q=struct">struct</a>
+      <a href="search.html?q=fopen">fopen</a>
+      <a href="search.html?q=array">array</a>
+      <a href="search.html?q=undefined%20behaviour">undefined behaviour</a>
+    </div>
+
+    <p class="small" style="margin-top:22px">Tip: press <kbd>Ctrl</kbd> + <kbd>K</kbd> from any page to open this search, and <kbd>Enter</kbd> to jump to the first result.</p>
+  </main>
+</div>
+
+<footer id="footer"></footer>
+<script src="assets/app.js"></script>
+<script src="assets/search-index.js"></script>
+<script src="assets/search.js"></script>
+</body>
+</html>

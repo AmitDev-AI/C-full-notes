@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="C arrays: declaration, initialisation, indexing, loops, sizeof, two-dimensional arrays and bounds checking.">
+<title>C Arrays — C Notes</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#04aa6d">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="c-arrays.html">
+<a class="skip-link" href="#main">Skip to content</a>
+<header id="topbar"></header>
+
+<div class="layout">
+  <aside id="sidebar"></aside>
+
+  <main class="content" id="main">
+    <div class="breadcrumb"><a href="index.html">C Tutorial</a><span>›</span>Arrays</div>
+    <h1>C Arrays</h1>
+    <p class="lead">An array stores a fixed number of values of the <b>same type</b> in contiguous memory. Instead of ten separate variables, you get one name and an index.</p>
+
+    <h2>Declaring an array</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>int scores[5];          // 5 ints, values uninitialised
+double prices[10];
+char letters[26];</code></pre>
+    </div>
+    <p>The number in brackets is the <b>number of elements</b>, not the highest index. Indices run from <code class="inline">0</code> to <code class="inline">size - 1</code>.</p>
+
+    <h2>Initialising an array</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int a[5] = {10, 20, 30, 40, 50};
+    int b[5] = {1, 2};              // rest become 0
+    int c[5] = {0};                 // all zeros
+    int d[] = {7, 8, 9};            // size inferred = 3
+
+    printf("a[0] = %d\n", a[0]);
+    printf("a[4] = %d\n", a[4]);
+    printf("b[4] = %d\n", b[4]);
+    printf("size of d = %zu\n", sizeof(d) / sizeof(d[0]));
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>a[0] = 10
+a[4] = 50
+b[4] = 0
+size of d = 3</pre></div>
+
+    <h2>Accessing and changing elements</h2>
+    <p>Use square brackets with an index. Indexing starts at zero.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int scores[5] = {70, 80, 90, 60, 100};
+
+    printf("First: %d\n", scores[0]);
+    printf("Third: %d\n", scores[2]);
+    printf("Last:  %d\n", scores[4]);
+
+    scores[1] = 85;              // change the second value
+    printf("Second is now %d\n", scores[1]);
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>First: 70
+Third: 90
+Last:  100
+Second is now 85</pre></div>
+
+    <h2>Looping through an array</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int values[5] = {4, 8, 15, 16, 23};
+    int sum = 0;
+
+    for (int i = 0; i &lt; 5; i++) {
+        printf("values[%d] = %d\n", i, values[i]);
+        sum += values[i];
+    }
+
+    printf("sum = %d\n", sum);
+    printf("average = %.1f\n", (double)sum / 5);
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>values[0] = 4
+values[1] = 8
+values[2] = 15
+values[3] = 16
+values[4] = 23
+sum = 66
+average = 13.2</pre></div>
+
+    <h2>Finding the size safely</h2>
+    <p>Use <code class="inline">sizeof</code> to compute the number of elements instead of repeating the size:</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>int values[] = {4, 8, 15, 16, 23};
+int count = sizeof(values) / sizeof(values[0]);
+
+for (int i = 0; i &lt; count; i++) {
+    printf("%d ", values[i]);
+}</code></pre>
+    </div>
+    <p>This works only where the array itself is visible. Inside a function, an array parameter becomes a pointer and <code class="inline">sizeof</code> gives the pointer size — pass the length separately.</p>
+
+    <h2>Out-of-bounds access</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>int a[5];
+
+a[5] = 99;      // BUG: valid indices are 0..4
+a[-1] = 42;     // BUG: negative index
+
+// C does not check bounds. This writes over other memory.
+// It may crash, corrupt data, or appear to work.</code></pre>
+    </div>
+    <div class="warn">
+      <p><b>Warning:</b> C never checks array bounds. Reading or writing outside the array is undefined behaviour and a common source of security vulnerabilities. Always verify that <code class="inline">0 &lt;= i &lt; length</code>.</p>
+    </div>
+
+    <h2>Two-dimensional arrays</h2>
+    <p>A 2D array is an array of arrays — useful for grids, tables and matrices.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    int grid[3][4] = {
+        {1, 2, 3, 4},
+        {5, 6, 7, 8},
+        {9, 10, 11, 12}
+    };
+
+    for (int row = 0; row &lt; 3; row++) {
+        for (int col = 0; col &lt; 4; col++) {
+            printf("%3d", grid[row][col]);
+        }
+        printf("\n");
+    }
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>  1  2  3  4
+  5  6  7  8
+  9 10 11 12</pre></div>
+
+    <h2>Arrays and variables</h2>
+    <p>An array name is not a modifiable variable; it acts like a pointer to the first element. You cannot assign one array to another with <code class="inline">=</code>.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>int a[3] = {1, 2, 3};
+int b[3];
+
+// b = a;              // error: arrays are not assignable
+
+for (int i = 0; i &lt; 3; i++) {
+    b[i] = a[i];       // copy element by element
+}
+
+// Or use memcpy from &lt;string.h&gt;
+#include &lt;string.h&gt;
+memcpy(b, a, sizeof(a));</code></pre>
+    </div>
+
+    <h2>Passing arrays to functions</h2>
+    <p>Arrays decay to a pointer to their first element, so the function needs the length as a separate parameter.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+double average(const int values[], int length) {
+    int sum = 0;
+    for (int i = 0; i &lt; length; i++) {
+        sum += values[i];
+    }
+    return (double)sum / length;
+}
+
+int main(void) {
+    int scores[] = {90, 80, 70, 60};
+    int n = sizeof(scores) / sizeof(scores[0]);
+
+    printf("average = %.2f\n", average(scores, n));
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>average = 75.00</pre></div>
+    <p>The <code class="inline">const</code> promises the function will not modify the caller's array.</p>
+
+    <h2>Variable-length arrays (C99)</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>int n = 10;
+int values[n];      // size decided at run time (C99+)
+
+// The array lives on the stack, so keep n small.
+// For large or long-lived data, use malloc (see Memory chapter).</code></pre>
+    </div>
+
+    <h2>Common mistakes</h2>
+    <ul>
+      <li>Starting at index 1 and using <code class="inline">a[length]</code> — both out of bounds.</li>
+      <li>Forgetting <code class="inline">{ }</code> in an initialiser and getting a compile error.</li>
+      <li>Using <code class="inline">sizeof</code> inside a function on an array parameter.</li>
+      <li>Declaring <code class="inline">int a[0];</code> — not valid standard C.</li>
+      <li>Assuming an array knows its own length — it does not.</li>
+    </ul>
+
+    <h2>Exercises</h2>
+    <ol>
+      <li>Store 10 numbers in an array and print them in reverse.</li>
+      <li>Find the largest and smallest element.</li>
+      <li>Count how many elements are even.</li>
+      <li>Create a 3×3 matrix and print its transpose.</li>
+      <li>Write a function that searches an array for a value and returns its index (or −1).</li>
+    </ol>
+  </main>
+
+  <aside class="toc" id="toc"></aside>
+</div>
+
+<footer id="footer"></footer>
+<script src="assets/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="C file handling: fopen modes, fprintf, fgets, fread, fwrite, fseek and error handling.">
+<title>C File Handling — C Notes</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#04aa6d">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="c-files.html">
+<a class="skip-link" href="#main">Skip to content</a>
+<header id="topbar"></header>
+
+<div class="layout">
+  <aside id="sidebar"></aside>
+
+  <main class="content" id="main">
+    <div class="breadcrumb"><a href="index.html">C Tutorial</a><span>›</span>File Handling</div>
+    <h1>C File Handling</h1>
+    <p class="lead">Files let a program keep data after it exits. C uses a <code class="inline">FILE *</code> stream for both text and binary files, with functions from <code class="inline">&lt;stdio.h&gt;</code>.</p>
+
+    <h2>The four steps</h2>
+    <ol>
+      <li><b>Open</b> the file with <code class="inline">fopen</code>.</li>
+      <li><b>Check</b> that the returned pointer is not <code class="inline">NULL</code>.</li>
+      <li><b>Read or write</b> using the stream functions.</li>
+      <li><b>Close</b> the file with <code class="inline">fclose</code>.</li>
+    </ol>
+
+    <h2>Opening files: fopen modes</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Mode</th><th>Meaning</th><th>If the file exists</th><th>If not</th></tr></thead>
+        <tbody>
+          <tr><td><code>"r"</code></td><td>Read text</td><td>Opens</td><td>Fails (<code>NULL</code>)</td></tr>
+          <tr><td><code>"w"</code></td><td>Write text</td><td><b>Truncates</b></td><td>Creates</td></tr>
+          <tr><td><code>"a"</code></td><td>Append text</td><td>Keeps content, writes at end</td><td>Creates</td></tr>
+          <tr><td><code>"r+"</code></td><td>Read and write</td><td>Opens</td><td>Fails</td></tr>
+          <tr><td><code>"w+"</code></td><td>Read and write</td><td>Truncates</td><td>Creates</td></tr>
+          <tr><td><code>"a+"</code></td><td>Read and append</td><td>Keeps content</td><td>Creates</td></tr>
+          <tr><td><code>"rb"</code>, <code>"wb"</code>, <code>"ab"</code></td><td>Binary versions</td><td colspan="2">Same rules, no newline translation</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="warn">
+      <p><b>Warning:</b> <code class="inline">"w"</code> erases the file immediately. Use <code class="inline">"a"</code> if you want to keep existing content.</p>
+    </div>
+
+    <h2>Writing a text file</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    FILE *fp = fopen("notes.txt", "w");
+
+    if (fp == NULL) {
+        perror("Could not open notes.txt");
+        return 1;
+    }
+
+    fprintf(fp, "C file handling\n");
+    fprintf(fp, "Line %d\n", 2);
+    fputs("Written with fputs\n", fp);
+
+    fclose(fp);
+    printf("File written.\n");
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>File written.</pre></div>
+
+    <h2>Reading a text file</h2>
+    <h3>Line by line with fgets</h3>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    FILE *fp = fopen("notes.txt", "r");
+    char line[256];
+
+    if (fp == NULL) {
+        perror("Could not open notes.txt");
+        return 1;
+    }
+
+    while (fgets(line, sizeof(line), fp) != NULL) {
+        printf("%s", line);
+    }
+
+    fclose(fp);
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>C file handling
+Line 2
+Written with fputs</pre></div>
+
+    <h3>Formatted reading with fscanf</h3>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    FILE *fp = fopen("scores.txt", "r");
+    int score;
+    int count = 0;
+    double sum = 0;
+
+    if (fp == NULL) {
+        perror("scores.txt");
+        return 1;
+    }
+
+    while (fscanf(fp, "%d", &amp;score) == 1) {
+        sum += score;
+        count++;
+    }
+
+    fclose(fp);
+
+    if (count &gt; 0) {
+        printf("average = %.2f\n", sum / count);
+    }
+    return 0;
+}</code></pre>
+    </div>
+    <p><code class="inline">fscanf</code> returns the number of items read, or <code class="inline">EOF</code> when input runs out. Always check it.</p>
+
+    <h2>Appending to a file</h2>
+    <div class="codebox" data-file="main.c">
+<pre><code>FILE *fp = fopen("log.txt", "a");
+if (fp != NULL) {
+    fprintf(fp, "Program started\n");
+    fclose(fp);
+}</code></pre>
+    </div>
+
+    <h2>Binary files</h2>
+    <p>Text functions stop at whitespace and translate newlines. For raw bytes — images, structs, arrays — use <code class="inline">fread</code> and <code class="inline">fwrite</code>.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+typedef struct {
+    int id;
+    double price;
+} Record;
+
+int main(void) {
+    Record out[2] = {{1, 9.99}, {2, 19.50}};
+    Record in[2];
+
+    FILE *fp = fopen("data.bin", "wb");
+    if (fp == NULL) return 1;
+
+    size_t written = fwrite(out, sizeof(Record), 2, fp);
+    fclose(fp);
+
+    if (written != 2) {
+        printf("Write failed\n");
+        return 1;
+    }
+
+    fp = fopen("data.bin", "rb");
+    if (fp == NULL) return 1;
+
+    size_t read = fread(in, sizeof(Record), 2, fp);
+    fclose(fp);
+
+    for (size_t i = 0; i &lt; read; i++) {
+        printf("%d: %.2f\n", in[i].id, in[i].price);
+    }
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>1: 9.99
+2: 19.50</pre></div>
+    <p>Binary files are not portable across systems with different type sizes or endianness. For data exchange, prefer a text format such as CSV or JSON.</p>
+
+    <h2>Moving around: fseek and ftell</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Function</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td><code>fseek(fp, offset, origin)</code></td><td>Move the position indicator</td></tr>
+          <tr><td><code>ftell(fp)</code></td><td>Current position in bytes</td></tr>
+          <tr><td><code>rewind(fp)</code></td><td>Go back to the start</td></tr>
+          <tr><td><code>feof(fp)</code></td><td>Non-zero after an attempted read past the end</td></tr>
+          <tr><td><code>ferror(fp)</code></td><td>Non-zero if an error occurred</td></tr>
+          <tr><td><code>clearerr(fp)</code></td><td>Clear EOF and error flags</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Origins: <code class="inline">SEEK_SET</code> (start), <code class="inline">SEEK_CUR</code> (current), <code class="inline">SEEK_END</code> (end).</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main(void) {
+    FILE *fp = fopen("notes.txt", "r");
+    if (fp == NULL) return 1;
+
+    fseek(fp, 0, SEEK_END);
+    long size = ftell(fp);
+    fseek(fp, 0, SEEK_SET);
+
+    printf("file size = %ld bytes\n", size);
+    fclose(fp);
+    return 0;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>file size = 48 bytes</pre></div>
+
+    <h2>Error handling</h2>
+    <p><code class="inline">perror</code> prints your message plus the system's reason, using <code class="inline">errno</code>.</p>
+    <div class="codebox" data-file="main.c">
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;errno.h&gt;
+#include &lt;string.h&gt;
+
+FILE *fp = fopen("missing.txt", "r");
+if (fp == NULL) {
+    perror("fopen");
+    printf("errno = %d (%s)\n", errno, strerror(errno));
+    return 1;
+}</code></pre>
+    </div>
+    <div class="output"><strong>Output</strong><pre>fopen: No such file or directory
+errno = 2 (No such file or directory)</pre></div>
+
+    <h2>Reading and writing at the same time</h2>
+    <p>When a stream is opened for both reading and writing, you must call <code class="inline">fflush</code> or a positioning function between a write and a read (and vice versa). Forgetting this is undefined behaviour.</p>
+
+    <h2>Closing files</h2>
+    <p><code class="inline">fclose</code> flushes buffered output and releases the stream. If you forget, data may be lost when the program exits abnormally, and you may run out of file handles.</p>
+
+    <h2>Standard streams</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Stream</th><th>Purpose</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td><code>stdin</code></td><td>Keyboard / redirected input</td><td><code>fgets(line, n, stdin)</code></td></tr>
+          <tr><td><code>stdout</code></td><td>Normal output</td><td><code>printf(...)</code></td></tr>
+          <tr><td><code>stderr</code></td><td>Error output (unbuffered)</td><td><code>fprintf(stderr, ...)</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="tip">
+      <p><b>Tip:</b> always check <code class="inline">fopen</code>, <code class="inline">fread</code>, <code class="inline">fwrite</code> and <code class="inline">fclose</code>. Disk-full, permission and missing-file errors are normal, not exceptional.</p>
+    </div>
+
+    <h2>Exercises</h2>
+    <ol>
+      <li>Write a program that saves five names to <code class="inline">names.txt</code>.</li>
+      <li>Read the file back and print each name with its line number.</li>
+      <li>Append a timestamp line to a log file.</li>
+      <li>Copy one file to another using <code class="inline">fgetc</code>/<code class="inline">fputc</code>.</li>
+      <li>Count the lines, words and characters in a text file.</li>
+    </ol>
+  </main>
+
+  <aside class="toc" id="toc"></aside>
+</div>
+
+<footer id="footer"></footer>
+<script src="assets/app.js"></script>
+</body>
+</html>
